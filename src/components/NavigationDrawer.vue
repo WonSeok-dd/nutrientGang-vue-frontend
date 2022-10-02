@@ -90,7 +90,7 @@ export default {
         { title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
         { title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
         { title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
-        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/'},
+        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
 
 
         //{ title: 'Pages', icon: 'mdi-menu', items : [            
