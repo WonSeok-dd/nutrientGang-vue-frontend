@@ -86,6 +86,7 @@ export default {
                 const rtr_info = {
                     name : this.name,
                     location : this.location,
+                    menu : this.menu
 
                 };
 
