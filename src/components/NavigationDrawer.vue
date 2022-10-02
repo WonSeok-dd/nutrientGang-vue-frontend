@@ -87,14 +87,15 @@ export default {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",
 
       items: [
-        { title: 'Dashboard', icon: 'mdi-view-dashboard', to: "/" },
-        
-        { title: 'Pages', icon: 'mdi-menu', items : [
-            { title: "SignIn", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
-            { title: "Info", icon: 'mdi-apple-finder', to: "/authentication/info" },
-            
-            { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
-        ]},        
+        { title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
+        { title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
+        { title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
+        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/'},
+
+
+        //{ title: 'Pages', icon: 'mdi-menu', items : [            
+        //    { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
+        //]},        
       ],
     }
   }

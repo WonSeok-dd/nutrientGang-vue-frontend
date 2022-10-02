@@ -55,7 +55,7 @@
 
 <script>
 import KakaoMap from "@/components/map/KakaoMap.vue"
-import RestaurantVue from "@/layouts/page/Restaurant.vue"
+import RestaurantVue from "@/layouts/default/Restaurant.vue"
 
 import {MarkerHandler} from "@/components/map/marker-handler.js"
 import {KakaoOverlay} from "@/components/map/overlay-handler.js"

@@ -10,7 +10,10 @@
                 -->
 
                 <v-card width="460">
-                    <v-card-text class="text-center px-12 py-16">                        
+                    <v-card-text class="text-center px-12 py-16">  
+
+                        <h1 class="text--primary font-weight-black">회원가입</h1>
+              
                         <ValidationObserver ref="observer" v-slot="{invalid}">
                             <v-form @submit.prevent="submit">
 
@@ -51,6 +54,16 @@
 
                             </v-form>
                         </ValidationObserver>
+
+                        <div class="mt-10">
+                            <router-link to="/authentication/sign-up" class="text-decoration-none mr-3">
+                                회원가입
+                            </router-link> | 
+                            <router-link to="/authentication/sign-in" class="text-decoration-none ml-3">
+                                로그인
+                            </router-link>
+                        </div>
+
                     </v-card-text>
 
                 </v-card>
