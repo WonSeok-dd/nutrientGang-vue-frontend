@@ -29,7 +29,15 @@
                             ></v-text-field>
                         </ValidationProvider>
 
-                            <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">등록하기</v-btn>
+                        <ValidationProvider :rules="{
+                            required : true,
+                            }" name="음식점 메뉴" v-slot="{errors}">
+                            <v-text-field v-model="menu" label="음식점 메뉴" :error-messages="errors"
+                            prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
+                            ></v-text-field>
+                        </ValidationProvider>
+
+                        <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">등록하기</v-btn>
 
                     </v-form>
                 </ValidationObserver>
@@ -38,11 +46,10 @@
 
     </v-container>
 
-
-
 </template>
 
 <script>
+import axios from 'axios'
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
 import {required} from "vee-validate/dist/rules"
 extend('required', {
@@ -57,6 +64,8 @@ export default {
             name: null,
             
             location: null,
+
+            menu : null
         }
     },
 
@@ -67,9 +76,27 @@ export default {
 
     methods : {
         async submit(){
-            const res = this.$refs.observer.validate()
-            if (res) {
-                alert("로그인 프로세스")
+            // 입력조건 유효성 결과
+            const result = await this.$refs.observer.validate()
+            
+            // 입력조건 유효성 결과 만족시
+            if (result){
+
+                // 음식점 정보
+                const rtr_info = {
+                    name : this.name,
+                    location : this.location,
+
+                };
+
+                await axios.post('/api/rtr/register', rtr_info)
+                    .then(res => {
+                        console.log(res)
+                        this.$router.push('/')
+                    })
+                    .catch(err =>{
+                        console.log(err.message)
+                    })
             }
         }
     }
