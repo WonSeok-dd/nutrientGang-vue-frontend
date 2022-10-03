@@ -30,6 +30,7 @@
 
                         <v-card elevation="10" outlined>
                             <v-card-title class="text--primary font-weight-black">음식점 위치</v-card-title>
+
                             <v-card-text>
                                 <ValidationProvider :rules="{
                                     required : true,
@@ -39,8 +40,13 @@
                                     ></v-text-field>
                                 </ValidationProvider>
                             </v-card-text>
-
                             
+                            <v-card-text>{{answer}}</v-card-text>
+
+                            <v-card-text>
+                                <v-btn color="primary" text @click="checkRtrLocation">확인</v-btn>
+                            </v-card-text> 
+
                         </v-card>
 
                         <v-divider class="mt-10 mb-10"></v-divider>
@@ -94,8 +100,9 @@ export default {
     data(){
         return {
 
+            answer : null,
+
             rtrName: null,
-            
             rtrLocation: null,
 
             menulist: [
@@ -124,7 +131,7 @@ export default {
                 const rtr_info = {
                     rtrName : this.rtrName,
                     rtrLocation : this.rtrLocation,
-                    menu : this.menu
+                    menulist : this.menulist
 
                 };
 
@@ -137,6 +144,23 @@ export default {
                         console.log(err.message)
                     })
             }
+        },
+
+        checkRtrLocation(){
+            const kakao = window.kakao
+            let geocoder = new kakao.maps.services.Geocoder();
+
+            let base = this;
+            geocoder.addressSearch(this.rtrLocation, function(res,status){
+                if (status === kakao.maps.services.Status.OK){
+
+                    base.answer = `lat: ${res[0].y} lng: ${res[0].x}`
+                    console.log(res[0].y, res[0].x)
+                }else{
+                    base.answer = `못찾음`
+                    console.log('못찾음')
+                }
+            });
         },
 
         addMenu(){
@@ -154,8 +178,9 @@ export default {
                 //위치 -1(끝) , 개수 1개
                 this.menulist.splice(idx,1)
             }
-        }
-    }
+        },
+    },
+
 }
 </script>
 
