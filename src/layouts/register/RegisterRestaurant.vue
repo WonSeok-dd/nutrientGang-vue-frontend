@@ -135,7 +135,6 @@ extend('required', {
   ...required,
   message : '해당 필드는 필수값입니다.'
 });
-
 extend('address', value => {
 
     let is_break = false
@@ -156,8 +155,6 @@ extend('address', value => {
         return '오류입니다.'
     }
     return true
-
-
 });
 
 export default {
@@ -177,9 +174,6 @@ export default {
                 },
             ],
         }
-    },
-
-    computed : {
     },
 
     components : {
@@ -213,7 +207,8 @@ export default {
                     })
             }
         },
-
+        
+        //올바른 주소인지 확인 -> 버튼 클릭
         checkRtrLocation(){
             const kakao = window.kakao
             let geocoder = new kakao.maps.services.Geocoder();
@@ -231,6 +226,7 @@ export default {
             });
         },
 
+        //메뉴등록 칸 추가 -> 버튼 클릭
         addMenu(){
             this.menulist.push({
                 menuName : null,
@@ -238,6 +234,8 @@ export default {
             }); 
         },
 
+
+        //메뉴등록 칸 제거 -> 버튼 클릭
         deleteMenu(idx){
             
             if (this.menulist.length  === 1){
