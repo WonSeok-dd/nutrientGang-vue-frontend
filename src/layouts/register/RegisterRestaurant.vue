@@ -13,29 +13,62 @@
                 <ValidationObserver ref="observer" v-slot="{invalid}">
                     <v-form @submit.prevent="submit">
                         
-                        <ValidationProvider :rules="{
-                            required : true,
-                            }" name="음식점 이름" v-slot="{errors}">
-                            <v-text-field v-model="name" label="음식점 이름" :error-messages="errors"
-                            prepend-icon="mdi-clipboard-outline" clearable 
-                            ></v-text-field>                                    
-                        </ValidationProvider>
-                            
-                        <ValidationProvider :rules="{
-                            required : true,
-                            }" name="음식점 위치" v-slot="{errors}">
-                            <v-text-field v-model="location" label="음식점 위치" :error-messages="errors"
-                            prepend-icon="mdi-map-marker" clearable class="mt-4"
-                            ></v-text-field>
-                        </ValidationProvider>
+                        <v-card elevation="10" outlined>
+                            <v-card-title class="text--primary font-weight-black">음식점 이름</v-card-title>
+                            <v-card-text>
+                                <ValidationProvider :rules="{
+                                    required : true,
+                                    }" name="음식점 이름" v-slot="{errors}">
+                                    <v-text-field v-model="rtrName" label="음식점 이름" :error-messages="errors"
+                                    prepend-icon="mdi-clipboard-outline" clearable 
+                                    ></v-text-field>                                    
+                                </ValidationProvider>
+                            </v-card-text>
+                        </v-card>
 
-                        <ValidationProvider :rules="{
-                            required : true,
-                            }" name="음식점 메뉴" v-slot="{errors}">
-                            <v-text-field v-model="menu" label="음식점 메뉴" :error-messages="errors"
-                            prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
-                            ></v-text-field>
-                        </ValidationProvider>
+                        <v-divider class="mt-10 mb-10"></v-divider>
+
+                        <v-card elevation="10" outlined>
+                            <v-card-title class="text--primary font-weight-black">음식점 위치</v-card-title>
+                            <v-card-text>
+                                <ValidationProvider :rules="{
+                                    required : true,
+                                    }" name="음식점 위치" v-slot="{errors}">
+                                    <v-text-field v-model="rtrLocation" label="음식점 위치" :error-messages="errors"
+                                    prepend-icon="mdi-map-marker" clearable class="mt-4"
+                                    ></v-text-field>
+                                </ValidationProvider>
+                            </v-card-text>
+
+                            
+                        </v-card>
+
+                        <v-divider class="mt-10 mb-10"></v-divider>
+
+                        <v-card elevation="10" outlined v-for="menu,i in menulist" :key="i">
+                            <v-app-bar flat color="">
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue" text fab @click="addMenu()"><v-icon>mdi-plus</v-icon></v-btn>
+                                <v-btn color="blue" text fab @click="deleteMenu(i)"><v-icon>mdi-minus</v-icon></v-btn>
+                            </v-app-bar>
+                            <v-card-title class="text--primary font-weight-black">메뉴{{i+1}}</v-card-title>
+                            <v-card-text>
+                                <ValidationProvider :rules="{
+                                    required : true,
+                                    }" name="메뉴 이름" v-slot="{errors}">
+                                    <v-text-field v-model="menulist[i].menuName" label="메뉴 이름" :error-messages="errors"
+                                    prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
+                                ></v-text-field>
+                                </ValidationProvider>
+                                <ValidationProvider :rules="{
+                                    required : true,
+                                    }" name="메뉴 정보" v-slot="{errors}">
+                                    <v-text-field v-model="menulist[i].menuInfo" label="메뉴 정보" :error-messages="errors"
+                                    prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
+                                ></v-text-field>
+                                </ValidationProvider>
+                            </v-card-text>
+                        </v-card>
 
                         <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">등록하기</v-btn>
 
@@ -61,11 +94,16 @@ export default {
     data(){
         return {
 
-            name: null,
+            rtrName: null,
             
-            location: null,
+            rtrLocation: null,
 
-            menu : null
+            menulist: [
+                {
+                    menuName: null,
+                    menuInfo : null,
+                },
+            ],
         }
     },
 
@@ -84,8 +122,8 @@ export default {
 
                 // 음식점 정보
                 const rtr_info = {
-                    name : this.name,
-                    location : this.location,
+                    rtrName : this.rtrName,
+                    rtrLocation : this.rtrLocation,
                     menu : this.menu
 
                 };
@@ -98,6 +136,23 @@ export default {
                     .catch(err =>{
                         console.log(err.message)
                     })
+            }
+        },
+
+        addMenu(){
+            this.menulist.push({
+                menuName : null,
+                menuInfo : null,
+            });
+        },
+
+        deleteMenu(idx){
+            
+            if (this.menulist.length  === 1){
+                //pass
+            }else{
+                //위치 -1(끝) , 개수 1개
+                this.menulist.splice(idx,1)
             }
         }
     }
