@@ -111,6 +111,37 @@
                                     prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
                                 ></v-text-field>
                                 </ValidationProvider>
+                                
+                                <v-row>
+                                    <v-col cols="12" sm="12" md="6" lg="4">
+                                        <ValidationProvider :rules="{
+                                            required : true,
+                                            numeric: true,
+                                            }" name="탄수화물(g) 함유량" v-slot="{errors}">
+                                            <v-text-field v-model="menulist[i].menuCarbo" label="탄수화물(g) 함유량" :error-messages="errors"
+                                            prepend-icon="mdi-bowl" suffix="g"></v-text-field>
+                                        </ValidationProvider>
+                                    </v-col>
+                                    <v-col cols="12" sm="12" md="6" lg="4">
+                                        <ValidationProvider :rules="{
+                                            required : true,
+                                            numeric: true,
+                                            }" name="단백질(g) 함유량" v-slot="{errors}">
+                                            <v-text-field v-model="menulist[i].menuProtein" label="단백질(g) 함유량" :error-messages="errors"
+                                            prepend-icon="mdi-fuel" suffix="g"></v-text-field>
+                                        </ValidationProvider>
+                                    </v-col>
+                                    <v-col cols="12" sm="12" md="6" lg="4">
+                                        <ValidationProvider :rules="{
+                                            required : true,
+                                            numeric: true,                                            
+                                            }" name="지방(g) 함유량" v-slot="{errors}">
+                                            <v-text-field v-model="menulist[i].menuFat" label="지방(g) 함유량" :error-messages="errors"
+                                            prepend-icon="mdi-fire" suffix="g"></v-text-field>
+                                        </ValidationProvider>
+                                    </v-col>
+                                </v-row>
+                                
                             </v-card-text>
                         </v-card>
 
@@ -128,11 +159,16 @@
 <script>
 import axios from 'axios'
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
-import {required} from "vee-validate/dist/rules"
+import {required , numeric} from "vee-validate/dist/rules"
 extend('required', {
   ...required,
   message : '해당 필드는 필수값입니다.'
 });
+extend('numeric', {
+    ...numeric,
+    message : '해당 필드는 숫자로만 입력해야 합니다..'
+})
+
 extend('address', async (value) => {
     
     const kakao = window.kakao;
@@ -153,7 +189,7 @@ extend('address', async (value) => {
 
     const result = await addressSearch(value)
     if (result === 'ZERO_RESULT'){
-        return '잘못된 주소 정보입니다.'
+        return '해당 주소 정보는 없습니다.'
     }
     return true
 });
@@ -173,6 +209,9 @@ export default {
                 {
                     menuName: null,
                     menuInfo : null,
+                    menuCarbo : null,
+                    menuProtein : null,
+                    menuFat : null
                 },
             ],
         }
@@ -196,7 +235,6 @@ export default {
                     rtrName : this.rtrName,
                     rtrLocation : this.rtrLocation,
                     menulist : this.menulist
-
                 };
 
                 await axios.post('/api/rtr/register', rtr_info)
