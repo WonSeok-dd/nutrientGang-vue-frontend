@@ -320,10 +320,18 @@ export default {
           //AWS 연결
           this.connectAWS();
 
-          //2. AWS 버킷에 업로드(1) - (photoKey: S3에 저장형식)
-          let albumFile = this.rtrimg.name
+          //2. AWS 버킷에 업로드(1) 
+          // 파일형식(.jpg) + 랜덤문자열 얻기
+          let albumFileName = this.rtrimg.name;
+          let form = albumFileName.split('.')[1];
+
+          let randomString = new Date().getTime().toString(36);
+          
+          // 앨범이름 얻기
           let albumPhotosKey = encodeURIComponent(this.albumName) + "/";
-          let photoKey = albumPhotosKey + albumFile;
+
+          // photoKey: S3에 저장형식
+          let photoKey = albumPhotosKey +  randomString + '.'+ form;
 
           var upload = new AWS.S3.ManagedUpload({
             params: {
