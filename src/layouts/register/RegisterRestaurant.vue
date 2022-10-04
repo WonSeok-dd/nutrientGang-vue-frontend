@@ -29,7 +29,30 @@
                         </v-card>
 
                         <v-divider class="mt-10 mb-10"></v-divider>
+                        
+                        <!--음식점 사진-->
+                        <v-card elevation="10" outlined>
+                            <v-card-title class="text--primary font-weight-black">음식점 사진</v-card-title>
+                            <v-card-text>
+                                <ValidationProvider :rules="{
+                                    required : true,
+                                    }" name="음식점 사진" v-slot="{errors}">
+                                    <v-file-input v-model="rtrimg" label="음식점 사진" :error-messages="errors"
+                                    accept="image/png, image/jpeg, image/bmp" outlined :show-size="1000"
+                                    prepend-icon="mdi-camera-burst" clearable counter color="blue"
+                                    @change="uploadAlbumFile">
+                                        <template v-slot:selection="{ text }">
+                                            <v-chip color="primary accent-4" dark label small>
+                                              {{ text }}
+                                            </v-chip>
+                                        </template>
+                                    </v-file-input>
+                                </ValidationProvider>
+                            </v-card-text>
+                            <v-btn @click="uploadAlbumFile">사진 s3에 업로드 하기</v-btn>
+                        </v-card>
 
+                        <v-divider class="mt-10 mb-10"></v-divider>
 
                         <!--음식점 주소-->
                         <v-card elevation="10" outlined>
@@ -83,7 +106,6 @@
                         </v-card>
 
                         <v-divider class="mt-10 mb-10"></v-divider>
-
 
                         <!--음식점 메뉴 - 반복문 -->
                         <v-card elevation="10" outlined v-for="menu,i in menulist" :key="i">
@@ -157,6 +179,7 @@
 </template>
 
 <script>
+import AWS from 'aws-sdk'
 import axios from 'axios'
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
 import {required , numeric} from "vee-validate/dist/rules"
@@ -200,6 +223,7 @@ export default {
         return {
 
             rtrName: null,
+            rtrimg : null,
 
             rtrLocation: null,
             //rtrLocationdialog : false,
@@ -214,6 +238,13 @@ export default {
                     menuFat : null
                 },
             ],
+
+
+            bucketRegion : 'ap-northeast-2',
+            IdentityPoolId : 'ap-northeast-2:7361f497-478c-4d05-88c0-aaa4f9b759bd',
+            href : 'https://photo-album-cluejws.s3.ap-northeast-2.amazonaws.com/', 
+            albumBucketName : 'photo-album-cluejws', 
+            albumName : 'rtr_album',          
         }
     },
 
@@ -267,6 +298,54 @@ export default {
                 this.menulist.splice(idx,1)
             }
         },
+
+        connectAWS(){
+          AWS.config.update({
+            region: this.bucketRegion,
+            credentials: new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: this.IdentityPoolId
+            })
+          });
+        },
+
+        getS3(){
+          var s3 = new AWS.S3({
+            apiVersion: "2006-03-01",
+            params: { Bucket: this.albumBucketName }
+          });
+          return s3;
+        },
+
+        uploadAlbumFile(){
+          //AWS 연결
+          this.connectAWS();
+
+          //2. AWS 버킷에 업로드(1) - (photoKey: S3에 저장형식)
+          let albumFile = this.rtrimg.name
+          let albumPhotosKey = encodeURIComponent(this.albumName) + "/";
+          let photoKey = albumPhotosKey + albumFile;
+
+          var upload = new AWS.S3.ManagedUpload({
+            params: {
+              Bucket: this.albumBucketName,
+              Key: photoKey,
+              Body: this.rtrimg,
+            }
+          });
+
+          //2. AWS 버킷에 업로드(2) 
+          var promise = upload.promise();
+          promise.then(
+            (data) => {
+              //this.getAlbumFiles();
+              console.log(`파일 업로드: ${data}`)
+            },
+            (err) => {
+               console.log(err)
+            }
+          );
+        },
+
 
         //올바른 주소인지 확인 -> 버튼 클릭
         //checkRtrLocation(){
