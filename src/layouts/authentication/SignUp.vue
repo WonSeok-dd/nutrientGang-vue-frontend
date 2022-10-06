@@ -108,43 +108,15 @@ extend('confirmed', {
 export default {
     data(){
         return {
-          //name : this.$store.state.infoName,
-          //email: this.$store.state.infoEmail,
+          name : null,
+          email: null,
 
           passwordShow: true,
-          //password: this.$store.state.infoPassword,
+          password: null,
 
           confirm_passwordShow: true,
           cofirm_password: '',
         }
-    },
-
-    computed : {
-        name : {
-            get(){
-                return this.$store.state.infoName
-            },
-            set(val){
-                this.$store.state.infoName = val
-            }
-        },
-        email : {
-            get(){
-                return this.$store.state.infoEmail
-            },
-            set(val){
-                this.$store.state.infoEmail = val
-            }
-        },
-
-        password : {
-            get(){
-                return this.$store.state.infoPassword
-            },
-            set(val){
-                this.$store.state.infoPassword = val
-            }
-        },
     },
 
     components : {
@@ -162,14 +134,9 @@ export default {
 
                 // 회원가입 정보
                 const info = {
-                    infoTarget : this.$store.state.infoTarget,
-                    infoActivity : this.$store.state.infoActivity,
-                    infoGender : this.$store.state.infoGender,
-                    infoHeight : this.$store.state.infoHeight,
-                    infoWeight : this.$store.state.infoWeight,
-                    infoName : this.$store.state.infoName,
-                    infoEmail : this.$store.state.infoEmail,
-                    infoPassword : this.$store.state.infoPassword
+                    name : this.name,
+                    email : this.email,
+                    password : this.password
                 };
 
                 await axios.post('/api/user/joinform', info)

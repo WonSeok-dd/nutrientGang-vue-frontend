@@ -7,10 +7,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
 
     state : {
-        infoName : null,
-        infoEmail : null,
-        infoPassword : null,
-
+        
         loginState : null
     },
 });
