@@ -141,7 +141,7 @@
                                             numeric: true,
                                             }" name="탄수화물(g) 함유량" v-slot="{errors}">
                                             <v-text-field v-model="menulist[i].menuCarbo" label="탄수화물(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-bowl" suffix="g"></v-text-field>
+                                            prepend-icon="mdi-bowl" clearable suffix="g"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col cols="12" sm="12" md="6" lg="4">
@@ -150,7 +150,7 @@
                                             numeric: true,
                                             }" name="단백질(g) 함유량" v-slot="{errors}">
                                             <v-text-field v-model="menulist[i].menuProtein" label="단백질(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-fuel" suffix="g"></v-text-field>
+                                            prepend-icon="mdi-fuel" clearable suffix="g"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                     <v-col cols="12" sm="12" md="6" lg="4">
@@ -159,7 +159,7 @@
                                             numeric: true,                                            
                                             }" name="지방(g) 함유량" v-slot="{errors}">
                                             <v-text-field v-model="menulist[i].menuFat" label="지방(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-fire" suffix="g"></v-text-field>
+                                            prepend-icon="mdi-fire" clearable suffix="g"></v-text-field>
                                         </ValidationProvider>
                                     </v-col>
                                 </v-row>
