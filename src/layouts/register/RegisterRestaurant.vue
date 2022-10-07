@@ -32,7 +32,11 @@
                         
                         <!--음식점 사진-->
                         <v-card elevation="10" outlined>
+                            
+                            <!--음식점 사진 확인 버튼-->
                             <v-card-title class="text--primary font-weight-black">음식점 사진</v-card-title>
+                            
+                            <!--음식점 사진 입력-->
                             <v-card-text>
                                 <ValidationProvider :rules="{
                                     required : true,
@@ -49,7 +53,20 @@
                                     </v-file-input>
                                 </ValidationProvider>
                             </v-card-text>
-                            <v-btn @click="uploadAlbumFile">사진 s3에 업로드 하기</v-btn>
+                            
+                            <!--음식점 사진 확인-->
+                            <v-expansion-panels>
+                                <v-expansion-panel>
+                                    <v-expansion-panel-header>
+                                        올린 이미지 확인
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <v-img :src="rtrimgPreURL"
+                                        height="200px" contain/>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+
                         </v-card>
 
                         <v-divider class="mt-10 mb-10"></v-divider>
@@ -223,7 +240,10 @@ export default {
         return {
 
             rtrName: null,
-            rtrimg : null,
+
+            rtrimg : null,          //v-input 받아온 값
+            rtrimgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
+            rtrimgPreURL : null,    //s3에 업로드되면 얻기, v-img:src (~)
 
             rtrLocation: null,
             //rtrLocationdialog : false,
@@ -264,6 +284,7 @@ export default {
                 // 음식점 정보
                 const rtr_info = {
                     rtrName : this.rtrName,
+                    rtrimgURL : this.rtrimgURL,
                     rtrLocation : this.rtrLocation,
                     menulist : this.menulist
                 };
@@ -282,11 +303,13 @@ export default {
         //메뉴등록 칸 추가 -> 버튼 클릭
         addMenu(){
             this.menulist.push({
-                menuName : null,
+                menuName: null,
                 menuInfo : null,
+                menuCarbo : null,
+                menuProtein : null,
+                menuFat : null
             }); 
         },
-
 
         //메뉴등록 칸 제거 -> 버튼 클릭
         deleteMenu(idx){
@@ -317,43 +340,54 @@ export default {
         },
 
         uploadAlbumFile(){
-          //AWS 연결
-          this.connectAWS();
+            //AWS 연결
+            this.connectAWS();
 
-          //2. AWS 버킷에 업로드(1) 
-          // 파일형식(.jpg) + 랜덤문자열 얻기
-          let albumFileName = this.rtrimg.name;
-          let form = albumFileName.split('.')[1];
+            //rtrimg 지울때 / 추가할때
+            if (this.rtrimg === null){
+                this.rtrimg = null
+            }else{
+                
+                //2. AWS 버킷에 업로드(1) 
+                // 파일형식(.jpg) + 랜덤문자열 얻기
+                let albumFileName = this.rtrimg.name;
+                let form = albumFileName.split('.')[1];
 
-          let randomString = new Date().getTime().toString(36);
-          
-          // 앨범이름 얻기
-          let albumPhotosKey = encodeURIComponent(this.albumName) + "/";
+                let randomString = new Date().getTime().toString(36);
 
-          // photoKey: S3에 저장형식
-          let photoKey = albumPhotosKey +  randomString + '.'+ form;
+                // 앨범이름 얻기
+                let albumPhotosKey = encodeURIComponent(this.albumName) + "/";
 
-          var upload = new AWS.S3.ManagedUpload({
-            params: {
-              Bucket: this.albumBucketName,
-              Key: photoKey,
-              Body: this.rtrimg,
-            }
-          });
+                // photoKey: S3에 저장형식
+                let photoKey = albumPhotosKey + randomString + '.'+ form;
 
-          //2. AWS 버킷에 업로드(2) 
-          var promise = upload.promise();
-          promise.then(
-            (data) => {
-              //this.getAlbumFiles();
-              console.log(`파일 업로드: ${data}`)
-            },
-            (err) => {
-               console.log(err)
-            }
-          );
-        },
+                var upload = new AWS.S3.ManagedUpload({
+                  params: {
+                    Bucket: this.albumBucketName,
+                    Key: photoKey,
+                    Body: this.rtrimg,
+                  }
+                });
 
+                //2. AWS 버킷에 업로드(2) 
+                var promise = upload.promise();
+                promise.then(
+                    (data) => {
+                        console.log(`파일 업로드: ${data}`);
+
+
+                        //s3에 업로드되면 얻기, POST요청 (afas.jpg)
+                        //s3에 업로드되면 얻기, v-img:src (~)
+                        this.rtrimgURL = randomString + '.' + form;
+                        this.rtrimgPreURL = this.href + 'rtr_album/' + randomString + '.' + form;
+
+                    },
+                    (err) => {
+                       console.log(err)
+                    }
+                );
+            } 
+        }, 
 
         //올바른 주소인지 확인 -> 버튼 클릭
         //checkRtrLocation(){
