@@ -375,7 +375,6 @@ export default {
                     (data) => {
                         console.log(`파일 업로드: ${data}`);
 
-
                         //s3에 업로드되면 얻기, POST요청 (afas.jpg)
                         //s3에 업로드되면 얻기, v-img:src (~)
                         this.rtrimgURL = randomString + '.' + form;
