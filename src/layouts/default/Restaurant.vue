@@ -1,6 +1,7 @@
 <template>
     <v-card class="mx-auto" max-width="344">
-        <v-img :src="rtr.rtrimgURL" height="200px" contain></v-img>
+        <v-img :src="cImg" @error="changeNotDefault"  
+        height="200px" contain></v-img>
 
         <v-card-title>{{rtr.rtrName}}</v-card-title>
         <v-card-subtitle>주소 : {{rtr.rtrLocation}}</v-card-subtitle>
@@ -45,8 +46,24 @@ export default {
     data(){
         return {
           show: false,
+          default_img : false,
         }
-  }
+    },
+
+    computed :{
+        //default_img:true -> defaultimg
+        //default_img:false -> rtrimgPreURL
+        cImg(){
+            return this.default_img ? require('@/assets/default.png') : this.rtr.rtrimgURL;
+        }
+    },
+
+    methods :{
+      //default_img = false -> true,
+      changeNotDefault(){
+          this.default_img = true;
+      },
+    }
 }
 </script>
 

@@ -83,7 +83,7 @@ const api = {
             },
             {
                 rtrName : "연세 서브웨이",
-                rtrimgURL : href + 'l91g0u9k.png' ,
+                rtrimgURL : href + 'l91g0u9k.png',
                 rtrLocation: '충무로 1길', 
                 rtrlat : 37.560944851198634,
                 rtrlng : 126.99743643508589,
