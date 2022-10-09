@@ -61,7 +61,7 @@
                                         올린 이미지 확인
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <v-img :src="rtrimgPreURL"
+                                        <v-img :src="cImg" @error="changeNotDefault"
                                         height="200px" contain/>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -244,8 +244,9 @@ export default {
             rtrimg : null,          //v-input 받아온 값
             rtrimgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
             rtrimgPreURL : null,    //s3에 업로드되면 얻기, v-img:src (~)
+            default_img : true,
 
-            rtrLocation: null,
+            rtrLocation : null,
             //rtrLocationdialog : false,
             //rtrLocationCheck : false,
 
@@ -271,6 +272,14 @@ export default {
     components : {
       ValidationObserver,
       ValidationProvider
+    },
+
+    computed :{
+        //default_img:true -> defaultimg
+        //default_img:false -> rtrimgPreURL
+        cImg(){
+            return this.default_img ? require('@/assets/default.png') : this.rtrimgPreURL;
+        }
     },
 
     methods : {
@@ -322,6 +331,11 @@ export default {
             }
         },
 
+        //default_img = true -> false
+        changeNotDefault(){
+            this.default_img = false;
+        },
+
         connectAWS(){
           AWS.config.update({
             region: this.bucketRegion,
@@ -345,7 +359,12 @@ export default {
 
             //rtrimg 지울때 / 추가할때
             if (this.rtrimg === null){
+                
                 this.rtrimg = null
+                this.rtrimgURL = null
+                
+                this.rtrimgPreURL = null;
+                this.default_img = true;
             }else{
                 
                 //2. AWS 버킷에 업로드(1) 
@@ -378,7 +397,9 @@ export default {
                         //s3에 업로드되면 얻기, POST요청 (afas.jpg)
                         //s3에 업로드되면 얻기, v-img:src (~)
                         this.rtrimgURL = randomString + '.' + form;
+                        
                         this.rtrimgPreURL = this.href + 'rtr_album/' + randomString + '.' + form;
+                        this.default_img = false;
 
                     },
                     (err) => {
