@@ -9,6 +9,7 @@
 const RestaurantMap = () => import("@/layouts/default/RestaurantMap.vue")
 
 import {api} from "@/api.js"  //axios로 변경
+//import axios from 'axios'
 
 export default {
 
@@ -20,11 +21,15 @@ export default {
 
   mounted(){
     
-    // axios를 통해 음식점 정보 부르기 
+    // axios를 통해 음식점 정보 부르기
+    //axios.get('/api/rtr/').then((res)=>{
+    //  this.restaurants = res.restaurants;
+    //});
+    
     api.restaurant.restaurantAll(res => {
 
       // 음식점state 할당
-      this.restaurants = res.restaurants
+      this.restaurants = res.restaurants;
 
     });
   },

@@ -16,10 +16,10 @@
                         <div class="overlay-popup" ref="restaurantOverlay">
 
                             <div v-if="overlayRestaurant">
-                                <h3>{{overlayRestaurant.place}}</h3>
-                                <div class="addr">{{overlayRestaurant.info}} : ~</div>
-                                <div class="addr">{{overlayRestaurant.info}} : ~</div>                            
-
+                                <h3>{{overlayRestaurant.rtrName}}</h3>
+                                <div align="left" v-for="menu,i in overlayRestaurant.rtrMenu" :key="i" class="menu font-weight-black">
+                                {{i+1}}. {{menu.menuName}}
+                                </div>
                                 <v-row justify="end">
                                     <v-col cols="auto" ><v-btn @click.prevent="closeOverlay()" icon><v-icon>mdi-close-outline</v-icon></v-btn></v-col>
                                 </v-row>
@@ -119,13 +119,13 @@ export default {
 
             // 마커클릭시 overlay 보여주기 이벤트
             this.overlayRestaurant = rtr;
-            this.overlay.showAt(rtr.lat, rtr.lng);
+            this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
           },
         });
 
         // 음식점 마커 지도에 추가
         this.markers.add(this.restaurants, (rtr) => {
-          return {lat : rtr.lat, lng: rtr.lng}
+          return {lat : rtr.rtrlat, lng: rtr.rtrlng}
         });
 
         // 음식점 overlay객체 생성
@@ -155,13 +155,13 @@ export default {
 
             //버튼클릭시 KakaoMap.vue의 watch속성 로직실행
             this.mapOptions.center = {
-                lat : rtr.lat,
-                lng : rtr.lng
+                lat : rtr.rtrlat,
+                lng : rtr.rtrlng
             }
 
             //버튼클릭시 overlay보여주기 이벤트
             this.overlayRestaurant = rtr;
-            this.overlay.showAt(rtr.lat, rtr.lng);
+            this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
 
         },
 
@@ -174,7 +174,7 @@ export default {
 
 <style>
 .active {
-  background-color: #1E88E5;
+  background-color:#ed4215;
 }
 
 .restaurant:hover {

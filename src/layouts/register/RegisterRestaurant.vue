@@ -217,7 +217,7 @@ extend('address', async (value) => {
     const addressSearch = address => {
         return new Promise((resolve) => {
             
-            geocoder.addressSearch(address, function(result, status) {
+            geocoder.addressSearch(address, (result, status) => {
                 if (status === kakao.maps.services.Status.OK) {
                     resolve(result);
                 } else {
