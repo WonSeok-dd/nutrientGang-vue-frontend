@@ -142,7 +142,7 @@ export default {
                 await axios.post('/api/user/joinform', info)
                     .then(res => {
                         console.log(res)
-                        this.$router.push('/authentication/sign-in')
+                        //this.$router.push('/authentication/sign-in')
                     })
                     .catch(err =>{
                         console.log(err.message)

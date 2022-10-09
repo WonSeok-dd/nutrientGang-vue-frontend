@@ -106,7 +106,7 @@ export default {
                 await axios.post('/api/user/login', info)
                     .then(res => {
                         console.log(res)
-                        this.$router.push('/')
+                        //this.$router.push('/')
                     })
                     .catch(err =>{
                         console.log(err.message)
