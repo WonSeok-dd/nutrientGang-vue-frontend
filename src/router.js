@@ -31,15 +31,18 @@ const routes = [
         ]
     },
 
-    {
+    {   
+        name : 'authentication',
         path: "/authentication",
         component : AuthenticationLayout,
         children : [
             {
+                name : 'sign-up',
                 path : 'sign-up',
                 component : SignUp
             },
             {
+                name : 'sign-in',
                 path : "sign-in",
                 component : SignIn
             },

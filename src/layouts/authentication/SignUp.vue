@@ -54,6 +54,11 @@
 
                             </v-form>
                         </ValidationObserver>
+                        
+                        <v-alert :value='isRegisterError' type="error" class="mt-5" 
+                        transition="scale-transition" dense outlined>
+                            {{RegisterErrorMsg}}
+                        </v-alert>
 
                         <div class="mt-10">
                             <router-link to="/authentication/sign-up" class="text-decoration-none mr-3">
@@ -73,7 +78,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios"
+
 
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
 import {required, email, confirmed} from "vee-validate/dist/rules"
@@ -116,6 +122,9 @@ export default {
 
           confirm_passwordShow: true,
           cofirm_password: '',
+
+          isRegisterError: false,
+          RegisterErrorMsg : ''
         }
     },
 
@@ -141,8 +150,21 @@ export default {
 
                 await axios.post('/api/user/joinform', info)
                     .then(res => {
-                        console.log(res)
-                        //this.$router.push('/authentication/sign-in')
+                        if (res.data.success === true){
+                            
+                            console.log(res.data)
+                            //this.$router.push('/authentication/sign-in')
+                        }else{
+                            console.log(res.data.success, res.data.message)
+                            this.isRegisterError = true;
+                            this.RegisterErrorMsg = res.data.message;
+
+                            setTimeout(()=>{
+                                this.isRegisterError = false;
+                                this.RegisterErrorMsg = '';
+                            },5000);
+
+                        }
                     })
                     .catch(err =>{
                         console.log(err.message)
