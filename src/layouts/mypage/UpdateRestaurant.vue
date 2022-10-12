@@ -184,7 +184,7 @@
                             </v-card-text>
                         </v-card>
 
-                        <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid" >등록하기</v-btn>
+                        <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid" >수정하기</v-btn>
 
                     </v-form>
                 </ValidationObserver>

@@ -18,11 +18,11 @@
       <!--drawer 제목, 부제목-->
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="text-h6">
-            Application
+          <v-list-item-title>
+           음식점 등록 서비스
           </v-list-item-title>
           <v-list-item-subtitle>
-            subtext
+            영양갱
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
