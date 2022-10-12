@@ -91,6 +91,7 @@ export default {
         { title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
         { title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
         { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
+        { title: '마이페이지', icon: 'mdi-account-check', to: '/mypage'}
 
 
         //{ title: 'Pages', icon: 'mdi-menu', items : [            

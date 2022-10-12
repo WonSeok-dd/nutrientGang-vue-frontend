@@ -7,7 +7,7 @@
         <v-card-subtitle>주소 : {{rtr.rtrLocation}}</v-card-subtitle>
 
         <v-card-actions>
-          <v-btn color="rtrActive" text @click="show = !show">메뉴보기</v-btn>
+          <v-btn color="rtrActive" text @click="show = !show">메뉴보기(클릭)</v-btn>
 
           <v-spacer></v-spacer>
 

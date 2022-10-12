@@ -3,7 +3,7 @@
     <v-container fluid>
         <!--제목-->
         <v-card class="text-center">
-            <h1 class="text--primary font-weight-black">음식점 등록</h1>
+            <h1 class="text--primary font-weight-black">음식점 수정</h1>
         </v-card>
 
         <!--음식점 등록-->
@@ -236,29 +236,26 @@ extend('address', async (value) => {
 
 
 export default {
+    
+    props : {
+        rtr : Object
+    },
+
     data(){
         return {
 
-            rtrName: null,
+            rtrName: this.rtr.rtrName,
 
             rtrimg : null,          //v-input 받아온 값
             rtrimgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
-            rtrimgPreURL : null,    //s3에 업로드되면 얻기, v-img:src (~)
-            default_img : true,
+            rtrimgPreURL : this.rtr.rtrimgURL,    //s3에 업로드되면 얻기, v-img:src (~)
+            default_img : false,
 
-            rtrLocation : null,
+            rtrLocation : this.rtr.rtrLocation,
             //rtrLocationdialog : false,
             //rtrLocationCheck : false,
 
-            rtrMenu: [
-                {
-                    menuName: null,
-                    menuInfo : null,
-                    menuCarbo : null,
-                    menuProtein : null,
-                    menuFat : null
-                },
-            ],
+            rtrMenu: this.rtr.rtrMenu,
 
 
             bucketRegion : 'ap-northeast-2',
@@ -298,7 +295,7 @@ export default {
                     rtrMenu : this.rtrMenu
                 };
 
-                await axios.post('/api/rtr/register', rtr_info)
+                await axios.put('/api/rtr/update', rtr_info)
                     .then(res => {
                         console.log(res.data.success, res.data.message);
                         //this.$router.push('/')
