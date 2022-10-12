@@ -34,35 +34,9 @@
         
         <template v-for="(item,index) in items">
           
-          <!--item.items가 존재하면O-->
-          <v-list-group v-if="item.items" :key="index" :prepend-icon="item.icon">
-            
-            <!--주 Navigtaion-->
-            <template #activator>
-              <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item-content>
-            </template>
-
-            <!--보조 Navigtaion-->
-            <template v-for="(itemchild, index) in item.items">
-              <!--item-->
-              <v-list-item :key="index" :to="itemchild.to" link>
-                <v-list-item-icon>
-                  <v-icon>{{ itemchild.icon }}</v-icon>
-                </v-list-item-icon>
-
-                <v-list-item-content>
-                  <v-list-item-title>{{ itemchild.title }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-
-          </v-list-group>
-
           <!--item.items가 존재하면X-->
-          <!--item-->
-          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link>
+          <!--item(items의 item)-->
+          <v-list-item :key="index" :to="item.to" active-class="primary" link>
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -71,9 +45,24 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-
+          
         </template>
+        <template v-for="(item,index) in login_items">
+          
+          <!--item.items가 존재하면X-->
+          <!--item(login_items의 item)-->
+          <v-list-item :key="index" :to="item.to" active-class="primary" link 
+          :disabled="isLogin === false">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          
+        </template>
 
       </v-list>
 
@@ -81,6 +70,9 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
+
 export default {
   data() {
     return {
@@ -90,16 +82,22 @@ export default {
         { title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
         { title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
         { title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
-        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
-        { title: '마이페이지', icon: 'mdi-account-check', to: '/mypage'}
-
 
         //{ title: 'Pages', icon: 'mdi-menu', items : [            
         //    { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
         //]},        
       ],
+      
+      login_items :[
+        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
+        { title: '마이페이지', icon: 'mdi-account-check', to: '/mypage'}
+      ],
     }
-  }
+  },
+
+  computed : {
+      ...mapState(['isLogin'])
+  },
 }
 </script>
 
