@@ -32,11 +32,11 @@
       <!--drawer Navigation-->
       <v-list expand dense nav>
         
-        <template v-for="(item,index) in items">
+        <template v-for="(item) in items">
           
           <!--item.items가 존재하면X-->
           <!--item(items의 item)-->
-          <v-list-item :key="index" :to="item.to" active-class="primary" link>
+          <v-list-item :key="item.idx" :to="item.to" active-class="primary" link>
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -47,11 +47,11 @@
           </v-list-item>
           
         </template>
-        <template v-for="(item,index) in login_items">
+        <template v-for="(item) in login_items">
           
           <!--item.items가 존재하면X-->
           <!--item(login_items의 item)-->
-          <v-list-item :key="index" :to="item.to" active-class="primary" link 
+          <v-list-item :key="item.idx" :to="item.to" active-class="primary" link 
           :disabled="isLogin === false">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
@@ -79,9 +79,9 @@ export default {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",
 
       items: [
-        { title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
-        { title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
-        { title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
+        { idx : 100, title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
+        { idx : 101, title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
+        { idx : 102, title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
 
         //{ title: 'Pages', icon: 'mdi-menu', items : [            
         //    { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
@@ -89,8 +89,8 @@ export default {
       ],
       
       login_items :[
-        { title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
-        { title: '마이페이지', icon: 'mdi-account-check', to: '/mypage'}
+        { idx : 200, title: '음식점 등록', icon: 'mdi-cart-plus', to: '/register'},
+        { idx : 201, title: '마이페이지', icon: 'mdi-account-check', to: '/mypage'}
       ],
     }
   },
