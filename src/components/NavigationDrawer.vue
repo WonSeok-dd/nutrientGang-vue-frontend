@@ -80,8 +80,6 @@ export default {
 
       items: [
         { idx : 100, title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
-        { idx : 101, title: '회원가입', icon: 'mdi-account-box', to: "/authentication/sign-up" },
-        { idx : 102, title: "로그인", icon: 'mdi-account-badge', to: "/authentication/sign-in" },
 
         //{ title: 'Pages', icon: 'mdi-menu', items : [            
         //    { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
