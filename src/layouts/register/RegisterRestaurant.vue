@@ -218,7 +218,7 @@ extend('address', async (value) => {
         return new Promise((resolve) => {
             
             geocoder.addressSearch(address, (result, status) => {
-                if (status === kakao.maps.services.Status.OK) {
+                if (status === kakao.maps.services.Status.OK) {                    
                     resolve(result);
                 } else {
                     resolve(status)
@@ -231,6 +231,7 @@ extend('address', async (value) => {
     if (result === 'ZERO_RESULT'){
         return '해당 주소 정보는 없습니다.'
     }
+
     return true
 });
 
@@ -337,12 +338,12 @@ export default {
         },
 
         connectAWS(){
-          AWS.config.update({
-            region: this.bucketRegion,
-            credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: this.IdentityPoolId
-            })
-          });
+            AWS.config.update({
+              region: this.bucketRegion,
+              credentials: new AWS.CognitoIdentityCredentials({
+                  IdentityPoolId: this.IdentityPoolId
+              })
+            });
         },
 
         getS3(){
