@@ -12,7 +12,19 @@ export const store = new Vuex.Store({
         isLoginError : false,
         LoginErrorMsg: '',
 
-        userInfo : null
+        userInfo : {
+            user_name : "정원석"
+        }
+    },
+
+    getters : {
+        getUserInfo_name(state){
+            if(state.isLogin){
+                return state.userInfo.user_name;
+            }
+
+            return '';
+        }
     },
 
     mutations : {
