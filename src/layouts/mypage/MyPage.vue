@@ -72,8 +72,16 @@ export default {
 
   methods : {
     updatePage(rtr){
+      
       console.log(rtr)
-      this.$router.push({name : 'update', params : {rtr: rtr}})
+      this.$router.push({
+        name : 'update', 
+        params : {
+            rtr: rtr
+        }
+        
+      });
+
     }
   },
 

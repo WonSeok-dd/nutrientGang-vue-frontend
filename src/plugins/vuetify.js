@@ -17,7 +17,8 @@ export default new Vuetify({
     theme: {
         themes: {
           light: {
-            rtrActive : '#ed4215'
+            rtrActive : '#ed4215',
+            borderColor : "#03C04A",
           },
         },
     },

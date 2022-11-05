@@ -53,9 +53,9 @@ export const store = new Vuex.Store({
             .then(res => {
                 
                 
-                // 로그인 일치 정보 o (success: true, token: token)
-                // 로그인 일치 정보 x (success: false, message)
-                if (res.data.success === true){             // 로그인 일치 정보 o
+                // 로그인 일치 정보 o (isSuccess: true, token: token)
+                // 로그인 일치 정보 x (isSuccess: false, message)
+                if (res.data.isSuccess === true){             // 로그인 일치 정보 o
                     
                     //1. localStoarge에 token 저장(새로고침 방지)
                     let token = res.data.token;
@@ -65,7 +65,7 @@ export const store = new Vuex.Store({
                     dispatch('getMemberInfo');
 
                 }else{                                     // 로그인 일치 정보 x      
-                    console.log(res.data.success, res.data.message)
+                    console.log(res.data.isSuccess, res.data.message)
                     
                     this.commit('loginError', res.data.message);
                 }
@@ -90,18 +90,18 @@ export const store = new Vuex.Store({
             axios.get('/api/user/auth', config)
             .then(response => {
                 
-                //auth o (success: true, user_id, user_name)
-                //auth x (success: false, message)
-                if (response.data.success === true){    //auth o
+                //auth o (isSuccess: true, user_id, user_name)
+                //auth x (isSuccess: false, message)
+                if (response.data.isSuccess === true){    //auth o
                     
                     let userInfo = {
                         user_id : response.data.user_id,
                         user_name : response.data.user_name,
                     };
-                    console.log(response.data.success, response.data.user_name)
+                    console.log(response.data.isSuccess, response.data.user_name)
                     commit('loginSuccess', userInfo)
                 }else{                                  //auth x
-                    console.log(response.data.success, response.data.message);
+                    console.log(response.data.isSuccess, response.data.message);
                 }
             })
             .catch(err => {

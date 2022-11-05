@@ -2,195 +2,152 @@
 
     <v-container fluid>
         <!--제목-->
-        <v-card class="text-center">
+        <div class="text-center">
             <h1 class="text--primary font-weight-black">음식점 수정</h1>
-        </v-card>
+        </div>
 
         <!--음식점 등록-->
-        <v-card>
-            <v-card-text class="text-center px-12 py-16">
-                        
-                <ValidationObserver ref="observer" v-slot="{invalid}">
-                    <v-form @submit.prevent="submit">
-                        
+        <div>
+            <v-row align="center" justify="center">
+                <v-col cols="12">
+                    <ValidationObserver ref="observer" v-slot="{invalid}">
+                        <v-form @submit.prevent="submit">
+                            <div>
 
-                        <!--음식점 이름-->
-                        <v-card elevation="10" outlined>
-                            <v-card-title class="text--primary font-weight-black">음식점 이름</v-card-title>
-                            <v-card-text>
-                                <ValidationProvider :rules="{
-                                    required : true,
-                                    }" name="음식점 이름" v-slot="{errors}">
-                                    <v-text-field v-model="rtrName" label="음식점 이름" :error-messages="errors"
-                                    prepend-icon="mdi-clipboard-outline" clearable 
-                                    ></v-text-field>                                    
-                                </ValidationProvider>
-                            </v-card-text>
-                        </v-card>
+                                <!--1. 음식점 이름-->
+                                <div class="text-center mt-10 mb-3 div-border">
+                                    <div>
+                                        <h2 class="blue--text font-weight-black">음식점 이름</h2>
+                                    </div>
+                                    <div>
+                                        <ValidationProvider :rules="{
+                                        required : true,
+                                        }" name="음식점 이름" v-slot="{errors}">
+                                        <v-text-field v-model="rtrName" label="음식점 이름" :error-messages="errors"
+                                        prepend-icon="mdi-clipboard-outline" clearable 
+                                        ></v-text-field>                                    
+                                        </ValidationProvider>
+                                    </div>
+                                </div>
 
-                        <v-divider class="mt-10 mb-10"></v-divider>
-                        
-                        <!--음식점 사진-->
-                        <v-card elevation="10" outlined>
-                            
-                            <!--음식점 사진 확인 버튼-->
-                            <v-card-title class="text--primary font-weight-black">음식점 사진</v-card-title>
-                            
-                            <!--음식점 사진 입력-->
-                            <v-card-text>
-                                <ValidationProvider :rules="{
-                                    required : true,
-                                    }" name="음식점 사진" v-slot="{errors}">
-                                    <v-file-input v-model="rtrimg" label="음식점 사진" :error-messages="errors"
-                                    accept="image/png, image/jpeg, image/bmp" outlined :show-size="1000"
-                                    prepend-icon="mdi-camera-burst" clearable counter color="blue"
-                                    @change="uploadAlbumFile">
-                                        <template v-slot:selection="{ text }">
-                                            <v-chip color="primary accent-4" dark label small>
-                                              {{ text }}
-                                            </v-chip>
-                                        </template>
-                                    </v-file-input>
-                                </ValidationProvider>
-                            </v-card-text>
-                            
-                            <!--음식점 사진 확인-->
-                            <v-expansion-panels>
-                                <v-expansion-panel>
-                                    <v-expansion-panel-header>
-                                        올린 이미지 확인
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content>
+                                <!--2. 음식점 사진-->
+                                <div class="text-center mt-10 mb-3 div-border">
+                                    <div>
+                                        <h2 class="blue--text font-weight-black">음식점 사진</h2>
+                                    </div>
+                                    <div>
+                                        <ValidationProvider :rules="{
+                                        required : true,
+                                        }" name="음식점 사진" v-slot="{errors}">
+                                        <v-file-input v-model="rtrimg" label="음식점 사진" :error-messages="errors"
+                                        accept="image/png, image/jpeg, image/bmp" outlined :show-size="1000"
+                                        prepend-icon="mdi-camera-burst" clearable counter color="blue"
+                                        @change="uploadAlbumFile">
+                                            <template v-slot:selection="{ text }">
+                                                <v-chip color="primary accent-4" dark label small>
+                                                  {{ text }}
+                                                </v-chip>
+                                            </template>
+                                        </v-file-input>
+                                        </ValidationProvider>
+                                    </div>
+
+                                    <!--음식점 사진 확인-->
+                                    <div>
+                                        <h4 class="font-weight-black">올린 사진 확인</h4>
+                                    </div>
+                                    <div class="border-image">
                                         <v-img :src="cImg" @error="changeNotDefault"
                                         height="200px" contain/>
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                            </v-expansion-panels>
-
-                        </v-card>
-
-                        <v-divider class="mt-10 mb-10"></v-divider>
-
-                        <!--음식점 주소-->
-                        <v-card elevation="10" outlined>
-                            <v-card-title class="text--primary font-weight-black">음식점 주소</v-card-title>
-                            
-                            <!--음식점 주소 입력-->
-                            <v-card-text>
-                                <ValidationProvider :rules="{
-                                    required : true,
-                                    address : true,
-                                    }" name="음식점 주소" v-slot="{errors}">
-                                    <v-text-field v-model="rtrLocation" label="음식점 주소" :error-messages="errors"
-                                    prepend-icon="mdi-map-marker" clearable class="mt-4"
-                                    ></v-text-field>
-                                </ValidationProvider>
-                            </v-card-text>
-                            
-
-                            <!--음식점 주소 다이얼로그 및 주소정보확인 버튼-->
-                            <!--
-                            <v-dialog v-model="rtrLocationdialog" width="500">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-row justify="center" class="pd-5">
-
-
-                                        <v-col cols="auto">
-                                            <v-alert v-if="rtrLocationCheck" dense outlined type="success">해당 주소 정보는 올바른 위치 정보입니다.</v-alert>
-                                            <v-alert v-else dense outlined type="error">해당 주소 정보는 올바른 위치 정보가 아닙니다.</v-alert>
-                                        </v-col>
-
-
-                                        <v-col cols="auto">
-                                            <v-alert color="success" dark dense v-bind="attrs" v-on="on" @click="checkRtrLocation"> 
-                                                <v-icon left>mdi-map-marker-radius</v-icon>주소 정보 확인
-                                            </v-alert>
-                                        </v-col>
-                                    </v-row>
-                                </template>
-
-                                <v-card>
-                                    <v-alert v-if="rtrLocationCheck" dense outlined type="success">해당 <strong>주소 정보</strong>는 올바른 <strong>위치 정보</strong>입니다.</v-alert>
-                                    <v-alert v-else dense outlined type="error">해당 <strong>주소 정보</strong>는 올바른 <strong>위치 정보</strong>가 아닙니다.</v-alert>
-
-                                    <v-card-actions>
-                                        <v-btn v-if="rtrLocationCheck" color="success" text @click="rtrLocationdialog = false">확인</v-btn>
-                                        <v-btn v-else color="error" text @click="rtrLocationdialog = false">확인</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
-                            -->
-                        </v-card>
-
-                        <v-divider class="mt-10 mb-10"></v-divider>
-
-                        <!--음식점 메뉴 - 반복문 -->
-                        <v-card elevation="10" outlined v-for="menu,i in rtrMenu" :key="i">
-                            
-                            <v-app-bar flat color="">
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue" text fab @click="addMenu()"><v-icon>mdi-plus</v-icon></v-btn>
-                                <v-btn color="blue" text fab @click="deleteMenu(i)"><v-icon>mdi-minus</v-icon></v-btn>
-                            </v-app-bar>
-                            
-                            <v-card-title class="text--primary font-weight-black">메뉴{{i+1}}</v-card-title>
-                            
-                            <v-card-text>
-                                <ValidationProvider :rules="{
-                                    required : true,
-                                    }" name="메뉴 이름" v-slot="{errors}">
-                                    <v-text-field v-model="rtrMenu[i].menuName" label="메뉴 이름" :error-messages="errors"
-                                    prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
-                                ></v-text-field>
-                                </ValidationProvider>
-                                <ValidationProvider :rules="{
-                                    required : true,
-                                    }" name="메뉴 정보" v-slot="{errors}">
-                                    <v-text-field v-model="rtrMenu[i].menuInfo" label="메뉴 정보" :error-messages="errors"
-                                    prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
-                                ></v-text-field>
-                                </ValidationProvider>
-                                
-                                <v-row>
-                                    <v-col cols="12" sm="12" md="6" lg="4">
+                                    </div>
+                                </div>
+                                                               
+                                <!--3. 음식점 주소-->
+                                <div class="text-center mt-10 mb-3 div-border">
+                                    <div>
+                                        <h2 class="blue--text font-weight-black">음식점 주소</h2>
+                                    </div>
+                                    <div>
                                         <ValidationProvider :rules="{
                                             required : true,
-                                            numeric: true,
-                                            }" name="탄수화물(g) 함유량" v-slot="{errors}">
-                                            <v-text-field v-model="rtrMenu[i].menuCarbo" label="탄수화물(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-bowl" clearable suffix="g"></v-text-field>
+                                            address : true,
+                                            }" name="음식점 주소" v-slot="{errors}">
+                                            <v-text-field v-model="rtrLocation" label="음식점 주소" :error-messages="errors"
+                                            prepend-icon="mdi-map-marker" clearable class="mt-4"
+                                            ></v-text-field>
                                         </ValidationProvider>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="6" lg="4">
+                                    </div>
+                                </div>
+                             
+                                <!--4. 음식점 메뉴 - 반복문 -->
+                                <div v-for="menu,i in rtrMenu" :key="i" class="text-center div-menuBorder mb-1">
+                                    <v-app-bar flat color="white">
+                                        <v-spacer></v-spacer>
+                                        <v-btn class="mr-1" color="borderColor" small dark fab outlined @click="addMenu()"><v-icon>mdi-plus</v-icon></v-btn>
+                                        <v-btn class="ml-1" color="borderColor" small dark fab outlined @click="deleteMenu(i)"><v-icon>mdi-minus</v-icon></v-btn>
+                                    </v-app-bar>
+                                    <div>
+                                        <h2 class="borderColor--text font-weight-black">메뉴{{i+1}}</h2>
+                                    </div>
+                                    <div>
                                         <ValidationProvider :rules="{
                                             required : true,
-                                            numeric: true,
-                                            }" name="단백질(g) 함유량" v-slot="{errors}">
-                                            <v-text-field v-model="rtrMenu[i].menuProtein" label="단백질(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-fuel" clearable suffix="g"></v-text-field>
+                                            }" name="메뉴 이름" v-slot="{errors}">
+                                            <v-text-field v-model="rtrMenu[i].menuName" label="메뉴 이름" :error-messages="errors"
+                                            prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
+                                        ></v-text-field>
                                         </ValidationProvider>
-                                    </v-col>
-                                    <v-col cols="12" sm="12" md="6" lg="4">
                                         <ValidationProvider :rules="{
                                             required : true,
-                                            numeric: true,                                            
-                                            }" name="지방(g) 함유량" v-slot="{errors}">
-                                            <v-text-field v-model="rtrMenu[i].menuFat" label="지방(g) 함유량" :error-messages="errors"
-                                            prepend-icon="mdi-fire" clearable suffix="g"></v-text-field>
+                                            }" name="메뉴 정보" v-slot="{errors}">
+                                            <v-text-field v-model="rtrMenu[i].menuInfo" label="메뉴 정보" :error-messages="errors"
+                                            prepend-icon="mdi-food-fork-drink" clearable class="mt-4"
+                                        ></v-text-field>
                                         </ValidationProvider>
-                                    </v-col>
-                                </v-row>
-                                
-                            </v-card-text>
-                        </v-card>
+                                    </div>
+                                    <div>
+                                        <v-row>
+                                            <v-col cols="12" sm="12" md="6" lg="4">
+                                                <ValidationProvider :rules="{
+                                                    required : true,
+                                                    numeric: true,
+                                                    }" name="탄수화물(g) 함유량" v-slot="{errors}">
+                                                    <v-text-field v-model="rtrMenu[i].menuCarbo" label="탄수화물(g) 함유량" :error-messages="errors"
+                                                    prepend-icon="mdi-bowl" clearable suffix="g"></v-text-field>
+                                                </ValidationProvider>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="6" lg="4">
+                                                <ValidationProvider :rules="{
+                                                    required : true,
+                                                    numeric: true,
+                                                    }" name="단백질(g) 함유량" v-slot="{errors}">
+                                                    <v-text-field v-model="rtrMenu[i].menuProtein" label="단백질(g) 함유량" :error-messages="errors"
+                                                    prepend-icon="mdi-fuel" clearable suffix="g"></v-text-field>
+                                                </ValidationProvider>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="6" lg="4">
+                                                <ValidationProvider :rules="{
+                                                    required : true,
+                                                    numeric: true,                                            
+                                                    }" name="지방(g) 함유량" v-slot="{errors}">
+                                                    <v-text-field v-model="rtrMenu[i].menuFat" label="지방(g) 함유량" :error-messages="errors"
+                                                    prepend-icon="mdi-fire" clearable suffix="g"></v-text-field>
+                                                </ValidationProvider>
+                                            </v-col>
+                                        </v-row>
+                                    </div>
+                                </div>
 
-                        <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid" >수정하기</v-btn>
-
-                    </v-form>
-                </ValidationObserver>
-            </v-card-text>
-
-        </v-card>
+                                <!--5. 등록 버튼-->
+                                <div>
+                                    <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">등록하기</v-btn>
+                                </div>
+                            </div>
+                        </v-form>
+                    </ValidationObserver>
+                </v-col>
+            </v-row>
+        </div>
     </v-container>
 
 </template>
@@ -241,21 +198,42 @@ export default {
         rtr : Object
     },
 
+    created(){
+        const hasNotRtr = !this.$route.params.rtr;
+        if(hasNotRtr) {
+            this.$router.push({
+                name : 'register',
+            });
+        }else{
+            this.rtrName = hasNotRtr ? null : this.$route.params.rtr.rtrName;
+            this.rtrimgPreURL = hasNotRtr ? null : this.$route.params.rtr.rtrimgURL;
+            this.isDefaultImage = hasNotRtr ? true : false;
+            this.rtrLocation = hasNotRtr ? null : this.$route.params.rtr.rtrLocation;
+
+            const menuObject = [{
+                menuName: null,
+                menuInfo : null,
+                menuCarbo : null,
+                menuProtein : null,
+                menuFat : null
+            }];
+            this.rtrMenu = hasNotRtr ? menuObject : this.$route.params.rtr.rtrMenu;
+        }
+    },
+
     data(){
         return {
 
-            rtrName: this.rtr.rtrName,
+            rtrName: null,
 
-            rtrimg : null,          //v-input 받아온 값
-            rtrimgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
-            rtrimgPreURL : this.rtr.rtrimgURL,    //s3에 업로드되면 얻기, v-img:src (~)
-            isDefaultImage : false,
+            rtrimg : null,                        //v-input 받아온 값
+            rtrimgURL : null,                     //s3에 업로드되면 얻기, POST요청 (afas.jpg)
+            rtrimgPreURL : null,    //s3에 업로드되면 얻기, v-img:src (~)
+            isDefaultImage : true,
 
-            rtrLocation : this.rtr.rtrLocation,
-            //rtrLocationdialog : false,
-            //rtrLocationCheck : false,
+            rtrLocation : null,
 
-            rtrMenu: this.rtr.rtrMenu,
+            rtrMenu: null,
 
 
             //bucketRegion : 'ap-northeast-2',
@@ -433,3 +411,20 @@ export default {
 
 }
 </script>
+<style scoped>
+.div-border{
+    border: 2px dashed;
+    border-color: #80CAFF;
+    padding: 2%; 
+}
+
+.div-menuBorder{
+    border: 2px dashed;
+    border-color: #03C04A;
+    padding: 1.5%;
+}
+
+.border-image{
+  border : 3px solid ;
+}
+</style>

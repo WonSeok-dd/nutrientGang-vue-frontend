@@ -59,6 +59,7 @@ const routes = [
         component : RegisterLayout,
         children : [
             {
+                name : 'register',
                 path : '',
                 component : RegisterRestaurant
             },
