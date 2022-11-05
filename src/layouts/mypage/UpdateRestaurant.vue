@@ -206,7 +206,7 @@ extend('required', {
 });
 extend('numeric', {
     ...numeric,
-    message : '해당 필드는 숫자로만 입력해야 합니다..'
+    message : '해당 필드는 숫자로만 입력해야 합니다.'
 })
 
 extend('address', async (value) => {
@@ -249,7 +249,7 @@ export default {
             rtrimg : null,          //v-input 받아온 값
             rtrimgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
             rtrimgPreURL : this.rtr.rtrimgURL,    //s3에 업로드되면 얻기, v-img:src (~)
-            default_img : false,
+            isDefaultImage : false,
 
             rtrLocation : this.rtr.rtrLocation,
             //rtrLocationdialog : false,
@@ -258,11 +258,17 @@ export default {
             rtrMenu: this.rtr.rtrMenu,
 
 
+            //bucketRegion : 'ap-northeast-2',
+            //IdentityPoolId : 'ap-northeast-2:7361f497-478c-4d05-88c0-aaa4f9b759bd',
+            //href : 'https://photo-album-cluejws.s3.ap-northeast-2.amazonaws.com/', 
+            //albumBucketName : 'photo-album-cluejws', 
+            //albumName : 'rtr_album',  
+            
             bucketRegion : 'ap-northeast-2',
-            IdentityPoolId : 'ap-northeast-2:7361f497-478c-4d05-88c0-aaa4f9b759bd',
-            href : 'https://photo-album-cluejws.s3.ap-northeast-2.amazonaws.com/', 
-            albumBucketName : 'photo-album-cluejws', 
-            albumName : 'rtr_album',          
+            IdentityPoolId : 'ap-northeast-2:d6a685e8-0da6-493d-bb54-d84abf3ab01c',
+            href : 'https://dgucapstonepics.s3.ap-northeast-2.amazonaws.com/', 
+            albumBucketName : 'dgucapstonepics', 
+            albumName : 'rtr_album',       
         }
     },
 
@@ -272,10 +278,10 @@ export default {
     },
 
     computed :{
-        //default_img:true -> defaultimg
-        //default_img:false -> rtrimgPreURL
+        //isDefaultImage:true -> defaultimg
+        //isDefaultImage:false -> rtrimgPreURL
         cImg(){
-            return this.default_img ? require('@/assets/default.png') : this.rtrimgPreURL;
+            return this.isDefaultImage ? require('@/assets/default.png') : this.rtrimgPreURL;
         }
     },
 
@@ -328,9 +334,9 @@ export default {
             }
         },
 
-        //default_img = true -> false
+        //isDefaultImage = true -> false
         changeNotDefault(){
-            this.default_img = false;
+            this.isDefaultImage = false;
         },
 
         connectAWS(){
@@ -355,13 +361,13 @@ export default {
             this.connectAWS();
 
             //rtrimg 지울때 / 추가할때
-            if (this.rtrimg === null){
+            if (!this.rtrimg){
                 
                 this.rtrimg = null
                 this.rtrimgURL = null
                 
                 this.rtrimgPreURL = null;
-                this.default_img = true;
+                this.isDefaultImage = true;
             }else{
                 
                 //2. AWS 버킷에 업로드(1) 
@@ -396,7 +402,7 @@ export default {
                         this.rtrimgURL = randomString + '.' + form;
                         
                         this.rtrimgPreURL = this.href + 'rtr_album/' + randomString + '.' + form;
-                        this.default_img = false;
+                        this.isDefaultImage = false;
 
                     },
                     (err) => {
