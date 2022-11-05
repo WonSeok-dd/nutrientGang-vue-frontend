@@ -33,7 +33,7 @@
 </template>
 
 <script>
-const MenuRcnDialog = () => import("@/components/Recommend/MenuRcnDialog.vue");
+const MenuRcnDialog = () => import("@/components/Recommend/Menu/MenuRcnDialog.vue");
 const DiaryKcal = () => import("@/components/Diary/DiaryKcal.vue");
 const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
 
