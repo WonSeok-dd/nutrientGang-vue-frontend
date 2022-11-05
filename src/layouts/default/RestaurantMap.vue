@@ -2,9 +2,9 @@
 
     <v-container fluid>
         <!--제목-->
-        <v-card class="text-center">
+        <div class="text-center">
             <h1 class="text--primary font-weight-black">음식점 현황</h1>
-        </v-card>
+        </div>
         
         <!--음식점 지도-->
         <v-card class="text-center">
@@ -63,6 +63,7 @@ import {KakaoOverlay} from "@/components/map/overlay-handler.js"
 
 export default {
 
+    name : 'RestaurantMap',
     props : {
         restaurants : Array
     },

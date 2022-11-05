@@ -20,6 +20,7 @@
 <script>
 import {mapState, mapActions} from 'vuex'
 export default {
+  name : 'AppBar',
   computed : {
     ...mapState(['isLogin'])
   },

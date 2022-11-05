@@ -12,7 +12,7 @@ import {api} from "@/api.js"  //axios로 변경
 import axios from 'axios'
 
 export default {
-
+  name : 'RestaurantList',
   data(){
     return {
       restaurants : []

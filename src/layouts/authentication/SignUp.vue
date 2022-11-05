@@ -112,6 +112,7 @@ extend('confirmed', {
 });
 
 export default {
+    name : 'SignUp',
     data(){
         return {
           name : null,

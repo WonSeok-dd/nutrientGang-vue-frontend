@@ -78,6 +78,7 @@ extend('email',{
 });
 
 export default {
+    name : 'SignIn',
     data(){
         return {
 

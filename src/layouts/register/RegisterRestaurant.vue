@@ -194,6 +194,7 @@ extend('address', async (value) => {
 
 
 export default {
+    name : 'RegisterRestaurant',
     data(){
         return {
 

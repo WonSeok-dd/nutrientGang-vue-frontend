@@ -193,7 +193,8 @@ extend('address', async (value) => {
 
 
 export default {
-    
+
+    name : 'UpdateRestaurant',  
     props : {
         rtr : Object
     },

@@ -19,7 +19,7 @@ const DefaultBar = () => import("@/components/AppBar.vue")
 const DefaultNavigationDrawer = () => import("@/components/NavigationDrawer.vue")
 
 export default {
-    
+    name : 'DefaultPage',
     data () {
       return {
 

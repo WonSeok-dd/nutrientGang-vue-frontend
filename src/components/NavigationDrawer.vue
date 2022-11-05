@@ -74,6 +74,7 @@ import {mapState} from 'vuex'
 
 
 export default {
+  name : 'NavigationDrawer',
   data() {
     return {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",

@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
         <!--등록한 음식점 제목-->
-        <v-card class="text-center">
+        <div class="text-center">
             <h1 class="text--primary font-weight-black">내가 등록한 음식점들</h1>
-        </v-card>
+        </div>
 
         <!--등록한 음식점 정보-->
         <v-card>
@@ -34,7 +34,7 @@ import {api} from "@/api.js"  //axios로 변경
 import axios from 'axios'
 
 export default {
-
+  name : 'MyPageComponent',
   data(){
     return {
       restaurants : []
