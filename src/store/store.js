@@ -63,36 +63,48 @@ export const store = new Vuex.Store({
             state.isLogin = false;
             state.isLoginError = false;
 
-            state.userInfo = null;
+            state.userInfo.user_name = "";
         },
     },
 
     actions : {
-        login({dispatch}, loginObj){
+        login({dispatch ,commit}, loginObj){
             
-            axios.post('/api/user/login', loginObj)
+            axios.post('/auth/login', loginObj)
             .then(res => {
                 
                 // 로그인 일치 정보 o (isSuccess: true, token: token)
                 // 로그인 일치 정보 x (isSuccess: false, message)
                 if (res.data.isSuccess === true){             // 로그인 일치 정보 o
                     
-                    //1. localStoarge에 token 저장(새로고침 방지)
-                    let accessToken = res.data.result.accessToken;
-                    localStorage.setItem('access-token', accessToken);
+                    console.log(res.data.isSuccess, res.data.username);
 
-                    //2. getMemberInfo
+                    //1. localStoarge에 token 저장(새로고침 방지)
+                    let accessToken = res.data.result.tokenDto.accessToken;
+                    let refreshToken = res.data.result.tokenDto.refreshToken;
+                    let accessTokenExpiresIn = res.data.result.tokenDto.accessTokenExpiresIn;
+                    localStorage.setItem('access-token', accessToken);
+                    localStorage.setItem('refresh-token', refreshToken);
+                    localStorage.setItem('access-token-expiresIn', accessTokenExpiresIn);
+                    
+                    //2. loginsuccess                     
+                    let userInfo = {
+                        user_name : res.data.username,
+                    };
+                    commit('loginSuccess', userInfo)
+
+                    //3. getMemberInfo
                     dispatch('getMemberInfo');
 
                 }else{                                     // 로그인 일치 정보 x      
-                    console.log(res.data.isSuccess, res.data.code ,res.data.message)
-                    
+                    console.log(res.data.isSuccess, res.data.message);
                     this.commit('loginError', res.data.message);
                 }
 
             })
             .catch(err =>{
-                console.log(err.message)
+                console.log(err.message);
+                this.commit('loginError', "서버와의 통신이 원할하지 않습니다.");
             })
         },
 
@@ -108,17 +120,17 @@ export const store = new Vuex.Store({
 
             //2. token을 헤더에 포함시켜서 유저 정보를 요청
             axios.get('/api/user/auth', config)
-            .then(response => {
-                console.log(response)
-                //auth o (isSuccess: true, user_id, user_name)
+            .then(res => {
+                console.log(res);
+
+                //auth o (isSuccess: true, user_name)
                 //auth x (isSuccess: false, message)
-                if (response.data.isSuccess === true){    //auth o
+                if (res.data.isSuccess === true){    //auth o
                     
+                    console.log(res.data.isSuccess, res.data.username);
                     let userInfo = {
-                        user_id : response.data.user_id,
-                        user_name : response.data.user_name,
+                        user_name : res.data.username,
                     };
-                    console.log(response.data.isSuccess, response.data.user_name)
                     commit('loginSuccess', userInfo)
                 }else{                                  //auth x
 
@@ -132,6 +144,8 @@ export const store = new Vuex.Store({
         logout({commit}) {
 
             localStorage.removeItem('access-token');
+            localStorage.removeItem('refresh-token');
+            localStorage.removeItem('access-token-expiresIn');
 
             commit('logout')
         },

@@ -121,11 +121,8 @@ export default {
     
     data(){
         return {
-            //name : this.$store.state.infoName,
-            //email: this.$store.state.infoEmail,
 
             passwordShow: true,
-            //password: this.$store.state.infoPassword,
 
             confirm_passwordShow: true,
             cofirm_password: '',
@@ -175,19 +172,59 @@ export default {
             if (result){
 
                 // 회원가입 정보
+
+                //성별
+                let gender = "";
+                switch(this.$store.state.infoGender){
+                    case 0:
+                        gender = "MALE";
+                        break;
+                    case 1:
+                        gender = "FEMALE";
+                        break;
+                }
+
+                //목표
+                let target = "";
+                switch(this.$store.state.infoTarget){
+                    case 0:
+                        target = "LOSS_WEIGHT";
+                        break;
+                    case 1:
+                        target = "GAIN_MUSCLE";
+                        break;
+                    case 2:
+                        target = "MAINTAIN_WEIGHT";
+                        break;
+                }
+
+                let activity = "";
+                switch(this.$store.state.infoActivity){
+                    case 0:
+                        activity = "SOFT_ACTIVITY";
+                        break;
+                    case 1:
+                        activity = "NORMAL_ACTIVITY";
+                        break;
+                    case 2:
+                        activity = "HARD_ACTIVITIY";
+                        break;
+                }
+
+
                 const info = {
-                    infoTarget : this.$store.state.infoTarget,
-                    infoActivity : this.$store.state.infoActivity,
-                    infoGender : this.$store.state.infoGender,
-                    infoHeight : this.$store.state.infoHeight,
-                    infoWeight : this.$store.state.infoWeight,
-                    infoName : this.$store.state.infoName,
-                    infoEmail : this.$store.state.infoEmail,
-                    infoPassword : this.$store.state.infoPassword
+                    target : target,
+                    activity : activity,
+                    gender : gender,
+                    height : this.$store.state.infoHeight,
+                    weight : this.$store.state.infoWeight,
+                    username : this.$store.state.infoName,
+                    email : this.$store.state.infoEmail,
+                    password : this.$store.state.infoPassword
                 };
                 console.log(info)
 
-                await axios.post('/api/user/joinform', info)
+                await axios.post('/auth/signup', info)
                     .then(res => {
                         if (res.data.isSuccess === true){
                             
@@ -206,7 +243,15 @@ export default {
                         }
                     })
                     .catch(err =>{
-                        console.log(err.message)
+                        console.log(err.message);
+                        this.isRegisterError = true;
+                        this.RegisterErrorMsg = "서버와의 통신이 원할하지 않습니다.";
+
+                        setTimeout(()=>{
+                            this.isRegisterError = false;
+                            this.RegisterErrorMsg = '';
+                        },5000);
+
                     })
             }
         }
