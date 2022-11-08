@@ -10,32 +10,36 @@
         </template>
 
         <!--Dialog 내용-->
-        
-        <!--
         <v-card>
             <v-toolbar dark color="#03C04A">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>메뉴</v-toolbar-title>
+                <v-toolbar-title>메뉴 추천</v-toolbar-title>
             </v-toolbar>
-        </v-card>-->
-
-
+            <v-card-text>
+              <MenuRcnDialogTemplate/>
+            </v-card-text>
+        </v-card>
     </v-dialog>
   </v-row>
 </template>
 
 <script>
+const MenuRcnDialogTemplate = () => import("@/components/Recommend/Menu/MenuRcnDialogTemplate.vue");
 export default {
+    name : 'MenuRcnDialog',
     data () {
       return {
         dialog: false,
-        notifications: false,
-        sound: true,
-        widgets: false,
       }
     },
+
+    components : {
+      "MenuRcnDialogTemplate" : MenuRcnDialogTemplate,
+    }
+
+
 }
 </script>
 
