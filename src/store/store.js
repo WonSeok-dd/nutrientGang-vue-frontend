@@ -102,14 +102,12 @@ export const store = new Vuex.Store({
 
                 }else{                                     // 로그인 일치 정보 x      
                     console.log(res.data.isSuccess, res.data.message);
-                    //1. loginError
                     commit('loginError', res.data.message);
                 }
 
             })
             .catch(err =>{
                 console.log(err.message);
-                //1. loginError
                 commit('loginError', '서버와의 통신이 원할하지 않습니다.');
             })
         },
@@ -125,8 +123,8 @@ export const store = new Vuex.Store({
             commit('logout')
         },
 
-        //token 재발행 reissue
-        reIssueToken({commit}){
+        //매 요청마다 권한 판단 오류 시 token 재발행
+        reIssueToken({dispatch, commit}){
 
             //1. localStorage에서 가져오기
             const accessToken = localStorage.getItem('access-token');
@@ -140,15 +138,23 @@ export const store = new Vuex.Store({
             axios.post('/auth/reissue', tokenObj)
             .then(res => {
 
-                if (res.data.isSuccess === true){
+                if (res.data.isSuccess === true && res.data.code === 1000){
                     
                     console.log(res.data.isSuccess, res.data.result);
                     //1. localStoarge에 저장
                     commit('setLocalStorage', res.data.result.tokenDto);
+                    
+                    //2. loginSuccess
+                    commit('loginSuccess', res.data.result.username);
+
+                }else {
+                    console.log(res.data.isSuccess, res.data.message);
+                    dispatch('logout')
                 }
             })
             .catch(err => {
                 console.log(err.message);
+                dispatch('logout')
             })
 
         }

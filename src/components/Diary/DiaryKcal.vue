@@ -36,8 +36,7 @@
 </template>
 
 <script>
-//import axios from "axios"
-
+import Diary from '@/api/Diary';
 export default {
     name : 'DiaryKcal',
     props: {
@@ -47,18 +46,39 @@ export default {
         },
     },
 
-    //mounted(){
-    //    axios.get("/api/diary/"+ this.date)
-    //    .then(()=>{
-    //          recommendKcal -> Number
-    //          dateKcal -> Number     
-    //    });
-    //},
+    watch : {
+        date : {
+            immediate : true,
+            handler(date){
+
+                //중요) 필요한 데이터 요청
+                Diary.getKcal(date)
+                .then((res) =>{
+                    console.log(res.data.message);
+                    if(res.data.isSuccess === true && res.data.code === 1000){
+                        this.recommendKcal = res.data.result.needCalorie;
+                        this.dateKcal = res.data.result.haveCalorie;
+                    }else if (res.data.isSuccess === false && res.data.code === 2014){
+                        this.recommendKcal = 0;
+                        this.dateKcal = 0;
+                    }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                        //
+                    }
+                })
+                .catch((err)=>{
+                    console.log('err',err);
+                    this.recommendKcal = 0;
+                    this.dateKcal = 0;
+                })
+
+            }
+        }
+    },
 
     data(){
         return {
             recommendKcal : 2067,     //일일 권장 Kcal
-            dateKcal : 300,           //사용자의 날짜별 Kcal
+            dateKcal : 100,           //사용자의 날짜별 Kcal
         }
     },
 
@@ -69,13 +89,16 @@ export default {
 
         leftKcal(){
             if (this.recommendKcal < this.dateKcal){
-                return 0
+                return 0;
             }else{
                 return this.recommendKcal - this.dateKcal;
             }
         },
 
         leftPercentKcal(){
+            if (this.recommendKcal === 0){
+                return 0;
+            }
             return (this.dateKcal / this.recommendKcal) * 100
         },
     }

@@ -83,6 +83,7 @@
 </template>
 
 <script>
+//import axios from 'axios';
 const LoadingComponent = () => import("@/components/LoadingComponent.vue");
 const DiaryKcal = () => import("@/components/Diary/DiaryKcal.vue");
 const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
@@ -98,7 +99,25 @@ export default {
     },
 
     mounted () {
-      //2022-09-30 이런식으로 불러오기
+      //1. localStorage에서 AccessToken가져오기
+      //const accessToken = localStorage.getItem('access-token');
+      //const config = {
+      //  headers: {
+      //    Authorization: `Bearer ${accessToken}`
+      //  }
+      //};
+
+      //2. 필요한 데이터 요청
+      //axios.get('/health/diary/nutrient', config)
+      //.then(res => {
+      //  if(res.data.isSuccess === true){
+      //    console.log(res.data.result);
+      //  }
+      //})
+      //.catch(err => {
+      //    console.log(err)
+      //});
+
       this.dateArrayEvents = [
         '2022-11-16','2022-11-17' 
       ];
