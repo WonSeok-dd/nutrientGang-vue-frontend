@@ -1,6 +1,13 @@
 <template>
 
-    <v-container fluid>
+    <v-container v-if="isLoading" class="fill-height">
+      <v-row justify="center">
+        <v-col cols="auto">
+          <LoadingComponent/>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container v-else fluid>
 
       <!--달력, 날짜별 몸무게-->
       <div class="mb-3">
@@ -79,6 +86,7 @@
 </template>
 
 <script>
+const LoadingComponent = () => import("@/components/LoadingComponent.vue");
 const DiaryKcal = () => import("@/components/Diary/DiaryKcal.vue");
 const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
 const DiaryMeal = () => import("@/components/Diary/DiaryMeal.vue");
@@ -86,6 +94,7 @@ const DiaryMeal = () => import("@/components/Diary/DiaryMeal.vue");
 export default {
     name : 'Diary',
     components : {
+      "LoadingComponent" : LoadingComponent,
       "DiaryKcal" : DiaryKcal,
       "DiaryNutrient" : DiaryNutrient,
       "DiaryMeal" : DiaryMeal,
@@ -96,10 +105,16 @@ export default {
       this.dateArrayEvents = [
         '2022-11-16','2022-11-17' 
       ];
+
+      this.isLoading = false;
     },
 
     data(){
         return {
+
+            //로딩 판단
+            isLoading : true,
+
             dateArrayEvents: null,
             date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
