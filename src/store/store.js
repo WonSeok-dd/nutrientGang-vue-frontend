@@ -35,6 +35,18 @@ export const store = new Vuex.Store({
     },
     
     mutations : {
+
+        //회원가입 성공 시 
+        clearInfoRegister(state){
+            state.infoTarget = 0;
+            state.infoActivity = 0;
+            state.infoGender = 0;
+            state.infoHeight = 180;
+            state.infoWeight = 50;
+            state.infoName = null;
+            state.infoEmail = null;
+            state.infoPassword = null;     
+        },
         
         //localStorage에 저장
         setLocalStorage(state, tokenDto){
@@ -90,24 +102,30 @@ export const store = new Vuex.Store({
             
             axios.post('/auth/login', loginObj)
             .then(res => {
-                
-                if (res.data.isSuccess === true){             // 로그인 일치 정보 o
-                    
-                    console.log(res.data.isSuccess, res.data.result);
+                console.log(res.data.message);
+                if (res.data.isSuccess === true && res.data.code === 1000){            
+                    //중요) 요청에 성공하였습니다.
                     //1. localStoarge에 저장
                     commit('setLocalStorage', res.data.result.tokenDto);
                     
                     //2. loginSuccess
                     commit('loginSuccess', res.data.result.username);
 
-                }else{                                     // 로그인 일치 정보 x      
-                    console.log(res.data.isSuccess, res.data.message);
+                }else if(res.data.isSuccess === false && res.data.code === 2003){       
+                    
+                    //중요) 비밀번호가 틀렸습니다.
+                    commit('loginError', res.data.message);
+                }else if (res.data.isSuccess === false && res.data.code === 2010){
+
+                    //중요) 유저를 찾을 수 없습니다.
                     commit('loginError', res.data.message);
                 }
 
             })
             .catch(err =>{
-                console.log(err.message);
+                //중요) 서버 오류입니다.
+                //뜨기 -> alert메시지 뜨기
+                console.log(err);
                 commit('loginError', '서버와의 통신이 원할하지 않습니다.');
             })
         },

@@ -226,12 +226,15 @@ export default {
 
                 await axios.post('/auth/signup', info)
                     .then(res => {
-                        if (res.data.isSuccess === true){
-                            
-                            console.log(res.data)
+                        console.log(res.data.message);
+                        if (res.data.isSuccess === true && res.data.code === 1000){
+                            //중요) 요청에 성공하였습니다.
+                            this.$store.commit('clearInfoRegister');
                             //this.$router.push('/authentication/sign-in')
-                        }else{
-                            console.log(res.data.isSuccess, res.data.message)
+
+                        }else if(res.data.isSuccess === false && res.data.code === 2005){
+
+                            //중요) 이미 회원가입된 email 입니다.
                             this.isRegisterError = true;
                             this.RegisterErrorMsg = res.data.message;
 
@@ -243,9 +246,11 @@ export default {
                         }
                     })
                     .catch(err =>{
-                        console.log(err.message);
+                        //중요) 서버 오류입니다.
+                        //뜨기 -> alert메시지 뜨기
+                        console.log(err);
                         this.isRegisterError = true;
-                        this.RegisterErrorMsg = "서버와의 통신이 원할하지 않습니다.";
+                        this.RegisterErrorMsg = '서버와의 통신이 원할하지 않습니다.';
 
                         setTimeout(()=>{
                             this.isRegisterError = false;
