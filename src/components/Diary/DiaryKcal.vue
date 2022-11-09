@@ -114,15 +114,17 @@ export default {
         leftKcal(){
             if (this.recommendKcal < this.dateKcal){
                 return 0;
-            }else{
-                return this.recommendKcal - this.dateKcal;
             }
+            
+            return this.recommendKcal - this.dateKcal;
+            
         },
 
         leftPercentKcal(){
             if (this.recommendKcal === 0){
                 return 0;
             }
+            
             return (this.dateKcal / this.recommendKcal) * 100
         },
     }
