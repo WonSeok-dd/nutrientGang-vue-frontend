@@ -1,6 +1,13 @@
 <template>
-  <div>  
-
+  
+  <div class="fill-height" v-if="isError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <ServerErrorComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <div v-else>  
     <!--칼로리 정보-->
     <v-row class="mt-3">
 
@@ -31,11 +38,12 @@
     <div class="pa-3 border">
       <LineChartGenerator :chart-options="chartOptions" :chart-data="chartData"/>
     </div>
-
   </div>
 </template>
 
 <script>
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+import Report from '@/api/Report';
 import { Line as LineChartGenerator } from 'vue-chartjs/legacy'
 import {Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -44,15 +52,56 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
 export default {
   name : "ReportChangeWeight",
   components: {
-    LineChartGenerator
+    LineChartGenerator,
+    "ServerErrorComponent" : ServerErrorComponent
   },
 
   mounted(){
+    
+    Report.getChangeWeight()
+    .then((res) =>{
+        console.log(res.data.message);
+        if(res.data.isSuccess === true && res.data.code === 1000){
+            //중요) 요청에 성공하였습니다.
+            this.maxKg = res.data.result.maxWeight;
+            this.minKg = res.data.result.minWeight;
 
+            const weightInfoList = res.data.result.weightInfoList;
+            const reverseList = [...weightInfoList].reverse();
+
+            this.dateKg = res.data.result.weightInfoList[0].weight;
+            //this.todayKg = res.data.result.todayKg;
+
+            this.chartData.labels = [];
+            this.chartData.datasets[0].data = [];
+            for (const weightInfo of reverseList){
+              this.chartData.labels.push(weightInfo.date);
+              this.chartData.datasets[0].data.push(weightInfo.weight)
+            }
+
+        }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+            //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+            //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+            this.$store.dispatch('logout');
+            this.$router.push({
+                name : "sign-in",
+            });
+        }
+    })
+    .catch((err)=>{
+        //중요) 서버 오류입니다.
+        //뜨기 -> alert메시지 뜨기
+        console.log(err);
+        this.isError = true;
+    });
   },
 
   data(){
     return {
+
+      //에러 판단
+      isError : false,
+
       dateKg : 70,     //날짜 별 몸무게
       todayKg : 70,    //오늘날짜 몸무게
 

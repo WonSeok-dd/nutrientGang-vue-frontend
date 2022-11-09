@@ -1,6 +1,13 @@
 <template>
-  <div>  
 
+  <div class="fill-height" v-if="isError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <ServerErrorComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <div v-else>  
     <!--칼로리 정보-->
     <v-row class="mt-3">
 
@@ -31,11 +38,12 @@
     <div class="py-3 px-1 border">
       <LineChartGenerator :chart-options="chartOptions" :chart-data="chartData"/>
     </div>
-
   </div>
 </template>
 
 <script>
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+import Report from '@/api/Report';
 import { Line as LineChartGenerator } from 'vue-chartjs/legacy'
 import {Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -44,15 +52,57 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale
 export default {
   name : 'ReportChangeKcal',
   components: {
-    LineChartGenerator
+    LineChartGenerator,
+    "ServerErrorComponent" : ServerErrorComponent
   },
 
-  mounted(){
+  created(){
 
+    Report.getChangeKcal()
+    .then((res) =>{
+        console.log(res.data.message);
+        if(res.data.isSuccess === true && res.data.code === 1000){
+            //중요) 요청에 성공하였습니다.
+            this.maxKcal = res.data.result.maxCalorie;
+            this.minKcal = res.data.result.minCalorie;
+            this.recommendKcal = res.data.result.needCalorie;
+
+            const calorieInfoList = res.data.result.calorieInfoList;
+            const reverseList = [...calorieInfoList].reverse();
+
+            this.dateKcal = res.data.result.calorieInfoList[0].calorie;
+            //this.todayKcal = res.data.result.todayKcal;
+
+            this.chartData.labels = [];
+            this.chartData.datasets[0].data = [];
+            for (const calorieInfo of reverseList){
+              this.chartData.labels.push(calorieInfo.date);
+              this.chartData.datasets[0].data.push(calorieInfo.calorie)
+            }
+
+        }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+            //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+            //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+            this.$store.dispatch('logout');
+            this.$router.push({
+                name : "sign-in",
+            });
+        }
+    })
+    .catch((err)=>{
+        //중요) 서버 오류입니다.
+        //뜨기 -> alert메시지 뜨기
+        console.log(err);
+        this.isError = true;
+    });
   },
 
   data(){
     return {
+
+      //에러 판단
+      isError : false,
+
       dateKcal : 3000,      //날짜 별 섭취 칼로리
       todayKcal : 3000,     //오늘날짜 섭취 칼로리
 
@@ -61,7 +111,7 @@ export default {
       recommendKcal : 2306, //사용자의 권장 칼로리 
 
       chartData: {
-          labels: ['2022-10-16','2022-10-17','2022-10-18','2022-10-19','2022-10-20','2022-10-21','2022-10-22'],
+          labels: ['null'],
           datasets: [     
             {
               label: '칼로리 변화',
@@ -73,7 +123,7 @@ export default {
               
               tension: 0.5,               //휘어짐 정도
 
-              data: [4500, 3800, 1200, 3600, 4300, 0, 3000],
+              data: [null],
 
               datalabels: {
                 display : true,
@@ -179,10 +229,10 @@ export default {
                 
                 const isdiff = this.recommendKcal - value > 0;     //2306시 2305선택
                 const diff = this.recommendKcal - value;           //2306-2305 = 1
-                
+
                 if(value % 500 === 0){
                   return value
-                }else if(diff < 5 && isdiff){
+                }else if( diff < 5 && isdiff){
                   return '권장 칼로리'
                 }
               }
