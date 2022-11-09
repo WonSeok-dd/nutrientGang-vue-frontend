@@ -37,15 +37,12 @@
                       </v-btn>
                   </template>
 
-                  <!--Dialog 내용-->
-                  <v-card>
-                      <v-card-text class="text-center">                        
-                          <v-date-picker v-model="date" 
-                          color="blue" header-color="blue"
-                          :events="dateArrayEvents" event-color="red lighten-1">
-                          </v-date-picker>
-                      </v-card-text>
-                  </v-card>
+                  <!--Dialog 내용-->  
+                  <v-date-picker v-model="date" 
+                  color="blue" header-color="blue"
+                  :events="dateArrayEvents" event-color="red lighten-1">
+                  </v-date-picker>
+
               </v-dialog>
             </v-col>  
             

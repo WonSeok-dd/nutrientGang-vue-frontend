@@ -59,13 +59,10 @@
               </template>
             
               <!--Dialog 내용-->
-              <v-card>
-                  <v-card-text class="text-center">                        
-                      <v-date-picker v-model="date" 
-                      color="blue" header-color="blue">
-                      </v-date-picker>
-                  </v-card-text>
-              </v-card>
+              <v-date-picker v-model="date" 
+              color="blue" header-color="blue">
+              </v-date-picker>
+
           </v-dialog>
         </v-col>
 

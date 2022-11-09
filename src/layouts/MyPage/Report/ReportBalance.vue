@@ -14,14 +14,11 @@
                   </v-btn>
               </template>
               
-              <!--Dialog 내용-->
-              <v-card>
-                  <v-card-text class="text-center">                        
-                      <v-date-picker v-model="dates" range readonly
-                      color="blue" header-color="blue">
-                      </v-date-picker>
-                  </v-card-text>
-              </v-card>
+              <!--Dialog 내용-->      
+              <v-date-picker v-model="dates" range readonly
+              color="blue" header-color="blue">
+              </v-date-picker>
+
           </v-dialog>
                 
           <!--Dialog 왼쪽 버튼-->
