@@ -1,7 +1,13 @@
 <template>
  
-  <div>
-
+  <div class="fill-height" v-if="isError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <ServerErrorComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <div v-else>
     <!--탄수화물 제목 / 초과 시 Chip / 그래프 --> 
     <div>
       <v-row align="center" no-gutters>
@@ -67,8 +73,8 @@
 </template>
 
 <script>
-//import axios from "axios
-
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+import Diary from '@/api/Diary';
 export default {
     name : 'DiaryNutrient',
     props: {
@@ -77,22 +83,59 @@ export default {
             default : (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
         },
     },
+    components : {
+      "ServerErrorComponent" : ServerErrorComponent
+    },
 
+    watch : {
+      date : {
+        immediate : true,
+        handler(date){
 
-    //mounted(){
-    //    axios.get("/api/diary/"+ this.date)
-    //    .then(()=>{
-    //          recommendCarbo -> Number
-    //          dateCarbo -> Number 
-    //          recommendProtein -> Number
-    //          dateProtein -> Number   
-    //          recommentFat -> Number
-    //          dateFat -> Number     
-    //    });
-    //},
+          Diary.getNutrient(date)
+          .then((res) => {
+            console.log(res.data.message);
+            if(res.data.isSuccess === true && res.data.code === 1000){
+                //중요) 요청에 성공하였습니다.
+                this.recommendCarbo = res.data.result.needNutrient.carbohydrate;
+                this.dateCarbo = res.data.result.haveNutrient.carbohydrate;
+                this.recommendProtein = res.data.result.needNutrient.protein;
+                this.dateProtein = res.data.result.haveNutrient.protein;
+                this.recommentFat = res.data.result.needNutrient.fat;
+                this.dateFat = res.data.result.haveNutrient.fat;
+            }else if (res.data.isSuccess === false && res.data.code === 2014){
+                //중요) 건강정보를 찾을 수 없습니다.
+                this.recommendCarbo = 0;
+                this.dateCarbo = 0;
+                this.recommendProtein = 0;
+                this.dateProtein = 0;
+                this.recommentFat = 0;
+                this.dateFat = 0;
+            }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                this.$store.dispatch('logout');
+                this.$router.push({
+                    name : "sign-in",
+                });
+            }
+          })
+          .catch((err)=>{
+              //중요) 서버 오류입니다.
+              //뜨기 -> alert메시지 뜨기
+              console.log(err);
+              this.isError = true;
+          })
+        }
+      }
+    },
 
     data(){
         return {
+
+            //에러 판단
+            isError : false,
+
             recommendCarbo: 100,    //일일 권장 탄수화물
             dateCarbo : 110,         //사용자의 날짜별 탄수화물
 
@@ -111,11 +154,14 @@ export default {
         },
 
         leftPercentCarbo(){
-            if (this.recommendCarbo < this.dateCarbo){
+            if(this.recommendCarbo < this.dateCarbo){
               return 100
-            }else{
-              return (this.dateCarbo / this.recommendCarbo) * 100
+            }else if(this.recommendCarbo === 0 && this.dateCarbo === 0){
+              return 0
             }
+            
+            return (this.dateCarbo / this.recommendCarbo) * 100
+            
         },
 
         isProteinExcess(){
@@ -123,11 +169,14 @@ export default {
         },
 
         leftPercentProtein(){
-            if (this.recommendProtein < this.dateProtein){
+            if(this.recommendProtein < this.dateProtein){
               return 100
-            }else{
-              return (this.dateProtein / this.recommendProtein) * 100
+            }else if(this.recommendProtein === 0 && this.dateProtein === 0){
+              return 0
             }
+
+            return (this.dateProtein / this.recommendProtein) * 100
+            
         },
 
         isFatExcess(){
@@ -137,9 +186,12 @@ export default {
         leftPercentFat(){
             if(this.recommentFat < this.dateFat){
               return 100
-            }else{
-              return (this.dateFat / this.recommentFat) * 100
+            }else if(this.recommentFat === 0 && this.dateFat === 0){
+              return 0
             }
+            
+            return (this.dateFat / this.recommentFat) * 100
+            
         }
     }
     
