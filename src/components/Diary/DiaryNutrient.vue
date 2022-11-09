@@ -2,7 +2,7 @@
  
   <div class="fill-height" v-if="isError">
       <v-row justify="center">
-          <v-col cols="auto">
+          <v-col cols="auto" class="mt-5">
               <ServerErrorComponent/>
           </v-col>
       </v-row>
@@ -21,7 +21,7 @@
         </v-col>
       </v-row>
       <div>
-        <v-progress-linear :value="dateCarbo" color="blue" height="25">
+        <v-progress-linear :value="leftPercentCarbo" color="blue" height="25">
           <strong>{{ Math.ceil(leftPercentCarbo) }}%</strong>
         </v-progress-linear>
       </div>
@@ -42,7 +42,7 @@
         </v-col>
       </v-row>
       <div>
-        <v-progress-linear :value="dateProtein" color="blue" height="25">
+        <v-progress-linear :value="leftPercentProtein" color="blue" height="25">
           <strong>{{ Math.ceil(leftPercentProtein) }}%</strong>
         </v-progress-linear>
       </div>
@@ -54,7 +54,7 @@
     <div>
       <v-row align="center" no-gutters>
         <v-col cols="auto">
-          <div>지방 <strong class="black--text">{{dateFat}}g</strong> / <strong class="grey--text">{{recommentFat}}g</strong></div>
+          <div>지방 <strong class="black--text">{{dateFat}}g</strong> / <strong class="grey--text">{{recommendFat}}g</strong></div>
         </v-col>
         <v-col cols="auto">
           <v-chip v-if="isFatExcess" class="ma-2" color="red" text-color="white" small>
@@ -63,7 +63,7 @@
         </v-col>
       </v-row>
       <div>
-        <v-progress-linear :value="dateFat" color="blue" height="25">
+        <v-progress-linear :value="leftPercentFat" color="blue" height="25">
           <strong>{{ Math.ceil(leftPercentFat) }}%</strong>
         </v-progress-linear>
       </div>
@@ -101,7 +101,7 @@ export default {
                 this.dateCarbo = res.data.result.haveNutrient.carbohydrate;
                 this.recommendProtein = res.data.result.needNutrient.protein;
                 this.dateProtein = res.data.result.haveNutrient.protein;
-                this.recommentFat = res.data.result.needNutrient.fat;
+                this.recommendFat = res.data.result.needNutrient.fat;
                 this.dateFat = res.data.result.haveNutrient.fat;
             }else if (res.data.isSuccess === false && res.data.code === 2014){
                 //중요) 건강정보를 찾을 수 없습니다.
@@ -109,7 +109,7 @@ export default {
                 this.dateCarbo = 0;
                 this.recommendProtein = 0;
                 this.dateProtein = 0;
-                this.recommentFat = 0;
+                this.recommendFat = 0;
                 this.dateFat = 0;
             }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
                 //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
@@ -142,7 +142,7 @@ export default {
             recommendProtein : 100, //일일 권장 단백질
             dateProtein: 30,        //사용자의 날짜별 단백질
 
-            recommentFat: 100,      //일일 권장 지방
+            recommendFat: 100,      //일일 권장 지방
             dateFat: 200,           //사용자의 날짜별 지방
         }
     },
@@ -180,17 +180,17 @@ export default {
         },
 
         isFatExcess(){
-            return this.recommentFat < this.dateFat
+            return this.recommendFat < this.dateFat
         },
 
         leftPercentFat(){
-            if(this.recommentFat < this.dateFat){
+            if(this.recommendFat < this.dateFat){
               return 100
-            }else if(this.recommentFat === 0 && this.dateFat === 0){
+            }else if(this.recommendFat === 0 && this.dateFat === 0){
               return 0
             }
             
-            return (this.dateFat / this.recommentFat) * 100
+            return (this.dateFat / this.recommendFat) * 100
             
         }
     }
