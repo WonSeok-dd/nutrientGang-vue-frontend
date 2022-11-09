@@ -28,7 +28,7 @@ export default {
   computed : {
     ...mapState(['isLogin']),
     ...mapGetters({
-      loginName : 'getUserInfo_name'
+      loginName : 'getUserName'
     }),
   },
 

@@ -19,32 +19,48 @@ export const store = new Vuex.Store({
 
         isLogin : false,
         isLoginError : false,
-        LoginErrorMsg : "",
+        LoginErrorMsg : '',
 
-        userInfo : {
-            user_name : "정원석"
-        }
+        userName : '',
     },
 
     getters : {
-        getUserInfo_name(state){
+        getUserName(state){
             if(state.isLogin){
-                return state.userInfo.user_name;
+                return state.userName;
             }
 
             return '';
-        }
+        },
     },
     
     mutations : {
         
+        //localStorage에 저장
+        setLocalStorage(state, tokenDto){
+            
+            const accessToken = tokenDto.accessToken;
+            const refreshToken = tokenDto.refreshToken;
+            const accessTokenExpiresIn = tokenDto.accessTokenExpiresIn;
+            localStorage.setItem('access-token', accessToken);
+            localStorage.setItem('refresh-token', refreshToken);
+            localStorage.setItem('access-token-expiresIn', accessTokenExpiresIn);
+        },
+
+        //localStorage에 삭제
+        removeLocalStorage(){
+            
+            localStorage.removeItem('access-token');
+            localStorage.removeItem('refresh-token');
+            localStorage.removeItem('access-token-expiresIn');
+        },
 
         //로그인 성공 시
-        loginSuccess(state, payload){
+        loginSuccess(state, userName){
             state.isLogin = true;
             state.isLoginError = false;
 
-            state.userInfo = payload
+            state.userName = userName;
         },
         
         //로그인 실패 시
@@ -63,91 +79,78 @@ export const store = new Vuex.Store({
             state.isLogin = false;
             state.isLoginError = false;
 
-            state.userInfo.user_name = "";
+            state.userName = '';
         },
     },
 
     actions : {
-        login({dispatch ,commit}, loginObj){
+        
+        // 로그인 버튼 클릭시 dispatch
+        login({commit}, loginObj){
             
             axios.post('/auth/login', loginObj)
             .then(res => {
                 
-                // 로그인 일치 정보 o (isSuccess: true, token: token)
-                // 로그인 일치 정보 x (isSuccess: false, message)
                 if (res.data.isSuccess === true){             // 로그인 일치 정보 o
                     
-                    console.log(res.data.isSuccess, res.data.username);
-
-                    //1. localStoarge에 token 저장(새로고침 방지)
-                    let accessToken = res.data.result.tokenDto.accessToken;
-                    let refreshToken = res.data.result.tokenDto.refreshToken;
-                    let accessTokenExpiresIn = res.data.result.tokenDto.accessTokenExpiresIn;
-                    localStorage.setItem('access-token', accessToken);
-                    localStorage.setItem('refresh-token', refreshToken);
-                    localStorage.setItem('access-token-expiresIn', accessTokenExpiresIn);
+                    console.log(res.data.isSuccess, res.data.result);
+                    //1. localStoarge에 저장
+                    commit('setLocalStorage', res.data.result.tokenDto);
                     
-                    //2. loginsuccess                     
-                    let userInfo = {
-                        user_name : res.data.username,
-                    };
-                    commit('loginSuccess', userInfo)
-
-                    //3. getMemberInfo
-                    dispatch('getMemberInfo');
+                    //2. loginSuccess
+                    commit('loginSuccess', res.data.result.username);
 
                 }else{                                     // 로그인 일치 정보 x      
                     console.log(res.data.isSuccess, res.data.message);
-                    this.commit('loginError', res.data.message);
+                    //1. loginError
+                    commit('loginError', res.data.message);
                 }
 
             })
             .catch(err =>{
                 console.log(err.message);
-                this.commit('loginError', "서버와의 통신이 원할하지 않습니다.");
+                //1. loginError
+                commit('loginError', '서버와의 통신이 원할하지 않습니다.');
             })
         },
 
-        getMemberInfo({commit}){
-            
-            //1. localStoarge에서 token 얻음(새로고침 방지)
-            let token = localStorage.getItem('access-token');
-            let config = {
-                headers : {
-                    'access-token' : token
-                }
-            };
 
-            //2. token을 헤더에 포함시켜서 유저 정보를 요청
-            axios.get('/api/user/auth', config)
+        //로그아웃 버튼 클릭시 dispatch
+        logout({commit}) {
+
+            //1. localStorage에 삭제
+            commit('removeLocalStorage');
+
+            //2. logout
+            commit('logout')
+        },
+
+        //token 재발행 reissue
+        reIssueToken({commit}){
+
+            //1. localStorage에서 가져오기
+            const accessToken = localStorage.getItem('access-token');
+            const refreshToken = localStorage.getItem('refresh-token');
+
+            const tokenObj = {
+                accessToken : accessToken,
+                refreshToken : refreshToken,
+            }
+        
+            axios.post('/auth/reissue', tokenObj)
             .then(res => {
-                console.log(res);
 
-                //auth o (isSuccess: true, user_name)
-                //auth x (isSuccess: false, message)
-                if (res.data.isSuccess === true){    //auth o
+                if (res.data.isSuccess === true){
                     
-                    console.log(res.data.isSuccess, res.data.username);
-                    let userInfo = {
-                        user_name : res.data.username,
-                    };
-                    commit('loginSuccess', userInfo)
-                }else{                                  //auth x
-
+                    console.log(res.data.isSuccess, res.data.result);
+                    //1. localStoarge에 저장
+                    commit('setLocalStorage', res.data.result.tokenDto);
                 }
             })
             .catch(err => {
                 console.log(err.message);
-            });
-        },
+            })
 
-        logout({commit}) {
-
-            localStorage.removeItem('access-token');
-            localStorage.removeItem('refresh-token');
-            localStorage.removeItem('access-token-expiresIn');
-
-            commit('logout')
-        },
+        }
     }
 });
