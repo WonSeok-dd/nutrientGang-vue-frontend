@@ -1,6 +1,13 @@
 <template>
-    <v-row align="center">
 
+    <div class="fill-height" v-if="isError">
+        <v-row justify="center">
+            <v-col cols="auto">
+                <ServerErrorComponent/>
+            </v-col>
+        </v-row>
+    </div>
+    <v-row align="center" v-else>
         <!--일일 권장 Kcal와 섭취 Kcal--> 
         <v-col cols="auto">
             <div>일일 권장</div>
@@ -36,6 +43,7 @@
 </template>
 
 <script>
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
 import Diary from '@/api/Diary';
 export default {
     name : 'DiaryKcal',
@@ -44,6 +52,9 @@ export default {
             type : String,
             default : (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
         },
+    },
+    components : {
+        "ServerErrorComponent" : ServerErrorComponent
     },
 
     watch : {
@@ -56,19 +67,27 @@ export default {
                 .then((res) =>{
                     console.log(res.data.message);
                     if(res.data.isSuccess === true && res.data.code === 1000){
+                        //중요) 요청에 성공하였습니다.
                         this.recommendKcal = res.data.result.needCalorie;
                         this.dateKcal = res.data.result.haveCalorie;
                     }else if (res.data.isSuccess === false && res.data.code === 2014){
+                        //중요) 건강정보를 찾을 수 없습니다.
                         this.recommendKcal = 0;
                         this.dateKcal = 0;
                     }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
-                        //
+                        //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                        //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                        this.$store.dispatch('logout');
+                        this.$router.push({
+                            name : "sign-in",
+                        });
                     }
                 })
                 .catch((err)=>{
-                    console.log('err',err);
-                    this.recommendKcal = 0;
-                    this.dateKcal = 0;
+                    //중요) 서버 오류입니다.
+                    //뜨기 -> alert메시지 뜨기
+                    console.log(err);
+                    this.isError = true;
                 })
 
             }
@@ -77,12 +96,17 @@ export default {
 
     data(){
         return {
+
+            //에러 판단
+            isError : false,
+
             recommendKcal : 2067,     //일일 권장 Kcal
             dateKcal : 100,           //사용자의 날짜별 Kcal
         }
     },
 
     computed: {
+        
         isKcalExcess(){
             return this.recommendKcal < this.dateKcal
         },

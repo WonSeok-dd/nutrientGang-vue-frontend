@@ -123,7 +123,7 @@ export const store = new Vuex.Store({
             commit('logout')
         },
 
-        //매 요청마다 권한 판단 오류 시 token 재발행
+        //레이아웃 그릴때 마다 권한 판단 오류 시 token 재발행
         reIssueToken({dispatch, commit}){
 
             //1. localStorage에서 가져오기
@@ -139,22 +139,32 @@ export const store = new Vuex.Store({
             .then(res => {
 
                 if (res.data.isSuccess === true && res.data.code === 1000){
-                    
+                    //중요) 요청에 성공하였습니다.
                     console.log(res.data.isSuccess, res.data.result);
-                    //1. localStoarge에 저장
+                        //1. localStoarge에 저장
                     commit('setLocalStorage', res.data.result.tokenDto);
                     
-                    //2. loginSuccess
+                        //2. loginSuccess
                     commit('loginSuccess', res.data.result.username);
 
                 }else {
+                    //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
+                    //돌리기 -> 로그인 페이지로 돌리기
                     console.log(res.data.isSuccess, res.data.message);
                     dispatch('logout')
+                    this.$router.push({
+                        name : "sign-in",
+                    });
                 }
             })
             .catch(err => {
+                //중요) 서버 오류 입니다.
+                //돌리기 -> 로그인 페이지로 돌리기
                 console.log(err.message);
                 dispatch('logout')
+                this.$router.push({
+                    name : "sign-in",
+                });
             })
 
         }
