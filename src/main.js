@@ -7,14 +7,10 @@ import { router } from "./router.js"
 import vuetify from './plugins/vuetify'
 
 import VueGeolocation from "vue-browser-geolocation"
-import vueMoment from 'vue-moment'
 //import axios from 'axios'
-
 
 Vue.config.productionTip = false
 Vue.use(VueGeolocation)
-Vue.use(vueMoment)
-
 
 new Vue({
   store : store,

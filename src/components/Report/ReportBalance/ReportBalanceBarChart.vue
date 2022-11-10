@@ -1,5 +1,13 @@
 <template>
-  <div class="text-center mt-10 border">
+
+  <div class="fill-height mt-10" v-if="isError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <ServerErrorComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <div class="text-center mt-10 border" v-else>
     <BarChartGenerator
       :chart-options="chartOptions"
       :chart-data="chartData"
@@ -9,6 +17,8 @@
 </template>
 
 <script>
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+import Report from '@/api/Report'
 import { Bar as BarChartGenerator } from 'vue-chartjs/legacy'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -17,11 +27,93 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 
 export default {
   name : 'ReportBalanceBarChart',
-  components: {
-    BarChartGenerator
+  props : {
+    dates : {
+        type : Array,
+        default : () => [
+          new Date(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).setDate(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).getDate() - 6)).toISOString().substr(0,10), 
+          new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000).toISOString().substr(0,10)
+        ]
+    },
   },
+  components: {
+    BarChartGenerator,
+    "ServerErrorComponent" : ServerErrorComponent
+
+  },
+
+  watch : {
+    dates : {
+      immediate : true,
+      handler(dates){
+        
+        const begin = dates[0];
+        const end = dates[1];
+
+        //중요) 필요한 데이터 요청
+        Report.getBalanceGraph(begin,end)
+        .then((res) =>{
+            console.log(res.data.message);
+            if(res.data.isSuccess === true && res.data.code === 1000){
+                //중요) 요청에 성공하였습니다.
+                const weekPortionList = res.data.result.weekPortionList;
+                const reverseList = [...weekPortionList].reverse();
+
+                let portionLabels = [];
+                let portionCarboData = [];
+                let portionProteinData = [];
+                let portionFatData = [];
+                for (const weekPortion of reverseList){
+                  
+                  let date = weekPortion.date;
+                  let dateArray = date.split('-');
+                  const finalDate = dateArray[1] + '.' + dateArray[2];
+                  portionLabels.push(finalDate);
+
+                  let carbohydratePortion = weekPortion.carbohydratePortion;
+                  const finalCarbohydratePortion = carbohydratePortion * 100;
+
+                  let proteinPortion = weekPortion.proteinPortion;
+                  const finalProteinPortion = proteinPortion * 100;
+
+                  let fatPortion = weekPortion.fatPortion;
+                  const finalFatPortion = fatPortion * 100;
+
+                  portionCarboData.push(finalCarbohydratePortion);
+                  portionProteinData.push(finalProteinPortion);
+                  portionFatData.push(finalFatPortion);
+                }
+
+                this.chartData.labels = portionLabels;
+                this.chartData.datasets[0].data = portionFatData;
+                this.chartData.datasets[1].data = portionProteinData;
+                this.chartData.datasets[2].data = portionCarboData;
+
+            }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                this.$store.dispatch('logout');
+                this.$router.push({
+                    name : "sign-in",
+                });
+            }
+        })
+        .catch((err)=>{
+            //중요) 서버 오류입니다.
+            //뜨기 -> alert메시지 뜨기
+            console.log(err);
+            this.isError = true;
+        })
+      }
+    }
+  },
+
   data() {
     return {
+
+      //에러 판단
+      isError : false,
+
       chartData: {
         labels: ['10.17','10.18','10.19','10.20','10.21','10.22','10.23'],
         datasets: [
