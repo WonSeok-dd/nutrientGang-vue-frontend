@@ -186,11 +186,10 @@ export default {
               },
 
               callback : (value) => {
-                
                 const diff = this.recommendKcal - value;
                 if(value % 500 === 0){
                   return value
-                }else if( 0 < diff && diff < 5){
+                }else if( 0 <= diff && diff <= 5){
                   return '권장 칼로리'
                 }
               }

@@ -69,7 +69,7 @@ export default {
               const reverseList = [...calorieInfoList].reverse();
 
               this.dateKcal = res.data.result.calorieInfoList[0].calorie;
-              this.todayKcal = 3000; //이거 필요
+              this.todayKcal = res.data.result.todayCalorie;
 
               this.kcalLabels = [];
               this.kcalData = [];
@@ -85,6 +85,17 @@ export default {
               this.$router.push({
                   name : "sign-in",
               });
+          }else{
+            //중요) 건강정보를 찾을 수 없습니다.
+            this.maxKcal = 0;
+            this.minKcal = 0;
+            this.recommendKcal = 0;
+
+            this.dateKcal = 0;
+            this.todayKcal = 0;
+
+            this.kcalLabels = [];
+            this.kcalData = [];
           }
       })
       .catch((err)=>{
@@ -106,7 +117,7 @@ export default {
               const reverseList = [...weightInfoList].reverse();
 
               this.dateKg = res.data.result.weightInfoList[0].weight;
-              this.todayKg = 70; //이거필요
+              this.todayKg = res.data.result.todayWeight; //이거필요
 
               this.kgLabels = [];
               this.kgData = [];
@@ -122,6 +133,16 @@ export default {
               this.$router.push({
                   name : "sign-in",
               });
+          }else{
+            //중요) 건강정보를 찾을 수 없습니다.
+            this.maxKg = 0;
+            this.minKg = 0;
+
+            this.dateKg = 0;
+            this.todayKg = 0;
+
+            this.kgLabels = [];
+            this.kgData = [];
           }
       })
       .catch((err)=>{
