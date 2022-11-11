@@ -6,6 +6,13 @@
             </v-col>
         </v-row>
     </div>
+    <div class="fill-height mt-10" v-else-if="isPieChatNotHealthError">
+        <v-row justify="center">
+            <v-col cols="auto">
+                <NotHealthInfoComponent/>
+            </v-col>
+        </v-row>
+    </div>
     <div class="text-center mt-10 border" v-else>
         <DoughnutChartGenerator :chart-options="pieChartOption" :chart-data="pieChartData"/>
     </div>
@@ -14,6 +21,7 @@
 
 <script>
 const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const NotHealthInfoComponent = () => import("@/components/NotHealthInfoComponent.vue");
 import { Doughnut as DoughnutChartGenerator} from 'vue-chartjs/legacy'
 
 export default {
@@ -21,12 +29,14 @@ export default {
     props: {
         pieChartData : {type : Object},
         pieChartOption : {type: Object},
-        isPieChartError :{type : Boolean}
+        isPieChartError :{type : Boolean},
+        isPieChatNotHealthError : {type : Boolean},
     },
 
     components: {
         DoughnutChartGenerator,
-        "ServerErrorComponent" : ServerErrorComponent
+        "ServerErrorComponent" : ServerErrorComponent,
+        "NotHealthInfoComponent" : NotHealthInfoComponent
     },
 }
 </script>

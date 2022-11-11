@@ -39,7 +39,7 @@
     <!--날짜별 영양소 파이 차트-->
     <div class="mb-3">
       <ReportBalancePieChart :pieChartData="updatePieChartData" :pieChartOption="updatePieChartOption"
-      :isPieChartError="isPieChartError"/>  
+      :isPieChartError="isPieChartError" :isPieChatNotHealthError="isPieChatNotHealthError"/>  
     </div>
 
     <!--날짜별 영양소-->
@@ -101,6 +101,7 @@ export default {
         Report.getBalancePortion(begin, end)
         .then((res) =>{
             this.isPieChartError = false;
+            this.isPieChatNotHealthError = false;
             console.log(res.data.message);
             if(res.data.isSuccess === true && res.data.code === 1000){
                 //중요) 요청에 성공하였습니다.
@@ -118,7 +119,7 @@ export default {
                 });
             }else{
                 //중요) 건강정보를 찾을 수 없습니다.
-                this.fillPieChartData(0,0,0);
+                this.isPieChatNotHealthError = true;
             }
         })
         .catch((err)=>{
@@ -213,6 +214,7 @@ export default {
         dates: [],
 
         isPieChartError : false,
+        isPieChatNotHealthError : false,
         pieChartData : [0,0,0],
 
         isBarChartError : false,
