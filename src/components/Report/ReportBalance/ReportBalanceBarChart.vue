@@ -39,7 +39,6 @@ export default {
   components: {
     BarChartGenerator,
     "ServerErrorComponent" : ServerErrorComponent
-
   },
 
   watch : {
@@ -96,6 +95,22 @@ export default {
                 this.$router.push({
                     name : "sign-in",
                 });
+            }else{
+                //중요) 건강정보를 찾을 수 없습니다.
+                const begin = this.dates[0];
+                let dateLabels = [];
+                for (let i=0; i<7; i++){
+                  let tempDate = new Date(begin);
+                  tempDate.setDate(tempDate.getDate()+ i);
+
+                  let strDate = tempDate.toISOString().substring(0,10);
+                  let strDateArray = strDate.split('-');
+                  const finalDate = strDateArray[1] + '.' + strDateArray[2];
+
+                  dateLabels.push(finalDate);
+                }
+
+                this.chartData.labels = dateLabels;
             }
         })
         .catch((err)=>{
@@ -115,14 +130,14 @@ export default {
       isError : false,
 
       chartData: {
-        labels: ['10.17','10.18','10.19','10.20','10.21','10.22','10.23'],
+        labels: ['null','null','null','null','null','null','null'],
         datasets: [
           {
             label: '지방',
             stack: 'combined',
             type : 'bar',
             backgroundColor: 'rgb(255, 205, 86)',
-            data: [30, 30, 30, 30, 30, 30, 30],
+            data: [0,0,0,0,0,0,0],
             datalabels: {
                 display : false,
             },
@@ -132,7 +147,7 @@ export default {
             stack: 'combined',
             type : 'bar',
             backgroundColor: 'rgb(54, 162, 235)',
-            data: [10, 10, 10, 10, 10, 10, 10],
+            data: [0,0,0,0,0,0,0],
             datalabels: {
                 display : false,
             },
@@ -142,7 +157,7 @@ export default {
             stack: 'combined',
             type : 'bar',
             backgroundColor: 'rgb(255, 99, 132)',
-            data: [60, 60, 60, 60, 60, 60, 60],
+            data: [0,0,0,0,0,0,0],
             datalabels: {
                 display : false,
             },
