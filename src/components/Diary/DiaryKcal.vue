@@ -65,6 +65,7 @@ export default {
                 //중요) 필요한 데이터 요청
                 Diary.getKcal(date)
                 .then((res) =>{
+                    this.isError = false;
                     console.log(res.data.message);
                     if(res.data.isSuccess === true && res.data.code === 1000){
                         //중요) 요청에 성공하였습니다.
