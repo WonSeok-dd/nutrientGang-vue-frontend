@@ -22,7 +22,7 @@ export default {
     },
 
     //영양균형
-    //섭취 영양소 비율
+    //일주일 간 총 섭취 영양소 비율
     getBalancePortion(begin, end){
 
         return interceptor({
@@ -35,7 +35,7 @@ export default {
         });
     },
 
-    //권장/섭취 상세정보
+    //일주일 간 섭취 영양소
     getBalanceDetail(begin, end){
 
         return interceptor({
@@ -48,7 +48,7 @@ export default {
         });
     },
 
-    //일주일 영양소 비율
+    //날짜별(일주일)간 섭취 비율
     getBalanceGraph(begin, end){
 
         return interceptor({
