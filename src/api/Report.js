@@ -60,4 +60,29 @@ export default {
             }
         });
     },
+
+    //식사기록
+    //일주일 간 총 식사 비율
+    getMealGraph(begin,end){
+        return interceptor({
+            url: '/health/report/meal/graph',
+            method: 'get',
+            params : {
+                begin : begin,
+                end : end
+            }
+        });
+    },
+
+    //일주일 간 식사여부 조회
+    getMealList(begin,end){
+        return interceptor({
+            url: '/health/report/meal/list',
+            method: 'get',
+            params : {
+                begin : begin,
+                end : end
+            }
+        });
+    }
 }
