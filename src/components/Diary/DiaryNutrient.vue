@@ -137,14 +137,14 @@ export default {
             //에러 판단
             isError : false,
 
-            recommendCarbo: 100,    //일일 권장 탄수화물
-            dateCarbo : 110,         //사용자의 날짜별 탄수화물
+            recommendCarbo: 0,    //일일 권장 탄수화물
+            dateCarbo : 0,         //사용자의 날짜별 탄수화물
 
-            recommendProtein : 100, //일일 권장 단백질
-            dateProtein: 30,        //사용자의 날짜별 단백질
+            recommendProtein : 0, //일일 권장 단백질
+            dateProtein: 0,        //사용자의 날짜별 단백질
 
-            recommendFat: 100,      //일일 권장 지방
-            dateFat: 200,           //사용자의 날짜별 지방
+            recommendFat: 0,      //일일 권장 지방
+            dateFat: 0,           //사용자의 날짜별 지방
         }
     },
 

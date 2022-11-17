@@ -101,8 +101,8 @@ export default {
             //에러 판단
             isError : false,
 
-            recommendKcal : 2067,     //일일 권장 Kcal
-            dateKcal : 100,           //사용자의 날짜별 Kcal
+            recommendKcal : 0,     //일일 권장 Kcal
+            dateKcal : 0,           //사용자의 날짜별 Kcal
         }
     },
 
