@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import Food from '@/api/Food'
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
 import {required} from "vee-validate/dist/rules"
 extend('required', {
@@ -67,13 +67,13 @@ extend('isfood', async (value) => {
     const foodSearch = food => {
         return new Promise((resolve) => {
 
-            axios.post('/api/food/', food)
-                .then(res => {
-                    resolve(res)
-                })
-                .catch(err =>{
-                    console.log(err.message)
-                });
+            Food.getFoodName(food)
+            .then(res => {
+                resolve(res)
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
         });
     }
 
@@ -117,15 +117,25 @@ export default {
             // 입력조건 유효성 결과 만족시
             if (result){
                 
-                const info = {food : this.food};
-                axios.post("/api/food", info)
-                    .then((res) => {
-                        console.log(res.data.food);
-                        if(res.data.isSuccess === true){
-
-                            let foodObject = res.data.food
-                            this.$emit("add-food", foodObject);
-                            this.food = null;
+                Food.getFoodName(this.food)
+                .then((res) => {
+                    console.log(res.data.message);
+                    if(res.data.isSuccess === true){
+                        
+                        let foodObject = {
+                            xmain : null,
+                            ymain : null,
+                            name : res.data.result.name,
+                            kcal : res.data.result.calorie,
+                            nutrient: {
+                                carbo : res.data.result.nutrient.carbohydrate,
+                                protein : res.data.result.nutrient.protein,
+                                fat : res.data.result.nutrient.fat,
+                            }
+                        }; 
+                        
+                        this.$emit("add-food", foodObject);
+                        this.food = null;
                             
                         }else{
                             //이미 validate로 판별함 -> 일어날수가 x
@@ -133,7 +143,7 @@ export default {
                     })
                     .catch((err) => {
                         console.log(err)
-                    });
+                    });   
             }
         },
 
