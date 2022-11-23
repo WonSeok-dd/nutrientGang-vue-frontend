@@ -126,6 +126,8 @@ export default {
             //중요) 서버 오류입니다.
             //뜨기 -> alert메시지 뜨기
             console.log(err);
+            this.isPieChatNotHealthError = false;
+
             this.isPieChartError = true;
         });
 

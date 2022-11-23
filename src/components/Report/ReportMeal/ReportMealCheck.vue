@@ -154,7 +154,6 @@ export default {
                   datesArray.push(temp_date.toISOString().substr(0,10))
                 }
 
-
                 this.breakFastArray = [
                     {"id": 1,"date": datesArray[0],"eaten": false},
                     {"id": 2,"date": datesArray[1],"eaten": false},
@@ -173,7 +172,6 @@ export default {
                     {"id": 6,"date": datesArray[5],"eaten": false},
                     {"id": 7,"date": datesArray[6],"eaten": false},
                 ]
-                
                 this.dinnerArray = [
                     {"id": 1,"date": datesArray[0],"eaten": false},
                     {"id": 2,"date": datesArray[1],"eaten": false},
