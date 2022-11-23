@@ -27,7 +27,7 @@ export default {
     getMeal(date){
 
         return interceptor({
-            url: '/health/diary/nutrient',
+            url: '/health/diary/meal',
             method: 'get',
             params : {
                 date :  date
