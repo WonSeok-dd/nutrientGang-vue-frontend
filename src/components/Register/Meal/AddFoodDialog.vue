@@ -67,7 +67,7 @@ extend('isfood', async (value) => {
     const foodSearch = food => {
         return new Promise((resolve) => {
 
-            Food.getFoodName(food)
+            Food.getFoodName(food.food)
             .then(res => {
                 resolve(res)
             })
