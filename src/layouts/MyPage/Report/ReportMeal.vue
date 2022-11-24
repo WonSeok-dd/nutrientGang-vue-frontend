@@ -96,9 +96,9 @@ export default {
             console.log(res.data.message);
             if(res.data.isSuccess === true && res.data.code === 1000){
                 //중요) 요청에 성공하였습니다.
-                const breakfastPortion = (res.data.result.breakfast * 100);
-                const lunchPortion = (res.data.result.lunch * 100);
-                const dinnerPortion = (res.data.result.dinner * 100);
+                const breakfastPortion = Math.round(res.data.result.breakfast * 100);
+                const lunchPortion = Math.round(res.data.result.lunch * 100);
+                const dinnerPortion = Math.round(res.data.result.dinner * 100);
                 
                 this.fillPieChartData(breakfastPortion, lunchPortion, dinnerPortion);
             }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
