@@ -177,6 +177,30 @@
         <v-col cols="auto">
           <h2>비율 입력</h2>
         </v-col>
+        <v-col cols="auto">
+          <v-dialog v-model="selectDialog" scrollable max-width="300px">
+              
+            <!--Dialog 유발-->
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on"  
+              dark color="#03C04A" outlined> 
+                <v-icon left>mdi-silverware-variant</v-icon> 
+                음식 선택
+                <v-icon right>mdi-silverware-variant</v-icon>
+              </v-btn>
+            </template>
+            
+            <!--Dialog 내용-->
+            <v-card class="text-center">
+              <v-card-text>
+                <SelectFoodDialog :foods="foods" 
+                v-on:select-food="selectFood"
+                v-on:select-dialog-off="selectDialogOff"/>
+              </v-card-text>
+            </v-card>
+
+          </v-dialog>
+        </v-col>
       </v-row>
       
       <!--입력-->
@@ -227,6 +251,7 @@
 <script>
 const LabelImage = () => import("@/components/Register/Image/LabelImage.vue");
 const AddFoodDialog = () => import("@/components/Register/Meal/AddFoodDialog.vue");
+const SelectFoodDialog = () => import("@/components/Register/Meal/SelectFoodDialog.vue");
 const NutrientSum = () => import("@/components/Register/Meal/NutrientSum.vue");
 const NutrientDetail = () => import("@/components/Register/Meal/NutrientDetail.vue");
 
@@ -238,6 +263,7 @@ export default {
   components : {
     "LabelImage" : LabelImage,
     "AddFoodDialog" : AddFoodDialog,
+    "SelectFoodDialog" : SelectFoodDialog,
     "NutrientSum" : NutrientSum,
     "NutrientDetail" : NutrientDetail,
   },
@@ -304,6 +330,10 @@ export default {
         { inputIdx: 4, title: '2소접시', ratio : 2},
       ],
 
+      //음식비율선택시 Dialog 관련
+      selectDialog : false,
+      selectedFoodIndex : 0,
+
       //음식등록시 Dialog 관련 
       submitDialog : false,
       submitErrMsg : "",
@@ -334,16 +364,14 @@ export default {
 
       ratioFoodsKcal(){
         return (ratio) => {
-          let sum_kcal = 0
-          
+          let selected_kcal = 0
+
           if(Array.isArray(this.foods) && this.foods.length === 0){
             //
           }else{
-            for(let i=0; i< this.foods.length; i++){
-                sum_kcal += this.foods[i].kcal;
-            } 
+            selected_kcal = this.foods[this.selectedFoodIndex].kcal;
           }
-          return ratio * sum_kcal;
+          return ratio * selected_kcal;
         }
       },
   },
@@ -362,6 +390,15 @@ export default {
 
       deleteFood(id){
         this.foods.splice(id,1);
+      },
+
+      selectFood(foodIndex){
+        this.selectedFoodIndex = foodIndex;
+        console.log(foodIndex);
+      },
+
+      selectDialogOff(){
+        this.selectDialog = false;
       },
 
       async submit(){

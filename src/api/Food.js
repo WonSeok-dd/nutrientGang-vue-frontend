@@ -13,6 +13,14 @@ export default {
         });
     },
 
+    registerFood(){
+        
+        return interceptor({
+            url: '/register/meal',
+            method: 'post',
+        });
+    }
+
 
 
 }
