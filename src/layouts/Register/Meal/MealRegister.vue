@@ -172,11 +172,15 @@
     <!--5. 입력-->
     <div class="mt-3 mb-3">
       
-      <!--입력 제목-->
-      <v-row align="center" class="mb-1">
+      <!--입력 제목, 음식 선택 Dialog-->
+      <v-row align="center">
+
+        <!--입력 제목-->
         <v-col cols="auto">
           <h2>비율 입력</h2>
         </v-col>
+
+        <!--음식 선택 Dialog-->
         <v-col cols="auto">
           <v-dialog v-model="selectDialog" scrollable max-width="300px">
               
@@ -198,8 +202,14 @@
                 v-on:select-dialog-off="selectDialogOff"/>
               </v-card-text>
             </v-card>
-
           </v-dialog>
+        </v-col>
+      </v-row>
+
+      <!--선택한 음식 이름-->
+      <v-row align="center" justify="center">
+        <v-col cols="auto">
+          <h2 class="blue--text font-weight-medium">선택한 음식 ({{selectedFoodName}})</h2>
         </v-col>
       </v-row>
       
@@ -288,8 +298,16 @@ export default {
     this.meal = hasNotInitMeal ?  '아침' : this.$route.params.initMeal;
 
     const hasNotInitFoods = !this.$route.params.initFoods;
-    this.foods = hasNotInitFoods ? [] : this.$route.params.initFoods; 
-
+    this.foods = hasNotInitFoods ? [] : this.$route.params.initFoods;
+    
+    let deepArr = [] 
+    if (!hasNotInitFoods){
+      for(let i=0; i< this.$route.params.initFoods.length; i++){
+        const deepObject = JSON.parse(JSON.stringify(this.$route.params.initFoods[i]));
+        deepArr.push(deepObject);
+      }
+    }
+    this.originalFoods = deepArr;
   },
 
   data(){
@@ -303,6 +321,7 @@ export default {
       mealDialog : false,
 
       foods : null,
+      originalFoods : null,
 
       isDefaultImg : true,
       imgURL : null,       //s3에 업로드되면 얻기, POST요청 (afas.jpg)
@@ -310,7 +329,6 @@ export default {
 
       //음식추가시 Dialog 관련
       addDialog : false,
-
 
       //전체,상세 영양정보 Dialog, Tab 관련
       nutrientDialog : false,
@@ -330,13 +348,33 @@ export default {
         { inputIdx: 4, title: '2소접시', ratio : 2},
       ],
 
-      //음식비율선택시 Dialog 관련
+      //비율음식선택시 Dialog 관련
       selectDialog : false,
       selectedFoodIndex : 0,
 
       //음식등록시 Dialog 관련 
       submitDialog : false,
       submitErrMsg : "",
+    }
+  },
+
+  watch : {
+
+    //비율Model값 변경 될 때마다
+    //foods의kcal(변경O), originalFoods의kcal(변경X)
+    inputModel : {
+      immediate : false,
+      handler(inputModel) {
+        if(Array.isArray(this.foods) && this.foods.length === 0){
+          //
+        }else{
+          const ratio = this.inputItems[inputModel].ratio;
+          const selectedKcal = this.originalFoods[this.selectedFoodIndex].kcal;
+          const computedKcal = ratio * selectedKcal;
+
+          this.foods[this.selectedFoodIndex].kcal = computedKcal;
+        }
+      }
     }
   },
 
@@ -348,6 +386,8 @@ export default {
           return this.isDefaultImg ? require('@/assets/default.png') : this.imgPreURL;
       },
 
+      //전체kcal
+      //foods의kcal(변경O), originalFoods의kcal(변경X)
       foodsKcal(){
         let sum_kcal = 0;
 
@@ -362,6 +402,8 @@ export default {
         return sum_kcal
       },
 
+      //비율표시kcal
+      //foods의kcal(이용X), originalFoods의kcal(이용O)
       ratioFoodsKcal(){
         return (ratio) => {
           let selected_kcal = 0
@@ -369,11 +411,27 @@ export default {
           if(Array.isArray(this.foods) && this.foods.length === 0){
             //
           }else{
-            selected_kcal = this.foods[this.selectedFoodIndex].kcal;
+            selected_kcal = this.originalFoods[this.selectedFoodIndex].kcal;
+            console.log("비율:" + ratio);
+            console.log("선택한 kcal:" + selected_kcal)
           }
           return ratio * selected_kcal;
         }
       },
+
+      //비율음식선택이름
+      //foods의name(이용X), originalFoods의name(이용O)
+      selectedFoodName(){
+        let selectedFoodName = "";
+
+        if(Array.isArray(this.foods) && this.foods.length === 0){
+          //
+        }else{
+          selectedFoodName = this.originalFoods[this.selectedFoodIndex].name;
+        }
+
+        return selectedFoodName;
+      }
   },
 
   methods : {
@@ -383,22 +441,37 @@ export default {
         this.isDefaultImg = false;
       },
 
+      //텍스트 등록 통해 추가
+      //foods에 추가O, originalFoods에 추가O(깊은복사)
       addFood(foodObject){
         this.foods.push(foodObject);
+
+        const deepObject = JSON.parse(JSON.stringify(foodObject));
+        this.originalFoods.push(deepObject);
+
         this.addDialog = false;
       },
 
+      //chip close이벤트 통해 삭제
+      //foods에 삭제O, originalFoods에 삭제O(깊은복사)
+      //selectedFoodIndex는 맨 처음걸로 set
       deleteFood(id){
         this.foods.splice(id,1);
+        this.originalFoods.splice(id,1);
+        this.selectedFoodIndex = 0;
       },
 
+      //SelectFoodDialog 통해 선택
+      //selectedFoodIndex set
       selectFood(foodIndex){
         this.selectedFoodIndex = foodIndex;
-        console.log(foodIndex);
       },
 
+      //SelectFoodDialog 통해 초기화
+      //비율Model 1소접시로 set
       selectDialogOff(){
         this.selectDialog = false;
+        this.inputModel = 3;
       },
 
       async submit(){
