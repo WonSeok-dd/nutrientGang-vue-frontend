@@ -259,13 +259,12 @@
 </template>
 
 <script>
+import Food from '@/api/Food'
 const LabelImage = () => import("@/components/Register/Image/LabelImage.vue");
 const AddFoodDialog = () => import("@/components/Register/Meal/AddFoodDialog.vue");
 const SelectFoodDialog = () => import("@/components/Register/Meal/SelectFoodDialog.vue");
 const NutrientSum = () => import("@/components/Register/Meal/NutrientSum.vue");
 const NutrientDetail = () => import("@/components/Register/Meal/NutrientDetail.vue");
-
-import axios from 'axios'
 
 export default {
   
@@ -361,7 +360,7 @@ export default {
   watch : {
 
     //비율Model값 변경 될 때마다
-    //foods의kcal(변경O), originalFoods의kcal(변경X)
+    //foods의kcal,nutrient(변경O), originalFoods의kcal(변경X)
     inputModel : {
       immediate : false,
       handler(inputModel) {
@@ -369,10 +368,21 @@ export default {
           //
         }else{
           const ratio = this.inputItems[inputModel].ratio;
+
           const selectedKcal = this.originalFoods[this.selectedFoodIndex].kcal;
+          const selectedCarbo = this.originalFoods[this.selectedFoodIndex].nutrient.carbo;
+          const selectedProtein = this.originalFoods[this.selectedFoodIndex].nutrient.protein;
+          const selectedFat = this.originalFoods[this.selectedFoodIndex].nutrient.fat;
+
           const computedKcal = ratio * selectedKcal;
+          const computedCarbo = ratio * selectedCarbo;
+          const computedProtein = ratio * selectedProtein;
+          const computedFat = ratio * selectedFat;
 
           this.foods[this.selectedFoodIndex].kcal = computedKcal;
+          this.foods[this.selectedFoodIndex].nutrient.carbo = computedCarbo;
+          this.foods[this.selectedFoodIndex].nutrient.protein = computedProtein;
+          this.foods[this.selectedFoodIndex].nutrient.fat = computedFat;
         }
       }
     }
@@ -412,8 +422,6 @@ export default {
             //
           }else{
             selected_kcal = this.originalFoods[this.selectedFoodIndex].kcal;
-            console.log("비율:" + ratio);
-            console.log("선택한 kcal:" + selected_kcal)
           }
           return ratio * selected_kcal;
         }
@@ -453,7 +461,7 @@ export default {
       },
 
       //chip close이벤트 통해 삭제
-      //foods에 삭제O, originalFoods에 삭제O(깊은복사)
+      //foods에 삭제O, originalFoods에 삭제O
       //selectedFoodIndex는 맨 처음걸로 set
       deleteFood(id){
         this.foods.splice(id,1);
@@ -483,26 +491,52 @@ export default {
           else{
             
             // 섭취 음식 등록 정보
-            const foodObj = {
+            let deepArr = [];
+            for(let i=0; i< this.foods.length; i++){
+              const deepObject = {
+                xmain : this.foods[i].xmain,
+                ymain : this.foods[i].ymain,
+                name : this.foods[i].name,
+                calorie : this.foods[i].kcal,
+                nutrient : {
+                  carbohydrate : this.foods[i].nutrient.carbo,
+                  protein : this.foods[i].nutrient.protein,
+                  fat : this.foods[i].nutrient.fat
+                }
+              };
+              deepArr.push(deepObject);
+            }
+
+            const postObj = {
                 date : this.date,
                 meal : this.meal,
-                imgURL : this.imgURL,
-                foods : this.foods,
-                ratio : this.inputItems[this.inputModel].ratio
+                imgUrl : this.imgURL,
+                foods : deepArr,
             };
-            console.log(foodObj);
 
-            await axios.post('/api/foods/join', foodObj)
-              .then(res => {
-                  if (res.data.isSuccess === true){
-                      console.log(res.data)
-                  }else{
-                      console.log(res.data)
-                  }
-              })
-              .catch(err =>{
-                  console.log(err.message)
-              })
+            console.log(postObj);
+            Food.registerFood(postObj)
+            .then((res) => {
+              console.log(res.data.message);
+              if(res.data.isSuccess === true){
+                  
+                  //Diary
+                  //this.$router.push({
+                  //    name : "Diary",
+                  //});
+                  
+              }else{
+                  this.submitDialog = true;
+                  this.submitErrMsg = "죄송합니다. 서버 오류로 등록하지 못했습니다."
+              }
+            })
+            .catch((err) => {
+                console.log(err)
+                this.submitDialog = true;
+                this.submitErrMsg = "죄송합니다. 서버 오류로 등록하지 못했습니다."
+            });
+
+
           }
       },
 

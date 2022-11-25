@@ -13,11 +13,14 @@ export default {
         });
     },
 
-    registerFood(){
+    registerFood(postObj){
         
         return interceptor({
             url: '/register/meal',
             method: 'post',
+            data : {
+                ...postObj
+            }
         });
     }
 
