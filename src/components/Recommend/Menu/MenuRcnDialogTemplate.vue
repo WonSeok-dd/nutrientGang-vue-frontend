@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-data-iterator :items="items" :search="searchModel"
+    <v-data-iterator :items="items"
       :sort-by="sortByModel" :sort-desc="sortDescModel"
       hide-default-footer>
 
@@ -76,8 +76,6 @@
     data () {
       return {
         
-        searchModel: '',
-
         sortDescModel: false,
         sortByModel: '이름',
         sortKeys: ['이름','칼로리','탄수화물','단백질','지방'],
