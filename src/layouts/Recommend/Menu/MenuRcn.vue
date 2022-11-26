@@ -102,7 +102,7 @@ export default {
         meal : {
             immediate : true,
             handler(meal) {
-                Recommend.getRcnMenu(meal)
+                Recommend.getRcnMenu(this.date, meal)
                 .then((res) =>{
                     this.isError = false;
                     this.isNotMenuError = false;
