@@ -13,15 +13,14 @@
     <!--칼로리 chip-->
     <div v-if="selectedTag === 0">
       <ReportChangeKcal
-      v-on:show-kcalData="showKcalData"
       :isKcalError="isKcalError"
       :maxKcal="maxKcal"
       :minKcal="minKcal"
       :dateKcal="dateKcal"
       :todayKcal="todayKcal"
       :recommendKcal="recommendKcal"
-      :kcalLabels="kcalLabels"
-      :kcalData="kcalData"/>
+      :lineChartKcalData="updateLineChartKcalData"
+      :lineChartKcalOption="updateLineChartKcalOption"/>
     </div>
 
     <!--몸무게 chip-->
@@ -164,7 +163,7 @@ export default {
             recommendKcal : null,
             dateKcal : null,
             todayKcal: null,
-            kcalLabels : null,
+            kcalLabels : [],
             kcalData : null,
 
             isKgError : false,
@@ -172,7 +171,7 @@ export default {
             minKg : null,
             dateKg : null,
             todayKg : null,
-            kgLabels : null,
+            kgLabels : [],
             kgData : null,
 
             tags: ['칼로리', '몸무게'],
@@ -180,11 +179,163 @@ export default {
         }
     },
 
-    methods : {
-      showKcalData(dateKcal){
-        this.dateKcal = dateKcal;
+    computed : {
+      updateLineChartKcalData(){
+        let chartData = {
+          labels: this.kcalLabels,
+          datasets: [     
+            {
+              label: '칼로리 변화',
+
+              backgroundColor: '#1870d5',    //점 색깔
+              pointBorderColor: '#1870d5',   //점 주위 색깔
+              borderColor: '#1870d5',        //그래프 색깔
+              borderWidth: 2,             //그래프 두께
+              
+              tension: 0.5,               //휘어짐 정도
+
+              data: this.kcalData,
+
+              datalabels: {
+                display : true,
+                formatter: function() {
+                  return '';
+                },
+
+                listeners: {
+                  click: (context) => {
+                    this.dateKcal = this.kcalData[context.dataIndex];
+                    //this.$emit('show-kcalData', this.kcalData[context.dataIndex]);
+                  }
+                },
+              }
+            },]
+        }
+
+        return chartData;
       },
 
+      updateLineChartKcalOption(){
+        let chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 5000,
+          },
+          interaction : {
+            mode : 'index',
+            intersect : false
+          },
+
+          //그래프 특징
+          plugins: {
+
+              //그래프 종류 표시
+              legend: {              
+                  display: true,
+                  align : 'end',
+                  fullSize : false,
+                  labels :{
+                    boxWidth : 10,
+                    font : {
+                      family : 'Jua',
+                      size : 13,
+                    },
+                  },
+
+                  onClick: () => {
+                    //pass
+                  },
+              },
+
+              //그래프 점 표시
+              tooltip: {
+                  callbacks : {
+                    //매개변수 -> return 변화 매개변수 
+                    label : () => {
+                      return '';
+                    }
+                  },
+                  boxWidth: 10,
+                  titleFont: {
+                    size: 13,
+                    family : 'Jua'
+                  }
+              },
+
+              //그래프 제목 표시
+              title : {
+                  display : true,
+                  font : {
+                    family : 'Jua',
+                    size : 20
+                  },
+                  text : '섭취 칼로리(점 클릭)'
+              },
+          },
+          
+          //x축, y축
+          scales: {
+            x: {
+              display: false,
+              ticks: {
+                padding: 5
+              },
+              grid: {
+                display: false
+              },
+            },
+
+            y: {
+              display : true,
+              min : 0,
+
+              //y축 label 설정
+              ticks: {
+                display : true,
+                stepSize : 5,
+                font : {
+                  family : 'Jua',
+                  size : 10,
+                },
+
+                callback : (value) => {
+                  const diff = this.recommendKcal - value;
+                  if(value % 500 === 0){
+                    return value
+                  }else if( 0 <= diff && diff <= 5){
+                    return '권장 칼로리'
+                  }
+                }
+              },
+
+              grid : {
+                display : true,         //이건 default
+                drawOnChartArea : true, //이건 default
+                drawBorder : false,      
+                drawTicks : true,      
+                color: function(context) {
+                  if(context.tick.label === '권장 칼로리'){
+                    return 'black'
+                  }else{
+                    return 'rgba(0, 0, 0, 0.1)'
+                  }
+                },
+                borderDash : [5,5],
+                lineWidth : 1.5
+              }
+
+            }
+          },
+
+        }
+
+        return chartOptions
+      },
+
+    },
+
+    methods : {
       showWeightData(dateKg){
         this.dateKg = dateKg
       }
