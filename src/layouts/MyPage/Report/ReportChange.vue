@@ -32,8 +32,8 @@
       :minKg="minKg"
       :dateKg="dateKg"
       :todayKg="todayKg"
-      :kgLabels="kgLabels"
-      :kgData="kgData"/>
+      :lineChartKgData="updateLineChartKgData"
+      :lineChartKgOption="updateLineChartKgOption"/>
     </div>
 
   </div>
@@ -333,6 +333,147 @@ export default {
         return chartOptions
       },
 
+      updateLineChartKgData(){
+        let chartData = {
+          labels: this.kgLabels,
+          datasets: [     
+            {
+              label: '몸무게 변화',
+
+              backgroundColor: '#1870d5',    //점 색깔
+              pointBorderColor: '#1870d5',   //점 주위 색깔
+              borderColor: '#1870d5',        //그래프 색깔
+              borderWidth: 2,             //그래프 두께
+              
+              tension: 0.5,               //휘어짐 정도
+
+              data: this.kgData,
+
+              datalabels: {
+                display : true,
+                formatter: function() {
+                  return '';
+                },
+
+                listeners: {
+                  click: (context) => {
+                    this.dateKg = this.kgData[context.dataIndex];
+                  }
+                }
+              }
+  
+            },
+          ]
+        }
+
+        return chartData;
+      },
+
+      updateLineChartKgOption(){
+        let chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 5000,
+          },
+          interaction : {
+            mode : 'index',
+            intersect : false
+          },
+
+          //그래프 특징
+          plugins: {
+
+            //그래프 종류 표시
+            legend: {              
+                display: true,
+                align : 'end',
+                fullSize : false,
+                labels :{
+                  boxWidth : 10,
+                  font : {
+                    family : 'Jua',
+                    size : 13,
+                  },
+                },
+
+                onClick: () => {
+                  //pass
+                },
+            },
+
+            //그래프 점 표시
+            tooltip: {
+                callbacks : {
+                  //매개변수 -> return 변화 매개변수 
+                  label : () => {
+                    return '';
+                  }
+                },
+                boxWidth: 10,
+                titleFont: {
+                  size: 13,
+                  family : 'Jua'
+                }
+            },
+
+            //그래프 제목 표시
+            title : {
+                display : true,
+                font : {
+                  family : 'Jua',
+                  size : 20
+                },
+                text : '몸무게(점 클릭)'
+            },
+          },
+        
+          //x축, y축
+          scales: {
+              x: {
+                display: false,
+                ticks: {
+                  padding: 5
+                },
+                grid: {
+                  display: false
+                },
+              },
+
+              y: {
+                display : true,
+                min : 0,
+
+                //y축 label 설정
+                ticks: {
+                  display : true,
+                  font : {
+                    family : 'Jua',
+                    size : 10,
+                  },
+                },
+
+                grid : {
+                  display : true,         //이건 default
+                  drawOnChartArea : true, //이건 default
+                  drawBorder : false,      
+                  drawTicks : true,      
+                  color: function(context) {
+                    if(context.tick.label === '권장 몸무게'){
+                      return 'black'
+                    }else{
+                      return 'rgba(0, 0, 0, 0.1)'
+                    }
+                  },
+                  borderDash : [5,5],
+                  lineWidth : 1.5
+                }
+              }
+          },
+        } 
+
+        return chartOptions;
+      }
     },
 
     methods : {
