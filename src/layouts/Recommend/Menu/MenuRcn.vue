@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import Recommend from '@/api/Recommend'
 const MenuRcnDialog = () => import("@/components/Recommend/Menu/MenuRcnDialog.vue");
 const DiaryKcal = () => import("@/components/Diary/DiaryKcal.vue");
 const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
@@ -110,7 +111,38 @@ export default {
         meal : {
             immediate : true,
             handler(meal) {
-                console.log(meal)
+                Recommend.getRcnMenu(meal)
+                .then((res) =>{
+                    this.isPieChartError = false;
+                    this.isPieChatNotHealthError = false;
+                    console.log(res.data.message);
+                    if(res.data.isSuccess === true && res.data.code === 1000){
+                        //중요) 요청에 성공하였습니다.
+                        const carboPortion = (res.data.result.carbohydratePortion * 100);
+                        const proteinPortion = (res.data.result.proteinPortion * 100);
+                        const fatPortion = (res.data.result.fatPortion * 100);
+
+                        this.fillPieChartData(carboPortion, proteinPortion, fatPortion);
+                    }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                        //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                        //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                        this.$store.dispatch('logout');
+                        this.$router.push({
+                            name : "sign-in",
+                        });
+                    }else{
+                        //중요) 건강정보를 찾을 수 없습니다.
+                        this.isPieChatNotHealthError = true;
+                    }
+                })
+                .catch((err)=>{
+                    //중요) 서버 오류입니다.
+                    //뜨기 -> alert메시지 뜨기
+                    console.log(err);
+                    this.isPieChatNotHealthError = false;
+        
+                    this.isPieChartError = true;
+                });
             }
         }
     }
