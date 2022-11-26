@@ -1,10 +1,10 @@
 <template>
-<v-row justify="center">
+  <v-row justify="center">
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
         
         <!--Dialog 유발-->
         <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" color="#03C04A" dark>
+            <v-btn v-bind="attrs" v-on="on" color="#03C04A" dark rounded>
               <v-icon left dark>mdi-alert-circle-outline</v-icon>메뉴 추천 받기<v-icon right dark>mdi-alert-circle-outline</v-icon>
             </v-btn>
         </template>
