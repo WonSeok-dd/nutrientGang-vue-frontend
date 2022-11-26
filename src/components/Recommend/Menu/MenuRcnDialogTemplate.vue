@@ -1,6 +1,21 @@
 <template>
-  <v-container fluid>
-    <v-data-iterator :items="items"
+  
+  <div class="fill-height mt-10" v-if="isError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <ServerErrorComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <div class="fill-height mt-10" v-else-if="isNotMenuError">
+      <v-row justify="center">
+          <v-col cols="auto">
+              <NotMenuInfoComponent/>
+          </v-col>
+      </v-row>
+  </div>
+  <v-container fluid v-else>
+    <v-data-iterator :items="rcnItems"
       :sort-by="sortByModel" :sort-desc="sortDescModel"
       hide-default-footer>
 
@@ -72,7 +87,28 @@
 </template>
 
 <script>
+const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const NotMenuInfoComponent = () => import("@/components/NotMenuInfoComponent.vue");
   export default {
+    name : 'MenuRcnDialogTemplate',
+    props : {
+      rcnItems : {
+        type : Array
+      },
+
+      isError : {
+        type : Boolean
+      },
+
+      isNotMenuError : {
+        type : Boolean
+      }
+    },
+    components : {
+      "ServerErrorComponent" : ServerErrorComponent,
+      "NotMenuInfoComponent" : NotMenuInfoComponent,
+    },
+
     data () {
       return {
         
@@ -80,18 +116,6 @@
         sortByModel: '이름',
         sortKeys: ['이름','칼로리','탄수화물','단백질','지방'],
         
-        items: [
-          { 이름: 'Frozen Yogurt', 칼로리: 159, 탄수화물: 24, 단백질: 4.0, 지방: 6.0, },
-          { 이름: 'Ice cream sandwich', 칼로리: 237, 탄수화물: 37, 단백질: 4.3, 지방: 9.0,},
-          { 이름: 'Eclair', 칼로리: 262, 탄수화물: 23, 단백질: 6.0, 지방: 16.0, },
-          { 이름: 'Cupcake', 칼로리: 305, 탄수화물: 67, 단백질: 4.3, 지방: 3.7,},
-          { 이름: 'Gingerbread',칼로리: 356, 탄수화물: 49,단백질: 3.9, 지방: 16.0,},
-          { 이름: 'Jelly bean', 칼로리: 375, 탄수화물: 94, 단백질: 0.0, 지방: 0.0,},
-          { 이름: 'Lollipop', 칼로리: 392, 탄수화물: 98, 단백질: 0, 지방: 0.2,},
-          { 이름: 'Honeycomb', 칼로리: 408, 탄수화물: 87, 단백질: 6.5, 지방: 3.2,},
-          { 이름: 'Donut', 칼로리: 452, 탄수화물: 51, 단백질: 4.9,  지방: 25.0,},
-          { 이름: 'KitKat', 칼로리: 518, 탄수화물: 65, 단백질: 7,  지방: 26.0,},
-        ],
       }
     },
 

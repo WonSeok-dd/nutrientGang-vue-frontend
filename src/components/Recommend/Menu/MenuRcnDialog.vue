@@ -15,10 +15,11 @@
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
-                <v-toolbar-title>메뉴 추천</v-toolbar-title>
+                <v-toolbar-title>({{computedDate}} - {{meal}}) 추천 메뉴</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <MenuRcnDialogTemplate/>
+              <MenuRcnDialogTemplate :rcnItems="rcnItems"
+              :isError="isError" :isNotMenuError="isNotMenuError"/>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -29,14 +30,53 @@
 const MenuRcnDialogTemplate = () => import("@/components/Recommend/Menu/MenuRcnDialogTemplate.vue");
 export default {
     name : 'MenuRcnDialog',
+    props : {
+      date : {
+        type : String
+      },
+      meal : {
+        type : String
+      },
+
+      rcnItems : {
+        type : Array
+      },
+
+      isError : {
+        type : Boolean
+      },
+
+      isNotMenuError : {
+        type : Boolean
+      }
+
+    },
+    
+    components : {
+      "MenuRcnDialogTemplate" : MenuRcnDialogTemplate,
+    },
+
+    computed : {
+      //날짜
+      computedDate(){
+        return this.formatDate(this.date);
+      },
+    },
+
     data () {
       return {
         dialog: false,
       }
     },
 
-    components : {
-      "MenuRcnDialogTemplate" : MenuRcnDialogTemplate,
+    methods : {
+      //computed 통해 날짜 할당시 format
+      formatDate(date){
+        if (!date) return null
+
+        const [year, month, day] = date.split('-')
+        return `${year.substring(2,4)}/${month}/${day}`
+      },
     }
 
 

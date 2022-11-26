@@ -8,7 +8,9 @@
 
         <!--2. 메뉴 추천 Dialog-->
         <div class="mb-10">
-            <MenuRcnDialog />
+            <MenuRcnDialog :rcnItems="rcnItems" 
+            :isError="isError" :isNotMenuError="isNotMenuError"
+            :date="date" :meal="meal"/>
         </div>
 
         <div class="menu-border pa-3"> 
@@ -90,17 +92,6 @@ const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
 
 export default {
     name : 'MenuRcn',
-    data(){
-        return {
-            //오늘 날짜
-            date : (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-
-            //식사 선택
-            meal : '아침',
-            mealDialog : false,
-        }
-    },
-
     components : {
         "MenuRcnDialog" : MenuRcnDialog,
         "DiaryNutrient" : DiaryNutrient,
@@ -113,16 +104,26 @@ export default {
             handler(meal) {
                 Recommend.getRcnMenu(meal)
                 .then((res) =>{
-                    this.isPieChartError = false;
-                    this.isPieChatNotHealthError = false;
+                    this.isError = false;
+                    this.isNotMenuError = false;
                     console.log(res.data.message);
                     if(res.data.isSuccess === true && res.data.code === 1000){
                         //중요) 요청에 성공하였습니다.
-                        const carboPortion = (res.data.result.carbohydratePortion * 100);
-                        const proteinPortion = (res.data.result.proteinPortion * 100);
-                        const fatPortion = (res.data.result.fatPortion * 100);
+                        const rcnItemsResult = res.data.result.rcnItems;
+                        let rcnItems = [];
+                        for (let i=0; i< rcnItemsResult.length; i++){
+                            const rcnItem = {
+                                '이름': rcnItemsResult[i].name,
+                                '칼로리': rcnItemsResult[i].calorie,
+                                '탄수화물': rcnItemsResult[i].carbo,
+                                '단백질' : rcnItemsResult[i].protein,
+                                '지방' : rcnItemsResult[i].fat
+                            };
+                            rcnItems.push(rcnItem);
+                        }
 
-                        this.fillPieChartData(carboPortion, proteinPortion, fatPortion);
+                        this.rcnItems = rcnItems;
+                        
                     }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
                         //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
                         //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
@@ -131,24 +132,40 @@ export default {
                             name : "sign-in",
                         });
                     }else{
-                        //중요) 건강정보를 찾을 수 없습니다.
-                        this.isPieChatNotHealthError = true;
+                        //중요) 추천할 메뉴가 없습니다.
+                        this.isNotMenuError = true;
                     }
                 })
                 .catch((err)=>{
                     //중요) 서버 오류입니다.
                     //뜨기 -> alert메시지 뜨기
                     console.log(err);
-                    this.isPieChatNotHealthError = false;
+                    this.isNotMenuError = false;
         
-                    this.isPieChartError = true;
+                    this.isError = true;
                 });
             }
         }
-    }
+    },
+
+    data(){
+        return {
+            //에러 발생
+            isError : false,
+            isNotMenuError : false,
+
+            //오늘 날짜
+            date : (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+
+            //식사 선택
+            meal : '아침',
+            mealDialog : false,
+
+            rcnItems: [],
+        }
+    },
 }
 </script>
-
 <style scoped>
 .border {
   border: 2px dashed;
