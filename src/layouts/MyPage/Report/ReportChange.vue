@@ -26,7 +26,6 @@
     <!--몸무게 chip-->
     <div v-else>
       <ReportChangeWeight
-      v-on:show-weightData="showWeightData"
       :isKgError="isKcalError"
       :maxKg="maxKg"
       :minKg="minKg"
@@ -475,12 +474,6 @@ export default {
         return chartOptions;
       }
     },
-
-    methods : {
-      showWeightData(dateKg){
-        this.dateKg = dateKg
-      }
-    }
 }
 </script>
 
