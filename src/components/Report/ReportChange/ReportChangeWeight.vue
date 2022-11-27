@@ -42,7 +42,7 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 import { Line as LineChartGenerator } from 'vue-chartjs/legacy'
 import {Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, CategoryScale, PointElement} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';

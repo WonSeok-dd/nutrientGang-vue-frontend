@@ -87,8 +87,8 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
-const NotMenuInfoComponent = () => import("@/components/NotMenuInfoComponent.vue");
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
+const NotMenuInfoComponent = () => import("@/components/ErrorComponent/NotMenuInfoComponent.vue");
   export default {
     name : 'MenuRcnDialogTemplate',
     props : {

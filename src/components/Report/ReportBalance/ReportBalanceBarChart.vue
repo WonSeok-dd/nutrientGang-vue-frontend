@@ -14,7 +14,7 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 import { Bar as BarChartGenerator } from 'vue-chartjs/legacy'
 
 export default {

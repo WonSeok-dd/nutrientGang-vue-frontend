@@ -73,7 +73,7 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 import Diary from '@/api/Diary';
 export default {
     name : 'DiaryNutrient',

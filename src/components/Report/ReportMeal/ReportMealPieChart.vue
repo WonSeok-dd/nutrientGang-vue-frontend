@@ -19,8 +19,8 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
-const NotMealInfoComponent = () => import("@/components/NotMealInfoComponent.vue")
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
+const NotMealInfoComponent = () => import("@/components/ErrorComponent/NotMealInfoComponent.vue")
 import { Doughnut as DoughnutChartGenerator} from 'vue-chartjs/legacy'
 
 export default {

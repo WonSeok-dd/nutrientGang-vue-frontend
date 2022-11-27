@@ -55,7 +55,7 @@
 </template>
 
 <script>
-const ServerErrorComponent = () => import("@/components/ServerErrorComponent.vue");
+const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 import Report from '@/api/Report';
 export default {
     name : 'ReportBalanceNutrient',
