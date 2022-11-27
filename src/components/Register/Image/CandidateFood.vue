@@ -34,6 +34,9 @@ export default {
     },
 
     methods : {
+        
+        //후보군 선택
+        //cnddtIndex=음식Index, activeFoodIndex=후보군Index
         selectCandiate(activeFoodIndex){
             this.$emit("select-canddt", this.cnddtIndex ,activeFoodIndex);
         }

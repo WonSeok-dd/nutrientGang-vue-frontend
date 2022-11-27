@@ -192,6 +192,8 @@ export default {
             this.isDefaultLabelImage = false;
         },
 
+        //후보군 선택
+        //cnddtIndex=음식Index, activeFoodIndex=후보군Index
         selectCanddt(cnddtIndex, activeFoodIndex){
             this.foods.splice(cnddtIndex, 1, this.cnddtFoods[cnddtIndex][activeFoodIndex])
         },
