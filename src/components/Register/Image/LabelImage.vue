@@ -45,25 +45,34 @@ export default {
         cLabelImg(){
             return this.isDefaultLabelImage ? require('@/assets/default.png') : this.labelImgPreURL;
         },
+    },
 
-        //xmain, ymain null인 food 제외위함
-        activeFoods(){
-
-            let activeFoods = [];
-
-            for(let i=0; i<this.foods.length; i++){
-                const isXmainNull = !(this.foods[i].xmain);
-                const isYmainNull = !(this.foods[i].ymain);
-                if(isXmainNull || isYmainNull){
-                    //
-                }else{
-                    activeFoods.push(this.foods[i]);
-                }
-
-            }
-            return activeFoods;
+    data(){
+        return {
+            activeFoods : []
         }
     },
+
+    watch : {
+        foods : {
+            immediate : true,
+            handler(foods){
+                
+                this.activeFoods = [];
+
+                //xmain, ymain null인 food 제외위함
+                for(let i=0; i<foods.length; i++){
+                    const isXmainNull = !(foods[i].xmain);
+                    const isYmainNull = !(foods[i].ymain);
+                    if(isXmainNull || isYmainNull){
+                        //
+                    }else{
+                        this.activeFoods.push(foods[i]);
+                    }
+                }
+            }
+        }
+    }
 }
 </script>
 <style scoped>

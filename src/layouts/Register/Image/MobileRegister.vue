@@ -55,6 +55,7 @@
                                         height="200px" contain/>
                                     </div>
                                 </div>
+
                                 <!--음식 라벨링 사진 확인-->
                                 <div>
                                     <div class="text-center">
@@ -63,6 +64,30 @@
                                 
                                     <LabelImage :foods="foods" :isDefaultLabelImage="isDefaultLabelImage" :labelImgPreURL="labelImgPreURL"/>
                                 </div>
+
+                                <!--구분선-->
+                                <v-divider class="ma-4"></v-divider>
+
+                                <!--음식 라벨링 후보군 선택-->                                    
+                                <div v-if="isZeroCnddtFoods === false">
+                                    <v-row v-for="(cnddtFood,cnddtIndex) in cnddtFoods" :key="`cnddtFood-${cnddtIndex}`"
+                                    align="center" justify="center"
+                                    class="border-candidate ma-1">
+                                  
+                                        <v-col cols="4">
+                                            <div>
+                                                음식{{cnddtIndex+1}} 후보군:
+                                            </div>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <CandidateFood :cnddtFood="cnddtFood" :cnddtIndex="cnddtIndex"
+                                            v-on:select-canddt="selectCanddt"/>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                                <h3 v-else class="text-center red--text">
+                                    분석된 음식이 없습니다
+                                </h3>
                                 
                                 <!--등록 버튼-->
                                 <div>
@@ -80,7 +105,9 @@
 
 <script>
 const LabelImage = () => import("@/components/Register/Image/LabelImage.vue");
+const CandidateFood = () => import("@/components/Register/Image/CandidateFood.vue");
 
+import axios from 'axios'
 import AWS from 'aws-sdk'
 import {extend, ValidationObserver, ValidationProvider } from "vee-validate"
 import {required} from "vee-validate/dist/rules"
@@ -95,6 +122,7 @@ export default {
         ValidationObserver,
         ValidationProvider,
         LabelImage,
+        CandidateFood,
     },
 
     created(){
@@ -103,6 +131,22 @@ export default {
 
         const hasNotInitMeal = !this.$route.params.initMeal;
         this.meal = hasNotInitMeal ?  '아침' : this.$route.params.initMeal;
+    },
+
+    computed : {
+        //isDefaultImage:true -> defaultimg
+        //isDefaultImage:false -> imgPreURL
+        cImg(){
+            return this.isDefaultImage ? require('@/assets/default.png') : this.imgPreURL;
+        },
+
+        cLabelImg(){
+            return this.isDefaultLabelImage ? require('@/assets/default.png') : this.labelImgPreURL;
+        },
+
+        isZeroCnddtFoods(){
+            return Array.isArray(this.cnddtFoods) && this.cnddtFoods.length === 0;
+        }
     },
 
     data(){
@@ -130,24 +174,9 @@ export default {
             albumName : 'food_album',
 
             //이미지 등록 후(음식 관련)
-            foods : [
-                {xmain:10, ymain:10, name:'김치찌개', kcal:300, nutrient:{carbo:50,protein:30,fat:9,}},
-                {xmain:40, ymain:40, name:'김밥', kcal:200, nutrient:{carbo:10,protein:10,fat:6,}},
-                {xmain:70, ymain:70, name:'꽁치', kcal:100, nutrient:{carbo:20,protein:10,fat:7,}},
-                {xmain:10, ymain:20, name:'공기밥', kcal:400, nutrient:{carbo:30,protein:5,fat:8,}},
-            ],
-        }
-    },
+            foods : [],
+            cnddtFoods : []
 
-    computed : {
-        //isDefaultImage:true -> defaultimg
-        //isDefaultImage:false -> imgPreURL
-        cImg(){
-            return this.isDefaultImage ? require('@/assets/default.png') : this.imgPreURL;
-        },
-
-        cLabelImg(){
-            return this.isDefaultLabelImage ? require('@/assets/default.png') : this.labelImgPreURL;
         }
     },
 
@@ -155,13 +184,16 @@ export default {
 
         //isDefaultImage = true -> false
         changeNotDefault(){
-            console.log('발생함?')
             this.isDefaultImage = false;
         },
 
         //isDefaultLabelImage = true -> false
         changeNotDefaultLabel(){
             this.isDefaultLabelImage = false;
+        },
+
+        selectCanddt(cnddtIndex, activeFoodIndex){
+            this.foods.splice(cnddtIndex, 1, this.cnddtFoods[cnddtIndex][activeFoodIndex])
         },
 
         async submit(){
@@ -258,6 +290,40 @@ export default {
                         this.labelImgPreURL = this.href + this.albumName + '/' + randomString + '.' + form;
                         this.isDefaultLabelImage = false;
 
+                        axios({
+                            method : 'get',
+                            url : '/image/detect/' + this.imgURL,
+                        })
+                        .then((res) =>{
+                            this.isError = false;
+                            console.log(res.data.message);
+                            if(res.data.isSuccess === true && res.data.code === 1000){
+                                //중요) 요청에 성공하였습니다.
+                                this.cnddtFoods = res.data.result.foods;
+                                
+                                for (let i=0; i < this.cnddtFoods.length; i++){
+                                    this.foods.push(this.cnddtFoods[i][0]); 
+                                }
+                                
+                            }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                                //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                                //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                                this.$store.dispatch('logout');
+                                this.$router.push({
+                                    name : "sign-in",
+                                });
+                            }else{
+                                //중요) 인식된 음식이 없습니다.
+                                
+                            }
+                        })
+                        .catch((err)=>{
+                          //중요) 서버 오류입니다.
+                          //뜨기 -> alert메시지 뜨기
+                          console.log(err);
+                          this.isError = true;
+                        });
+
                     },
                     (err) => {
                        console.log(err)
@@ -272,5 +338,9 @@ export default {
 <style scoped>
 .border-image{
   border : 3px solid ;
+}
+.border-candidate{
+  border: 2px dashed;
+  border-color: #80CAFF;
 }
 </style>
