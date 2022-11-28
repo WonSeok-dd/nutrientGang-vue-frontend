@@ -49,8 +49,13 @@
                                     <div class="text-center">
                                         <h2 class="text--primary font-weight-black">음식 사진 확인</h2>
                                     </div>
-                                
-                                    <div class="border-image">
+                                    
+                                    <v-row align="center" justify="center" v-if="isLoading">
+                                        <v-col cols="auto">
+                                            <LoadingComponent/>
+                                        </v-col>
+                                    </v-row>
+                                    <div class="border-image" v-else>
                                         <v-img :src="cImg" @error="changeNotDefault"
                                         height="200px" contain/>
                                     </div>
@@ -61,8 +66,14 @@
                                     <div class="text-center">
                                         <h2 class="text--primary font-weight-black">분석된 음식 사진 확인</h2>
                                     </div>
-                                
-                                    <LabelImage :foods="foods" :isDefaultLabelImage="isDefaultLabelImage" :labelImgPreURL="labelImgPreURL"/>
+
+                                    <v-row align="center" justify="center" v-if="isLoading">
+                                        <v-col cols="auto">
+                                            <LoadingComponent/>
+                                        </v-col>
+                                    </v-row>
+                                    <LabelImage :foods="foods" :isDefaultLabelImage="isDefaultLabelImage" :labelImgPreURL="labelImgPreURL"
+                                    v-else/>
                                 </div>
 
                                 <!--구분선-->
@@ -91,7 +102,7 @@
                                 
                                 <!--등록 버튼-->
                                 <div>
-                                    <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid" >등록하기</v-btn>
+                                    <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">세부 등록</v-btn>
                                 </div>
                             </div>
                         </v-form>
@@ -106,6 +117,7 @@
 <script>
 const LabelImage = () => import("@/components/Register/Image/LabelImage.vue");
 const CandidateFood = () => import("@/components/Register/Image/CandidateFood.vue");
+const LoadingComponent = () => import("@/components/LoadingComponent.vue");
 
 import axios from 'axios'
 import AWS from 'aws-sdk'
@@ -123,6 +135,7 @@ export default {
         ValidationProvider,
         LabelImage,
         CandidateFood,
+        LoadingComponent
     },
 
     created(){
@@ -151,6 +164,9 @@ export default {
 
     data(){
         return {
+
+            //로딩 관련
+            isLoading : false,
 
             //router params 관련
             date : null,
@@ -236,10 +252,13 @@ export default {
         },
 
         uploadAlbumFile(){
-            //AWS 연결
+            //1.로딩 시작
+            this.isLoading = true;
+
+            //2.AWS 연결
             this.connectAWS();
 
-            //img 지울때 / 추가할때
+            //3.img 지울때 / 추가할때
             if (!this.img){
                 
                 //일반 이미지
@@ -253,9 +272,12 @@ export default {
                 this.labelImgPreURL = null;
                 this.isDefaultLabelImage = true;
 
+                //1.로딩 끝
+                this.isLoading = false;
+
             }else{
                 
-                //2. AWS 버킷에 업로드(1) 
+                //4. AWS 버킷에 업로드(1) 
                 // 파일형식(.jpg) + 랜덤문자열 얻기
                 let albumFileName = this.img.name;
                 let form = albumFileName.split('.')[1];
@@ -276,10 +298,10 @@ export default {
                   }
                 });
 
-                //2. AWS 버킷에 업로드(2) 
+                //4. AWS 버킷에 업로드(2) 
                 var promise = upload.promise();
-                promise.then(
-                    (data) => {
+                promise
+                .then((data) => {
                         console.log("파일 업로드:", data);
 
                         //이미지
@@ -318,19 +340,27 @@ export default {
                                 //중요) 인식된 음식이 없습니다.
                                 
                             }
+
+                            //1.로딩 끝
+                            this.isLoading = false;
                         })
                         .catch((err)=>{
-                          //중요) 서버 오류입니다.
-                          //뜨기 -> alert메시지 뜨기
-                          console.log(err);
-                          this.isError = true;
+                            //중요) 서버 오류입니다.
+                            //뜨기 -> alert메시지 뜨기
+                            console.log(err);
+                            this.isError = true;
+
+                            //1.로딩 끝
+                            this.isLoading = false;
                         });
 
-                    },
-                    (err) => {
-                       console.log(err)
-                    }
-                );
+                })
+                .catch((err) => {
+                    console.log(err)
+
+                    //1.로딩 끝
+                    this.isLoading = false;
+                });
             } 
         }, 
     }
