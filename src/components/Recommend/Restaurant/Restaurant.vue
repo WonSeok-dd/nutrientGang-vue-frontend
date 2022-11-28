@@ -54,7 +54,14 @@ export default {
         //default_img:true -> defaultimg
         //default_img:false -> rtrimgPreURL
         cImg(){
-            return this.default_img ? require('@/assets/default.png') : this.rtr.rtrimgURL;
+
+            //이미지 등록 전(S3관련)
+
+            const href = 'https://dgucapstonepics.s3.ap-northeast-2.amazonaws.com/';
+            const albumName = 'rtr_album';
+
+            const url = href + albumName + '/' + this.rtr.rtrimgURL;
+            return this.default_img ? require('@/assets/default.png') : url;
         }
     },
 

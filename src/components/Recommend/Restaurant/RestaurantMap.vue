@@ -2,8 +2,18 @@
 
     <v-container fluid>
         <!--제목-->
-        <div class="text-center">
-            <h1 class="text--primary font-weight-black">음식점 현황</h1>
+        <div class="text-center mb-5">
+            <v-row justify="center" align="center">
+                <v-col cols="auto">
+                    <h1 class="text--primary font-weight-black">음식점 현황</h1>
+                </v-col>
+                <v-col cols="auto">
+                    <v-btn outlined color="blue" fab
+                    @click="refreshMap">
+                        <v-icon>mdi-refresh</v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>
         </div>
         
         <!--음식점 지도-->
@@ -84,6 +94,12 @@ export default {
     props : {
         menu : Object,
     },
+    components : {
+      "KakaoMap" : KakaoMap,
+      "RestaurantVue" : RestaurantVue,
+      "ServerErrorComponent" : ServerErrorComponent,
+      "NotRtrInfoComponent" : NotRtrInfoComponent,
+    },
 
     data(){
         return {
@@ -119,7 +135,9 @@ export default {
                     lat : coordinates.lat,
                     lng : coordinates.lng
                 }
-                console.log(`get location: ${coordinates.lat} ${coordinates.lng}`);
+
+                this.refreshMap();
+
             })
             .catch((error) => {
                 this.mapOptions.center = {
@@ -127,72 +145,14 @@ export default {
                     lng : 127.00095068962825
                 }
                 console.log(`${error}: not get location`);
+                
+                this.refreshMap();
             });
     },
 
     mounted(){
-
-        Recommend.getRcnRtr(this.menu.name, this.mapOptions.center.lat, this.mapOptions.center.lng)
-        .then((res) =>{
-            this.isError = false;
-            this.isNotRtrError = false;
-            console.log(res.data.message);
-            if(res.data.isSuccess === true && res.data.code === 1000){
-                //중요) 요청에 성공하였습니다.
-                this.restaurants = res.data.rcnRtrs;
-
-            }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
-                //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
-                //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
-                this.$store.dispatch('logout');
-                this.$router.push({
-                    name : "sign-in",
-                });
-            }else{
-                //중요) 추천 음식점을 찾을 수 없습니다.
-                this.isNotRtrError = true;
-
-            }
-        })
-        .catch((err)=>{
-            //중요) 서버 오류입니다.
-            //뜨기 -> alert메시지 뜨기
-            console.log(err);
-            this.isNotRtrError = false;
-
-            this.isError = true;
-        });
-
-        // 음식점 마커객체 생성
-        const vuekakaomap = this.$refs.kmap
-        this.markers = new MarkerHandler(vuekakaomap, {
-          markerClicked : (rtr) => {
-            console.log("click" + rtr);
-
-            // 마커클릭시 지도 이동 이벤트
-            this.showOnMap(rtr)
-
-            // 마커클릭시 overlay 보여주기 이벤트
-            this.overlayRestaurant = rtr;
-            this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
-          },
-        });
-
-        // 음식점 마커 지도에 추가
-        this.markers.add(this.restaurants, (rtr) => {
-          return {lat : rtr.rtrlat, lng: rtr.rtrlng}
-        });
-
-        // 음식점 overlay객체 생성
-        this.overlay = new KakaoOverlay(vuekakaomap, this.$refs.restaurantOverlay)
-
-    },
-
-    components : {
-      "KakaoMap" : KakaoMap,
-      "RestaurantVue" : RestaurantVue,
-      "ServerErrorComponent" : ServerErrorComponent,
-      "NotRtrInfoComponent" : NotRtrInfoComponent,
+        
+        
     },
 
     methods : {
@@ -222,9 +182,65 @@ export default {
 
         },
 
-      closeOverlay(){
-        this.overlay.hide();
-      }
+        closeOverlay(){
+          this.overlay.hide();
+        },
+
+        refreshMap(){
+            //1. 추천 음식점 정보 얻기
+            Recommend.getRcnRtr(this.menu.name, this.mapOptions.center.lat, this.mapOptions.center.lng)
+            .then((res) =>{
+                this.isError = false;
+                this.isNotRtrError = false;
+                console.log(res.data.message);
+                if(res.data.isSuccess === true && res.data.code === 1000){
+                    //중요) 요청에 성공하였습니다.
+                    this.restaurants = res.data.result.rcnRtrs;
+
+                }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
+                    //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
+                    //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
+                    this.$store.dispatch('logout');
+                    this.$router.push({
+                        name : "sign-in",
+                    });
+                }else{
+                    //중요) 추천 음식점을 찾을 수 없습니다.
+                    this.isNotRtrError = true;
+
+                }
+            })
+            .catch((err)=>{
+                //중요) 서버 오류입니다.
+                //뜨기 -> alert메시지 뜨기
+                console.log(err);
+                this.isNotRtrError = false;
+
+                this.isError = true;
+            });
+
+            //2.(1) 음식점 마커객체 생성
+            const vuekakaomap = this.$refs.kmap
+            this.markers = new MarkerHandler(vuekakaomap, {
+              markerClicked : (rtr) => {
+
+                // 마커클릭시 지도 이동 이벤트
+                this.showOnMap(rtr)
+
+                // 마커클릭시 overlay 보여주기 이벤트
+                this.overlayRestaurant = rtr;
+                this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
+              },
+            });
+
+            //2.(2) 음식점 마커 지도에 추가
+            this.markers.add(this.restaurants, (rtr) => {
+              return {lat : rtr.rtrlat, lng: rtr.rtrlng}
+            });
+
+            //3. 음식점 overlay객체 생성
+            this.overlay = new KakaoOverlay(vuekakaomap, this.$refs.restaurantOverlay)
+        }
     }
 }
 </script>

@@ -21,7 +21,6 @@ class KakaoOverlay {
     }
 
     showAt(lat, lng){
-        console.log("overlay show!!", lat , lng);
         this.instance.setMap(this.vuekakaomap.mapInstance); //Custom overlay 생성(ref를 통해 KakaoMap.vue의 data:mapInstance)
         
         const pos = new kakao.maps.LatLng(lat, lng);
