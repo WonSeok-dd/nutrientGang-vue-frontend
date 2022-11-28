@@ -69,7 +69,7 @@
         <v-card>
             <v-row class="ma-3">
                 <v-col v-for="rtr,i in this.restaurants" :key="i" cols="12" sm="6" md="4" lg="3"
-                @click="showOnMap(rtr)" :class="{active : rtr === activeRestaurant }" class="restaurant" >
+                @click="showOnMap(rtr)" :class="activeColor(rtr)" class="restaurant" >
                     <RestaurantVue v-bind:rtr="rtr" ></RestaurantVue>
                 </v-col>
             </v-row>
@@ -127,6 +127,25 @@ export default {
         }
     },
 
+    computed : {
+        activeColor(){
+            return (rtr) => {
+                
+                const isNullObject = !this.activeRestaurant;
+
+                if (!isNullObject) {
+                    if(rtr.rtrIndex === this.activeRestaurant.rtrIndex){
+                        return 'active';
+                    }
+
+                    return '';
+                }
+
+                return '';
+            }
+        }
+    },
+
     created(){
 
         // 현재 위치얻기 / 안되면 동국대학교로 설정
@@ -159,20 +178,20 @@ export default {
             this.mapOptions.level = level
         },
 
-        // 버튼클릭시 지도 이동 이벤트
+        // 음식점클릭 이벤트
         showOnMap(rtr){
 
-            //버튼클릭시 class: acitve활성
-            this.activeRestaurant = rtr
+            //음식점클릭시 class: acitve활성
+            this.activeRestaurant = rtr;
 
 
-            //버튼클릭시 KakaoMap.vue의 watch속성 로직실행
+            //음식점클릭시 KakaoMap.vue의 watch속성 로직실행
             this.mapOptions.center = {
                 lat : rtr.rtrlat,
                 lng : rtr.rtrlng
             }
 
-            //버튼클릭시 overlay보여주기 이벤트
+            //음식점클릭시 overlay보여주기 이벤트
             this.overlayRestaurant = rtr;
             this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
 
@@ -202,14 +221,15 @@ export default {
                     });
                 }else{
                     //중요) 추천 음식점을 찾을 수 없습니다.
+                    this.initData();
                     this.isNotRtrError = true;
-
                 }
             })
             .catch((err)=>{
                 //중요) 서버 오류입니다.
                 //뜨기 -> alert메시지 뜨기
                 console.log(err);
+                this.initData();
                 this.isNotRtrError = false;
 
                 this.isError = true;
@@ -220,12 +240,9 @@ export default {
             this.markers = new MarkerHandler(vuekakaomap, {
               markerClicked : (rtr) => {
 
-                // 마커클릭시 지도 이동 이벤트
+                // 마커클릭시 음식점클릭 이벤트
                 this.showOnMap(rtr)
 
-                // 마커클릭시 overlay 보여주기 이벤트
-                this.overlayRestaurant = rtr;
-                this.overlay.showAt(rtr.rtrlat, rtr.rtrlng);
               },
             });
 
@@ -236,8 +253,32 @@ export default {
 
             //3. 음식점 overlay객체 생성
             this.overlay = new KakaoOverlay(vuekakaomap, this.$refs.restaurantOverlay)
+        },
+
+        initData(){
+            this.restaurants = [];
+
+            //이건 처음에 할당하고 고정해야됨
+            //this.mapOptions = {
+            //    center : {
+            //        lat : 0,
+            //        lng : 0
+            //    },
+            //    level : 3
+            //};
+
+            //marker 인스턴스
+            this.markers = null; 
+
+            //selected 음식점(class: acitve활성)
+            this.activeRestaurant = null; 
+
+            //overlay 인스턴스
+            //overlay에 보여줄 음식점(음식정보내용: 할당)
+            this.overlay = null;  
+            this.overlayRestaurant = null; 
         }
-    }
+    },
 }
 </script>
 

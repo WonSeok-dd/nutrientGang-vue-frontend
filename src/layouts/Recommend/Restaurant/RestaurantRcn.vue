@@ -10,10 +10,20 @@
             
             <!--선택한 메뉴-->
             <!--선택한 메뉴 없을 경우, 정상 -->
-            <div class="fill-height menu-border pt-5" v-if="hasNotMenu">
+            <div class="fill-height menu-border pa-5" v-if="hasNotMenu">
                 <v-row justify="center" align="center">
                     <v-col cols="auto">
                         <NotChooseMenuComponent/>
+                    </v-col>
+                </v-row>
+                <v-row justify="center" align="center">
+                    <v-col cols="auto">
+                        <v-btn outlined color="blue"
+                        @click="goMenuRcn">
+                            <v-icon left>mdi-chevron-double-right</v-icon>
+                            메뉴 선택하러 가기
+                            <v-icon right>mdi-chevron-double-left</v-icon>
+                        </v-btn>
                     </v-col>
                 </v-row>
             </div>
@@ -62,7 +72,7 @@
                     </v-col>
                 </v-row>
             </div>
-            <div class="menu-border" v-else>
+            <div v-else>
                 <RestaurantList :menu="menu"/>
             </div>
         </div>
@@ -107,6 +117,14 @@ export default {
             //    protein,
             //    fat
             //}
+        }
+    },
+
+    methods : {
+        goMenuRcn(){
+            this.$router.push({
+                name : "MenuRcn",
+            });
         }
     }
 
