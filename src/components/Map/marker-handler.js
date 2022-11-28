@@ -27,8 +27,6 @@ class MarkerHandler {
                     this.options.markerClicked(markerInstance.$$.data);
                 });
             }   
-
-            console.log(`${markerInstance} MarkerInstance 생성`)
         })
     }
 }

@@ -42,13 +42,11 @@ export default {
 
   watch : {
     // 지도 확대 이벤트시 변경
-    "options.level"(cur, pre){
-      console.log(`watch level : ${pre} -> ${cur}`)
+    "options.level"(cur){
       this.mapInstance.setLevel(cur)
     },
     // 지도 이동 이벤트시 변경
     "options.center"(cur){
-      console.log(`watch center : ${cur.lat} ${cur.lng}`)
       //this.mapInstance.setCenter(new kakao.maps.LatLng(cur.lat, cur.lng)) -> 거칠게 이동
       this.mapInstance.panTo(new kakao.maps.LatLng(cur.lat, cur.lng))     //-> 부드럽게 이동 
     }
