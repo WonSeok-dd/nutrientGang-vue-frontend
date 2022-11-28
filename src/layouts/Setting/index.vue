@@ -18,9 +18,8 @@
 const DefaultBar = () => import("@/components/AppBar.vue");
 const DefaultNavigationDrawer = () => import("@/components/AppNavigationDrawer.vue");
 
-
 export default {
-    name : 'RegisterImagePage',
+    name : 'SettingPage',
     data () {
       return {
 

@@ -4,10 +4,9 @@ import VueRouter from "vue-router"
 const DefaultLayout = () => import("@/layouts/Default/index.vue");
 const AuthenticationLayout = () => import("@/layouts/Auth/index.vue");
 const MyPageLayout = () => import("@/layouts/MyPage/index.vue");
-const WeightRegisterLayout = () => import("@/layouts/Register/Weight/index.vue");
-const ImageRegisterLayout = () => import("@/layouts/Register/Image/index.vue");
-const MealRegisterLayout  = () => import("@/layouts/Register/Meal/index.vue");
 const RecommendLayout = () => import("@/layouts/Recommend/index.vue");
+const SettingLayout = () => import("@/layouts/Setting/index.vue");
+
 
 // DefaultLayout
 const DashBoard = () => import("./components/DashBoard.vue")
@@ -23,19 +22,24 @@ const InfoSignUp  = () => import("@/layouts/Auth/InfoSignUp.vue");
 const Diary = () => import("@/layouts/MyPage/Diary/Diary.vue");
 const Report = () => import("@/layouts/MyPage/Report/Report.vue");
 
-//WeightRegisterLayout
-const WeightRegister = () => import("@/layouts/Register/Weight/WeightRegister.vue");
-
-//ImageRegisterLayout
-const MobileRegister = () =>import("@/layouts/Register/Image/MobileRegister.vue");
-const TextRegister = () => import("@/layouts/Register/Image/TextRegister.vue");
-
-//MealRegisterLayout
-const MealRegister = () => import("@/layouts/Register/Meal/MealRegister.vue");
-
 //RecommendLayout
 const MenuRcn = () => import("@/layouts/Recommend/Menu/MenuRcn.vue");
 const RestaurantRcn = () => import("@/layouts/Recommend/Restaurant/RestaurantRcn.vue");
+
+//SettingLayout
+//SettingLayout- Register
+const WeightRegister = () => import("@/layouts/Setting/Register/Weight/WeightRegister.vue");
+
+const MobileRegister = () =>import("@/layouts/Setting/Register/Image/MobileRegister.vue");
+const TextRegister = () => import("@/layouts/Setting/Register/Image/TextRegister.vue");
+
+const MealRegister = () => import("@/layouts/Setting/Register/Meal/MealRegister.vue");
+
+//SettingLayout
+//SettingLayout - Modify
+const WeightModify = () => import("@/layouts/Setting/Modify/Weight/WeightModify.vue");
+
+const MealModify = () => import("@/layouts/Setting/Modify/Meal/MealModify.vue");
 
 
 Vue.use(VueRouter)
@@ -98,51 +102,6 @@ const routes = [
             },
         ]
     },
-    {
-        path: '/register/weight',
-        component : WeightRegisterLayout,
-        children : [
-            {
-                name : "WeightRegister",
-                path : "",
-                component : WeightRegister,
-                props : true
-            },
-        ]
-    },
-    {
-        path: '/register/image',
-        component : ImageRegisterLayout,
-        children : [
-            {
-                name : "MobileRegister",
-                path : "mobile",
-                component : MobileRegister,
-                props : true   
-            },
-            
-            {
-                name : "TextRegister",
-                path : "text",
-                component : TextRegister,
-                props : true
-            },
-
-        ]
-    },
-    {
-        path: '/register/meal',
-        component : MealRegisterLayout,
-        children : [
-
-            {
-                name : "MealRegister",
-                path : "",
-                component : MealRegister,
-                props : true
-            },
-        ]
-    },
 
     {
         path : '/recommend',
@@ -160,6 +119,56 @@ const routes = [
                 component : RestaurantRcn,
                 props : true,
             }
+        ]
+    },
+
+    {
+        path : '/setting/register',
+        component : SettingLayout,
+        children : [
+            {
+                name : "WeightRegister",
+                path : 'weight',
+                component : WeightRegister,
+                props : true,
+            },
+            {
+                name : "MobileRegister",
+                path : 'image/mobile',
+                component : MobileRegister,
+                props : true,
+            },
+            {
+                name : "TextRegister",
+                path : 'image/text',
+                component : TextRegister,
+                props : true,
+            },
+            {
+                name : "MealRegister",
+                path : 'meal',
+                component : MealRegister,
+                props : true,
+            },
+        ]
+    },
+
+    {
+        path : '/setting/modify',
+        component : SettingLayout,
+        children : [
+            {
+                name : "WeightModify",
+                path : 'weight',
+                component : WeightModify,
+                props : true,
+            },
+            {
+                name : "MealModify",
+                path : 'meal',
+                component : MealModify,
+                props : true,
+            },
         ]
     }
 

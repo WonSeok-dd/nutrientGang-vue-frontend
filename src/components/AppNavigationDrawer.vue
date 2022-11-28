@@ -91,14 +91,23 @@ export default {
         { title: 'Dashboard', icon: 'mdi-view-dashboard', to: "/" },
         { title: '로그인', icon: 'mdi-account-badge', to: "/authentication/sign-in" },
         { title: '회원가입', icon: 'mdi-apple-finder', to: "/authentication/info-first" },
-        { title: '마이페이지', icon: 'mdi-elephant', items : [
+        { title: '마이페이지', icon: 'mdi-account-multiple', items : [
             { title: "다이어리", icon: 'mdi-heart-box-outline', to: "/mypage/diary" },
             { title: "리포트", icon: 'mdi-history', to: "/mypage/report" },
         ]},          
-        { title: '추천받기', icon: 'mdi-thumb-up-outline', items : [
-            { title: "메뉴 추천", icon: 'mdi-silverware', to: "/recommend/menu" },
-            { title: "음식점 추천", icon: 'mdi-home-variant', to: "/recommend/restaurant" },
-        ]},   
+        { title: '추천페이지', icon: 'mdi-thumb-up', items : [
+            { title: "메뉴", icon: 'mdi-silverware', to: "/recommend/menu" },
+            { title: "음식점", icon: 'mdi-home-variant', to: "/recommend/restaurant" },
+        ]},
+        { title: '등록페이지', icon: 'mdi-account-multiple-plus', items : [
+            { title: "카메라/갤러리(음식)", icon: 'mdi-image-filter-tilt-shift', to: "/setting/register/image/mobile" },
+            { title: "텍스트(음식)", icon: 'mdi-comment-text-outline', to: "/setting/register/image/text" },
+            { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/register/weight" },
+        ]},
+        { title: '수정페이지', icon: 'mdi-account-switch', items : [
+            { title: "음식", icon: 'mdi-food', to: "/setting/modify/meal" },
+            { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/modify/weight" },
+        ]}, 
       ],
     }
   }
