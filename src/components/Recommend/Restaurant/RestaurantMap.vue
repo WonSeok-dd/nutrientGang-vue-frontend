@@ -150,11 +150,6 @@ export default {
             });
     },
 
-    mounted(){
-        
-        
-    },
-
     methods : {
 
         // 버튼클릭시 지도 확대 이벤트

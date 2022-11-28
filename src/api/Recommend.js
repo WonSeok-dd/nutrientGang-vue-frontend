@@ -20,7 +20,7 @@ export default {
             url: '/rcn/rtr',
             method: 'get',
             params : {
-                menuName : menuName,
+                menu : menuName,
                 lat : lat,
                 lng : lng
             }
