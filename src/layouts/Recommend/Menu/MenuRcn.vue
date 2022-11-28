@@ -109,7 +109,7 @@ export default {
                     console.log(res.data.message);
                     if(res.data.isSuccess === true && res.data.code === 1000){
                         //중요) 요청에 성공하였습니다.
-                        const rcnItemsResult = res.data.result.rcnItems;
+                        const rcnItemsResult = res.data.result.rcnMenus;
                         let rcnItems = [];
                         for (let i=0; i< rcnItemsResult.length; i++){
                             const rcnItem = {
