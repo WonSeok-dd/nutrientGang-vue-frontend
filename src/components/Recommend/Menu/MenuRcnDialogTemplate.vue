@@ -22,8 +22,9 @@
       <!--1. 정렬 창, 정렬 방법 버튼-->
       <template v-slot:header>
         <v-row align="center" justify="center">
+
+          <!--정렬 창-->
           <v-col cols="8">
-            <!--정렬 창-->
             <v-select v-model="sortByModel" :items="sortKeys" label="정렬 기준"
             outlined hide-details
             append-icon="mdi-sort" 
@@ -59,7 +60,17 @@
             <!--1개 정보-->
             <v-card>
               <v-card-title class="subheading font-weight-bold">
-                {{ item.이름 }}
+                <v-row justify="center" align="center">
+                  <v-col cols="auto">
+                    <div>{{ item.이름 }}</div>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-btn color="#03C04A" small outlined
+                    @click="goRestaurantRcn(item)">
+                      <v-icon left>mdi-home-variant</v-icon> 음식점
+                      </v-btn>                    
+                  </v-col>
+                </v-row>
               </v-card-title>
 
               <v-divider></v-divider>
@@ -124,6 +135,25 @@ const NotMenuInfoComponent = () => import("@/components/ErrorComponent/NotMenuIn
         return this.sortKeys.filter(key => key !== '이름')
       },
     },
+
+    methods : {
+      goRestaurantRcn(item){
+        const menu = {
+          name : item.이름,
+          kcal : item.칼로리,
+          carbo : item.탄수화물,
+          protein : item.단백질,
+          fat : item.지방
+        }
+        console.log(menu);
+        //this.$router.push({
+        //  name : "RestaurantRcn",
+        //  params : {
+        //    initMenu : menu
+        //  }
+        //})
+      }
+    }
 
   }
 </script>

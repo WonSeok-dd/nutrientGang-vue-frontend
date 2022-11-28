@@ -7,7 +7,7 @@ module.exports = defineConfig({
   runtimeCompiler : true,
 
   devServer: {
-    //proxy: 'http://localhost:3000'
-    proxy : 'http://54.180.116.95:8080'
+    proxy: 'http://localhost:3000'
+    //proxy : 'http://54.180.116.95:8080'
   }
 })
