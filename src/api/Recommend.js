@@ -14,5 +14,18 @@ export default {
         });
     },
 
+    getRcnRtr(menuName, lat, lng){
+
+        return interceptor({
+            url: '/rcn/rtr',
+            method: 'get',
+            params : {
+                menuName : menuName,
+                lat : lat,
+                lng : lng
+            }
+        });
+    }
+
 
 }

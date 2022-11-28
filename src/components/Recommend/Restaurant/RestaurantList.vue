@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <RestaurantMap v-bind:restaurants="restaurants"/>
+    <RestaurantMap :restaurants="restaurants" :menu="menu"/>
   </v-container>
 </template>
 
@@ -12,6 +12,10 @@ import axios from 'axios'
 
 export default {
   name : 'RestaurantList',
+  props : {
+    menu : Object
+  },
+
   data(){
     return {
       restaurants : []

@@ -61,7 +61,7 @@
                 </v-row>
             </div>
             <div class="menu-border" v-else>
-                <RestaurantList/>
+                <RestaurantList :menu="menu"/>
             </div>
         </div>
 
@@ -98,6 +98,13 @@ export default {
     data(){
         return {
             menu : null,
+            //menu : {
+            //    name,
+            //    kcal,
+            //    carbo,
+            //    protein,
+            //    fat
+            //}
         }
     }
 
