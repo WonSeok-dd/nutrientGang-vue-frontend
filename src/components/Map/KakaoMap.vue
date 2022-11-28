@@ -63,6 +63,7 @@ export default {
   height: 600px;
 }
 
+/*overlay-popup의 설정*/
 .kmap .overlay-popup{
   max-width: 200px;
   min-width: 160px;
@@ -76,19 +77,19 @@ export default {
   box-shadow: 0 0 8px #0000004d, 0 0 1px 2px #00000022;
 }
 
+/*overlay-popup의 음식점 이름설정*/
 .kmap .overlay-popup h3{
-  margin: 0px;
   padding: 8px;
-  
+
   background-color: #ed4215;
   color: white;
-  
+
   font-weight: 400;
   font-size: 16px;
 }
 
-.kmap .overlay-popup .addr{
-  padding: 8px;
+/*overlay-popup의 음식점 메뉴이름설정*/
+.kmap .overlay-popup .menu{
+  padding-left: 10px;
 }
-
 </style>

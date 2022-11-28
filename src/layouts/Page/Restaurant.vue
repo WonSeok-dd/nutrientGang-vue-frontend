@@ -1,12 +1,13 @@
 <template>
     <v-card class="mx-auto" max-width="344">
-        <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
+        <v-img :src="cImg" @error="changeNotDefault"  
+        height="200px" contain></v-img>
 
-        <v-card-title>{{rtr.place}}</v-card-title>
-        <v-card-subtitle>주소 : 서울특별시</v-card-subtitle>
+        <v-card-title>{{rtr.rtrName}}</v-card-title>
+        <v-card-subtitle>주소 : {{rtr.rtrLocation}}</v-card-subtitle>
 
         <v-card-actions>
-          <v-btn color="primary lighten-1" text @click="show = !show">메뉴보기</v-btn>
+          <v-btn color="rtrActive" text @click="show = !show">메뉴보기(클릭)</v-btn>
 
           <v-spacer></v-spacer>
 
@@ -19,12 +20,16 @@
           <div v-show="show">
             <v-divider></v-divider>
 
-            <v-card-text>
-              {{rtr.info}}
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
-              {{rtr.info}}
+            <v-card-text v-for="menu,i in rtr.rtrMenu" :key="i">
+              <div class="border-styles">
+                <h3>{{menu.menuName}}</h3>
+                <v-divider></v-divider>
+                <div class="mb-1">{{menu.menuInfo}}</div>
+                <div>탄수화물: {{menu.menuCarbo}}g</div>
+                <div>단백질: {{menu.menuProtein}}g</div>
+                <div>지방: {{menu.menuFat}}g</div>
+              </div>
+
             </v-card-text>
           </div>
         </v-expand-transition>
@@ -33,7 +38,7 @@
 
 <script>
 export default {
-
+    name : 'Restaurant',
     props : {
       rtr : Object
     },
@@ -41,11 +46,36 @@ export default {
     data(){
         return {
           show: false,
+          default_img : false,
         }
-  }
+    },
+
+    computed :{
+        //default_img:true -> defaultimg
+        //default_img:false -> rtrimgPreURL
+        cImg(){
+            return this.default_img ? require('@/assets/default.png') : this.rtr.rtrimgURL;
+        }
+    },
+
+    methods :{
+      //default_img = false -> true,
+      changeNotDefault(){
+          this.default_img = true;
+      },
+    }
 }
 </script>
 
 <style>
+.border-styles{
+ margin: 2px 0;
+ padding: 1px 3px;
+ border-width: 2px;
+ border-style: solid;
+}
 
+.border-styles h3{
+ color: #ed4215;;
+}
 </style>
