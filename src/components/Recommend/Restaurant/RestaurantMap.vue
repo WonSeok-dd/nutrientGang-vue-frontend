@@ -17,6 +17,7 @@
         </div>
         
         <!--음식점 지도-->
+        <!--서버 에러 경우, 해당 메뉴 가진 음식점 없을 경우, 정상-->
         <div class="fill-height mt-10" v-if="isError">
             <v-row justify="center">
                 <v-col cols="auto">
@@ -31,7 +32,7 @@
                 </v-col>
             </v-row>
         </div>
-        <v-card class="text-center">
+        <v-card class="text-center" v-else>
             <v-card-text class="text-center">
                 
                 <!--카카오지도-->

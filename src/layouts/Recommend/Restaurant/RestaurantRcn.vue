@@ -9,6 +9,7 @@
         <div>
             
             <!--선택한 메뉴-->
+            <!--선택한 메뉴 없을 경우, 정상 -->
             <div class="fill-height menu-border pt-5" v-if="hasNotMenu">
                 <v-row justify="center" align="center">
                     <v-col cols="auto">
@@ -53,6 +54,7 @@
             <v-divider class="mt-5 mb-5"></v-divider>
 
             <!--선택한 메뉴를 가진 음식점-->
+            <!--선택한 메뉴 없을 경우, 정상 -->
             <div class="fill-height menu-border pt-5" v-if="hasNotMenu">
                 <v-row justify="center" align="center">
                     <v-col cols="auto">
