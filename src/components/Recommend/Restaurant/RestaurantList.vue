@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const RestaurantMap = () => import("@/layouts/Page/RestaurantMap.vue")
+const RestaurantMap = () => import("@/components/Recommend/Restaurant/RestaurantMap.vue")
 
 import {api} from "@/api.js"  //axios로 변경
 import axios from 'axios'

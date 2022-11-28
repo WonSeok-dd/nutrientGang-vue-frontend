@@ -146,12 +146,12 @@ const NotMenuInfoComponent = () => import("@/components/ErrorComponent/NotMenuIn
           fat : item.지방
         }
         console.log(menu);
-        //this.$router.push({
-        //  name : "RestaurantRcn",
-        //  params : {
-        //    initMenu : menu
-        //  }
-        //})
+        this.$router.push({
+          name : "RestaurantRcn",
+          params : {
+            initMenu : menu
+          }
+        })
       }
     }
 

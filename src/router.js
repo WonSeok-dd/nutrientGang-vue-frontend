@@ -21,7 +21,7 @@ const InfoSecond = () => import("@/layouts/Auth/InfoSecondIn.vue");
 const InfoSignUp  = () => import("@/layouts/Auth/InfoSignUp.vue");
 
 //PageLayout
-const RestaurantList = () => import("@/layouts/Page/RestaurantList.vue")
+const RestaurantList = () => import("@/components/Recommend/Restaurant/RestaurantList.vue")
 
 //MyPageLayout
 const Diary = () => import("@/layouts/MyPage/Diary/Diary.vue");
