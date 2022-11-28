@@ -94,12 +94,7 @@ export default {
         { title: '마이페이지', icon: 'mdi-elephant', items : [
             { title: "다이어리", icon: 'mdi-heart-box-outline', to: "/mypage/diary" },
             { title: "리포트", icon: 'mdi-history', to: "/mypage/report" },
-        ]},     
-
-        { title: 'Pages', icon: 'mdi-menu', items : [
-            { title: "연습", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
-        ]},      
-        
+        ]},          
         { title: '추천받기', icon: 'mdi-thumb-up-outline', items : [
             { title: "메뉴 추천", icon: 'mdi-silverware', to: "/recommend/menu" },
             { title: "음식점 추천", icon: 'mdi-home-variant', to: "/recommend/restaurant" },

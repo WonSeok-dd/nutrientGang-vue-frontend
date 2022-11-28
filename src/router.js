@@ -3,7 +3,6 @@ import VueRouter from "vue-router"
 
 const DefaultLayout = () => import("@/layouts/Default/index.vue");
 const AuthenticationLayout = () => import("@/layouts/Auth/index.vue");
-const PageLayout = () => import("@/layouts/Page/index.vue");
 const MyPageLayout = () => import("@/layouts/MyPage/index.vue");
 const WeightRegisterLayout = () => import("@/layouts/Register/Weight/index.vue");
 const ImageRegisterLayout = () => import("@/layouts/Register/Image/index.vue");
@@ -19,9 +18,6 @@ const SignIn = () => import('@/layouts/Auth/SignIn.vue')
 const InfoFist = () => import("@/layouts/Auth/InfoFirstIn.vue");
 const InfoSecond = () => import("@/layouts/Auth/InfoSecondIn.vue");
 const InfoSignUp  = () => import("@/layouts/Auth/InfoSignUp.vue");
-
-//PageLayout
-const RestaurantList = () => import("@/components/Recommend/Restaurant/RestaurantList.vue")
 
 //MyPageLayout
 const Diary = () => import("@/layouts/MyPage/Diary/Diary.vue");
@@ -82,17 +78,6 @@ const routes = [
                 path : "sign-in",
                 component : SignIn
             },
-        ]
-    },
-
-    {
-        path: "/page",
-        component : PageLayout,
-        children : [
-            {
-                path : "restaurantList",
-                component : RestaurantList
-            }
         ]
     },
 
