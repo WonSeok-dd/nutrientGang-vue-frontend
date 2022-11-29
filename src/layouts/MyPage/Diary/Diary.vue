@@ -1,13 +1,6 @@
 <template>
 
-    <v-container v-if="isLoading" class="fill-height">
-      <v-row justify="center">
-        <v-col cols="auto">
-          <LoadingComponent/>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-container v-else fluid>
+    <v-container fluid>
 
       <!--달력, 날짜별 몸무게-->
       <div class="mb-3">
@@ -27,8 +20,7 @@
 
                   <!--Dialog 내용-->
                   <v-date-picker v-model="date"
-                  color="blue" header-color="blue"
-                  :events="dateArrayEvents" event-color="red lighten-1">
+                  color="blue" header-color="blue">
                   </v-date-picker>
 
               </v-dialog>
@@ -83,8 +75,6 @@
 </template>
 
 <script>
-//import axios from 'axios';
-const LoadingComponent = () => import("@/components/LoadingComponent.vue");
 const DiaryKcal = () => import("@/components/Diary/DiaryKcal.vue");
 const DiaryNutrient = () => import("@/components/Diary/DiaryNutrient.vue");
 const DiaryMeal = () => import("@/components/Diary/DiaryMeal.vue");
@@ -92,7 +82,6 @@ const DiaryMeal = () => import("@/components/Diary/DiaryMeal.vue");
 export default {
     name : 'Diary',
     components : {
-      "LoadingComponent" : LoadingComponent,
       "DiaryKcal" : DiaryKcal,
       "DiaryNutrient" : DiaryNutrient,
       "DiaryMeal" : DiaryMeal,
@@ -118,10 +107,6 @@ export default {
       //    console.log(err)
       //});
 
-      this.dateArrayEvents = [
-        '2022-11-16','2022-11-17' 
-      ];
-
       this.isLoading = false;
     },
 
@@ -131,7 +116,6 @@ export default {
             //로딩 판단
             isLoading : true,
 
-            dateArrayEvents: null,
             date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
             dateDialog: false,
@@ -194,7 +178,6 @@ export default {
             name : "WeightRegister",
             params : {
               initDate : this.date,
-              initDateArrayEvents : this.dateArrayEvents
             }
           }
         );

@@ -39,8 +39,7 @@
 
                   <!--Dialog 내용-->  
                   <v-date-picker v-model="date" 
-                  color="blue" header-color="blue"
-                  :events="dateArrayEvents" event-color="red lighten-1">
+                  color="blue" header-color="blue">
                   </v-date-picker>
 
               </v-dialog>
@@ -139,14 +138,12 @@ export default {
     },
 
     mounted () {
-      this.dateArrayEvents = ['2022-11-21', '2022-11-22'];
       this.maxWeight = 70
       this.minWeight = 50
     },
 
     data(){
         return {
-            dateArrayEvents : null,
             date : null,
             dateDialog: false,
 
