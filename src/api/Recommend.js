@@ -4,12 +4,21 @@ export default {
     
     getRcnMenu(date, meal){
         
+        let engMeal = '';
+        if(meal === '아침'){
+            engMeal = 'breakfast';
+        }else if(meal === '점심'){
+            engMeal = 'lunch';
+        }else if(meal === '저녁'){
+            engMeal = 'dinner'
+        }
+
         return interceptor({
             url: '/rcn/menu',
             method: 'get',
             params : {
                 date : date,
-                meal : meal
+                meal : engMeal
             }
         });
     },

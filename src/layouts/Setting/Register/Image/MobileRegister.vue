@@ -316,7 +316,7 @@ export default {
 
                         axios({
                             method : 'get',
-                            url : '/image/detect/' + this.imgURL,
+                            url : 'http://13.124.140.178:5000/predict/' + this.imgURL,
                         })
                         .then((res) =>{
                             this.isError = false;
