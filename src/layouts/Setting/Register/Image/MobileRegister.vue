@@ -102,7 +102,7 @@
                                 
                                 <!--등록 버튼-->
                                 <div>
-                                    <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">세부 등록</v-btn>
+                                    <v-btn type="submit" block x-large rounded color="primary" class="mt-4" :disabled="invalid">상세 등록</v-btn>
                                 </div>
                             </div>
                         </v-form>

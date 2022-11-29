@@ -2,7 +2,7 @@
   <div class="fill-height mt-10" v-if="isError">
         <!--0.제목-->
         <div class="text-center mb-10">
-                <h1 class="text--primary font-weight-black">음식 상세 수정</h1>
+                <h1 class="text--primary font-weight-black">식사 상세 수정</h1>
         </div>
 
         <v-row justify="center">
@@ -15,7 +15,7 @@
     
         <!--0.제목-->
         <div class="text-center mb-10">
-                <h1 class="text--primary font-weight-black">음식 상세 수정</h1>
+                <h1 class="text--primary font-weight-black">식사 상세 수정</h1>
         </div>
 
         <!--1. 카메라/갤러리/텍스트 이미지(분석됨) 보기-->
@@ -252,7 +252,7 @@
         <div class="mt-10">
             <v-form @submit.prevent="submit">
                 <v-btn type="submit"
-                block x-large rounded color="primary">입력 완료</v-btn>
+                block x-large rounded color="primary">수정 완료</v-btn>
             </v-form>
             <v-dialog transition="dialog-bottom-transition" max-width="600" v-model="submitDialog">
                 <!--Dialog 내용-->
