@@ -320,11 +320,10 @@ export default {
                         })
                         .then((res) =>{
                             this.isError = false;
-                            console.log(res.data.message);
-                            if(res.data.isSuccess === true && res.data.code === 1000){
+                            if(res.data.isSuccess === "true" && res.data.code === 1000){
                                 //중요) 요청에 성공하였습니다.
                                 this.cnddtFoods = res.data.result.foods;
-                                
+
                                 for (let i=0; i < this.cnddtFoods.length; i++){
                                     this.foods.push(this.cnddtFoods[i][0]); 
                                 }
