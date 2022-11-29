@@ -17,85 +17,108 @@
         </div>
         <div v-else>
             <!--식사기록 아침-->
-            <div>
-                아침 <strong class="black--text">{{breakfastKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
-            </div>
-            <div>
-                <div class="fill-height" v-if="isBreakfastNothing">
-                    <v-row justify="center">
-                        <v-col cols="auto" class="mt-5">
-                            <NotMealInfoComponent/>
-                        </v-col>
-                    </v-row>
+            <div class="mb-5">
+                <div>
+                    <div>
+                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                    </div>
                 </div>
-                <vueper-slides v-else 
-                 class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
-                 :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visibleSlides="4">
-                    <template #arrow-left>
-                        <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
-                    </template>
-                    <template #arrow-right>
-                        <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
-                    </template>
+                <div>
+                    아침 <strong class="black--text">{{breakfastKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
+                </div>
+                <div>
+                    <div class="fill-height" v-if="isBreakfastNothing">
+                        <v-row justify="center">
+                            <v-col cols="auto" class="mt-5">
+                                <NotMealInfoComponent/>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <vueper-slides v-else 
+                     class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
+                     :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visibleSlides="4">
+                        <template #arrow-left>
+                            <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
+                        </template>
+                        <template #arrow-right>
+                            <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
+                        </template>
 
-                    <vueper-slide v-for="(food,index) in breakfastArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '아침')"/>  
-                </vueper-slides>  
+                        <vueper-slide v-for="(food,index) in breakfastArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
+                        :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '아침')"/>  
+                    </vueper-slides>  
+                </div>
             </div>
+            
 
             <!--식사기록 점심-->
-            <div>
-                점심 <strong class="black--text">{{lunchKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
-            </div>
-            <div>
-                <div class="fill-height" v-if="isLunchNothing">
-                    <v-row justify="center">
-                        <v-col cols="auto" class="mt-5">
-                            <NotMealInfoComponent/>
-                        </v-col>
-                    </v-row>
+            <div class="mb-5">
+                <div>
+                    <div>
+                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                    </div>
                 </div>
-                <vueper-slides v-else 
-                 class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
-                 :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visible-slides="4">
-                    <template #arrow-left>
-                        <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
-                    </template>
-                    <template #arrow-right>
-                        <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
-                    </template>
+                <div>
+                    점심 <strong class="black--text">{{lunchKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
+                </div>
+                <div>
+                    <div class="fill-height" v-if="isLunchNothing">
+                        <v-row justify="center">
+                            <v-col cols="auto" class="mt-5">
+                                <NotMealInfoComponent/>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <vueper-slides v-else 
+                     class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
+                     :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visible-slides="4">
+                        <template #arrow-left>
+                            <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
+                        </template>
+                        <template #arrow-right>
+                            <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
+                        </template>
 
-                    <vueper-slide v-for="(food,index) in lunchArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '점심')"/>  
-                </vueper-slides>  
+                        <vueper-slide v-for="(food,index) in lunchArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
+                        :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '점심')"/>  
+                    </vueper-slides>  
+                </div>
             </div>
 
             <!--식사기록 저녁-->
-            <div>
-                저녁 <strong class="black--text">{{dinnerKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
-            </div>
-            <div>
-                <div class="fill-height" v-if="isDinnerNothing">
-                    <v-row justify="center">
-                        <v-col cols="auto" class="mt-5">
-                            <NotMealInfoComponent/>
-                        </v-col>
-                    </v-row>
+            <div class="mb-5">
+                <div>
+                    <div>
+                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                    </div>
                 </div>
-                <vueper-slides v-else 
-                class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
-                 :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visibleSlides="4">
-                    <template #arrow-left>
-                        <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
-                    </template>
-                    <template #arrow-right>
-                        <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
-                    </template>
+                <div>
+                    저녁 <strong class="black--text">{{dinnerKcal}}kcal</strong> / <strong class="grey--text">{{recommendKcal}}kcal</strong>
+                </div>
+                <div>
+                    <div class="fill-height" v-if="isDinnerNothing">
+                        <v-row justify="center">
+                            <v-col cols="auto" class="mt-5">
+                                <NotMealInfoComponent/>
+                            </v-col>
+                        </v-row>
+                    </div>
+                    <vueper-slides v-else 
+                    class="no-shadow" slide-multiple :bullets= "false" :arrows-outside="false"
+                     :gap="3" :slide-ratio="1 / 4" :dragging-distance="200" :visibleSlides="4">
+                        <template #arrow-left>
+                            <v-icon color="blue">mdi-arrow-left-bold-box</v-icon>
+                        </template>
+                        <template #arrow-right>
+                            <v-icon color="blue">mdi-arrow-right-bold-box</v-icon>
+                        </template>
 
-                    <vueper-slide v-for="(food,index) in dinnerArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '저녁')"/>  
-                </vueper-slides>  
+                        <vueper-slide v-for="(food,index) in dinnerArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
+                        :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '저녁')"/>  
+                    </vueper-slides>  
+                </div>
             </div>
+
         </div>
     </div>
 

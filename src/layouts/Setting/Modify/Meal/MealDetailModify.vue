@@ -2,7 +2,7 @@
   <div class="fill-height mt-10" v-if="isError">
         <!--0.제목-->
         <div class="text-center mb-10">
-                <h1 class="text--primary font-weight-black">식사 상세 수정</h1>
+            <h1 class="text--primary font-weight-black">식사 상세 수정 및 삭제</h1>
         </div>
 
         <v-row justify="center">
@@ -15,7 +15,7 @@
     
         <!--0.제목-->
         <div class="text-center mb-10">
-                <h1 class="text--primary font-weight-black">식사 상세 수정</h1>
+                <h1 class="text--primary font-weight-black">식사 상세 수정 및 삭제</h1>
         </div>
 
         <!--1. 카메라/갤러리/텍스트 이미지(분석됨) 보기-->
@@ -248,12 +248,24 @@
             </v-card>
         </div>
 
-        <!--6. 등록-->
+        <!--6. 수정 삭제-->
         <div class="mt-10">
-            <v-form @submit.prevent="submit">
-                <v-btn type="submit"
-                block x-large rounded color="primary">수정 완료</v-btn>
-            </v-form>
+            <v-row align="center" justify="center">
+
+                <!--수정-->
+                <v-col cols="6">
+                    <v-form @submit.prevent="submit">
+                        <v-btn type="submit"
+                        block x-large rounded color="primary" outlined>수정</v-btn>
+                    </v-form>
+                </v-col>
+
+                <!--삭제-->
+                <v-col cols="6">
+                    <v-btn @click="deleteDialogOn"
+                    block x-large rounded color="error" outlined>삭제</v-btn>
+                </v-col>
+            </v-row>
             <v-dialog transition="dialog-bottom-transition" max-width="600" v-model="submitDialog">
                 <!--Dialog 내용-->
                 <v-card>
@@ -261,11 +273,35 @@
                         <v-icon left>mdi-alert-decagram</v-icon>주의<v-icon right>mdi-alert-decagram</v-icon>
                     </v-card-title>
                     <v-card-text class="text-center">
-                        <h2 class="pa-12">{{submitErrMsg}}</h2>
+                        <h3 class="pa-12" v-html="printNewLine"></h3>
                     </v-card-text>
                     <v-card-actions class="justify-center">
                         <v-btn text @click="closeSubmitDialog()">확인</v-btn>
                     </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog transition="dialog-bottom-transition" max-width="600" v-model="deleteDialog">
+                <!--Dialog 내용-->
+                <v-card>
+                    <v-card-title class="justify-center error white--text">
+                        주의
+                    </v-card-title>
+                    <v-card-text class="text-center">
+                        <h3 class="pa-12">정말로 삭제 하시겠습니까?</h3>
+                    </v-card-text>
+                    <v-row align="center" justify="center">
+                        <v-col cols="6">
+                            <v-card-actions class="justify-center">
+                                <v-btn text @click="okayDeleteDialog()">삭제</v-btn>
+                            </v-card-actions>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-card-actions class="justify-center">
+                                <v-btn text @click="closeDeleteDialog()">취소</v-btn>
+                            </v-card-actions>
+                        </v-col>
+                    </v-row>
+
                 </v-card>
             </v-dialog>
         </div>
@@ -414,6 +450,9 @@ export default {
             //음식수정시 Dialog 관련 
             submitDialog : false,
             submitErrMsg : "",
+
+            //음식삭제시 Dialog관련
+            deleteDialog : false,
         }
     },
 
@@ -515,6 +554,10 @@ export default {
             }
 
             return selectedFoodName;
+        },
+
+        printNewLine(){
+            return this.submitErrMsg.replace("\n", "<br />")
         }
     },
 
@@ -562,7 +605,7 @@ export default {
 
             if(Array.isArray(this.foods) && this.foods.length === 0){
                 this.submitDialog = true;
-                this.submitErrMsg = "최소한 1개의 음식은 등록해주세요"
+                this.submitErrMsg = "최소한 1개의 음식은\n 등록해주세요."
             }
             else{
 
@@ -595,7 +638,7 @@ export default {
                 Modify.modifyFood(putObj, this.initMealId, this.initMeal)
                 .then((res) => {
                     console.log(res.data.message);
-                    if(res.data.isSuccess === true){
+                    if(res.data.isSuccess === true && res.data.code === 1000){
                     
                         //Diary
                         //this.$router.push({
@@ -604,13 +647,13 @@ export default {
     
                     }else{
                         this.submitDialog = true;
-                        this.submitErrMsg = "죄송합니다. 서버 오류로 수정하지 못했습니다."
+                        this.submitErrMsg = "서버 오류로 수정 불가"
                     }
                 })
                 .catch((err) => {
                     console.log(err)
                     this.submitDialog = true;
-                    this.submitErrMsg = "죄송합니다. 서버 오류로 수정하지 못했습니다."
+                    this.submitErrMsg = "서버 오류로 수정 불가"
                 });
             }
         },
@@ -619,6 +662,40 @@ export default {
             this.submitDialog = false;
             this.submitErrMsg = "";
         },
+
+        deleteDialogOn(){
+            this.deleteDialog = true;
+        },
+
+        okayDeleteDialog(){
+            this.deleteDialog = false;
+
+            Modify.deleteFood(this.initMealId, this.initMeal)
+            .then((res) => {
+                    console.log(res.data.message);
+                    if(res.data.isSuccess === true && res.data.code === 1000){
+                    
+                        //Diary
+                        //this.$router.push({
+                        //    name : "Diary",
+                        //});
+    
+                    }else{
+                        this.submitDialog = true;
+                        this.submitErrMsg = "서버 오류로 삭제 불가"
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    this.submitDialog = true;
+                    this.submitErrMsg = "서버 오류로 삭제 불가"
+                });
+
+        },
+
+        closeDeleteDialog(){
+            this.deleteDialog = false;
+        }
     }
 }
 </script>

@@ -27,6 +27,17 @@ export default {
                 ...putObj
             }
         });
+    },
+
+    deleteFood(mealId,meal){
+        return interceptor({
+            url: '/delete/meal',
+            method: 'delete',
+            params : {
+                mealId : mealId,
+                meal : meal
+            }
+        });
     }
 
 }
