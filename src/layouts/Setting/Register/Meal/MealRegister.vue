@@ -540,8 +540,6 @@ export default {
                 this.submitDialog = true;
                 this.submitErrMsg = "서버 오류로 등록 불가"
             });
-
-
           }
       },
 
