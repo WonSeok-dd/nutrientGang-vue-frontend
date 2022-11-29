@@ -68,6 +68,36 @@
 
       <!--날짜별 식사기록-->
       <div class="mb-3">
+        
+        <!--식사기록 제목 및 식사 등록 버튼-->
+        <div class="my-3">
+            <v-row>
+                
+                <!--식사기록 제목-->
+                <v-col cols="auto">
+                    <h3>식사 기록</h3>
+                </v-col>
+                <v-spacer></v-spacer>
+
+                <!--식사등록 버튼-->
+                <v-col cols="auto">
+                    <v-menu bottom origin="center center" transition="scale-transition">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn dark color="blue" outlined fab v-bind="attrs" v-on="on">
+                                <v-icon dark>mdi-plus</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <v-list>
+                          <v-list-item v-for="(menuItem) in menuItems" :key="menuItem.menuIdx" @click="goImageRegister(menuItem.component)">
+                            <v-list-item-title>{{ menuItem.title }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </v-col>
+            </v-row>
+        </div>
+
         <DiaryMeal :date="date"/>
       </div>
       
@@ -117,8 +147,12 @@ export default {
             isLoading : true,
 
             date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-
             dateDialog: false,
+
+            menuItems: [
+                {menuIdx: 0, title: '카메라/갤러리', component : "MobileRegister" },
+                {menuIdx: 1, title: '텍스트', component : "TextRegister" },
+            ],
 
         }
     },
@@ -181,6 +215,17 @@ export default {
             }
           }
         );
+      },
+
+      goImageRegister(component){
+        this.$router.push(
+            {
+                name : component,
+                params : {
+                    initDate : this.date,
+                    initMeal : '아침',
+                }
+            });
       },
 
     },

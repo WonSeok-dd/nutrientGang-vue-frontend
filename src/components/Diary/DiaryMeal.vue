@@ -1,34 +1,5 @@
 <template>
     <div>
-        <!--식사기록 제목 및 식사 등록 버튼-->
-        <div class="my-3">
-            <v-row>
-                
-                <!--식사기록 제목-->
-                <v-col cols="auto">
-                    <h3>식사 기록</h3>
-                </v-col>
-                <v-spacer></v-spacer>
-
-                <!--식사등록 버튼-->
-                <v-col cols="auto">
-                    <v-menu bottom origin="center center" transition="scale-transition">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn dark color="blue" outlined fab v-bind="attrs" v-on="on">
-                                <v-icon dark>mdi-plus</v-icon>
-                          </v-btn>
-                        </template>
-
-                        <v-list>
-                          <v-list-item v-for="(menuItem) in menuItems" :key="menuItem.menuIdx" @click="goImageRegister(menuItem.component)">
-                            <v-list-item-title>{{ menuItem.title }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </v-col>
-            </v-row>
-        </div>
-
         <!--식사 기록 내용-->
         <div class="fill-height" v-if="isError">
             <v-row justify="center">
@@ -68,7 +39,7 @@
                     </template>
 
                     <vueper-slide v-for="(food,index) in breakfastArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food)"/>  
+                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '아침')"/>  
                 </vueper-slides>  
             </div>
 
@@ -95,7 +66,7 @@
                     </template>
 
                     <vueper-slide v-for="(food,index) in lunchArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food)"/>  
+                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '점심')"/>  
                 </vueper-slides>  
             </div>
 
@@ -122,7 +93,7 @@
                     </template>
 
                     <vueper-slide v-for="(food,index) in dinnerArray" :key="`food-${index}`" :image="cImg(food.imgUrl)" :title="`${food.calorie}kcal`" 
-                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food)"/>  
+                    :style="`color : ${cColor(food.imgUrl)}`" @click.native="slideClick(food, '저녁')"/>  
                 </vueper-slides>  
             </div>
         </div>
@@ -255,26 +226,18 @@ export default {
             isDinnerNothing : false,
 
             recommendKcal : 0,
-            
-            menuItems: [
-                {menuIdx: 0, title: '카메라/갤러리', component : "MobileRegister" },
-                {menuIdx: 1, title: '텍스트', component : "TextRegister" },
-            ],
         }
     },
 
     methods : {
-        slideClick(food){
-            console.log("ㅎㅇ", food);
-        },
-
-        goImageRegister(component){
-            this.$router.push(
-            {
-                name : component,
+        slideClick(food, meal){
+            console.log(food.mealId, meal)
+            //MealDetailModify
+            this.$router.push({
+                name : "MealDetailModify",
                 params : {
-                    initDate : this.date,
-                    initMeal : '아침',
+                    initMealId : food.mealId,
+                    initMeal : meal
                 }
             });
         },

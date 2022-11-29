@@ -61,15 +61,20 @@ export default {
                 this.activeFoods = [];
 
                 //xmain, ymain null인 food 제외위함
-                for(let i=0; i<foods.length; i++){
-                    const isXmainNull = !(foods[i].xmain);
-                    const isYmainNull = !(foods[i].ymain);
-                    if(isXmainNull || isYmainNull){
-                        //
-                    }else{
-                        this.activeFoods.push(foods[i]);
+                if(!this.foods){
+                    //
+                }else{
+                    for(let i=0; i<foods.length; i++){
+                        const isXmainNull = !(foods[i].xmain);
+                        const isYmainNull = !(foods[i].ymain);
+                        if(isXmainNull || isYmainNull){
+                            //
+                        }else{
+                            this.activeFoods.push(foods[i]);
+                        }
                     }
                 }
+
             }
         }
     }
