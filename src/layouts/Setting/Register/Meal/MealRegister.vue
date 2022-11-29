@@ -523,7 +523,7 @@ export default {
             Food.registerFood(postObj)
             .then((res) => {
               console.log(res.data.message);
-              if(res.data.isSuccess === true){
+              if(res.data.isSuccess === true && res.data.code === 1000){
                   
                   //Diary
                   //this.$router.push({
@@ -532,13 +532,13 @@ export default {
                   
               }else{
                   this.submitDialog = true;
-                  this.submitErrMsg = "죄송합니다. 서버 오류로 등록하지 못했습니다."
+                  this.submitErrMsg = "서버 오류로 등록 불가"
               }
             })
             .catch((err) => {
                 console.log(err)
                 this.submitDialog = true;
-                this.submitErrMsg = "죄송합니다. 서버 오류로 등록하지 못했습니다."
+                this.submitErrMsg = "서버 오류로 등록 불가"
             });
 
 
