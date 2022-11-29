@@ -118,25 +118,6 @@ export default {
     },
 
     mounted () {
-      //1. localStorage에서 AccessToken가져오기
-      //const accessToken = localStorage.getItem('access-token');
-      //const config = {
-      //  headers: {
-      //    Authorization: `Bearer ${accessToken}`
-      //  }
-      //};
-
-      //2. 필요한 데이터 요청
-      //axios.get('/health/diary/nutrient', config)
-      //.then(res => {
-      //  if(res.data.isSuccess === true){
-      //    console.log(res.data.result);
-      //  }
-      //})
-      //.catch(err => {
-      //    console.log(err)
-      //});
-
       this.isLoading = false;
     },
 

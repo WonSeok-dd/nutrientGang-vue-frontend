@@ -100,12 +100,12 @@ export default {
             { title: "음식점", icon: 'mdi-home-variant', to: "/recommend/restaurant" },
         ]},
         { title: '등록페이지', icon: 'mdi-account-multiple-plus', items : [
-            { title: "카메라/갤러리(음식)", icon: 'mdi-image-filter-tilt-shift', to: "/setting/register/image/mobile" },
-            { title: "텍스트(음식)", icon: 'mdi-comment-text-outline', to: "/setting/register/image/text" },
+            { title: "카메라/갤러리(식사)", icon: 'mdi-image-filter-tilt-shift', to: "/setting/register/image/mobile" },
+            { title: "텍스트(식사)", icon: 'mdi-comment-text-outline', to: "/setting/register/image/text" },
             { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/register/weight" },
         ]},
         { title: '수정페이지', icon: 'mdi-account-switch', items : [
-            { title: "음식", icon: 'mdi-food', to: "/setting/modify/meal" },
+            { title: "식사", icon: 'mdi-food', to: "/setting/modify/meal" },
             { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/modify/weight" },
         ]}, 
       ],

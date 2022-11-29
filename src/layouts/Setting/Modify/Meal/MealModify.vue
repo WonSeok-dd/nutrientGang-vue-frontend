@@ -2,7 +2,7 @@
   <v-container fluid>
       
       <div class="text-center mb-10">
-            <h1 class="text--primary font-weight-black">음식 수정</h1>
+            <h1 class="text--primary font-weight-black">식사 수정</h1>
       </div>
 
       <!--1. 달력-->
