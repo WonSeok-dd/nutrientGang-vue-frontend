@@ -254,6 +254,8 @@ export default {
         uploadAlbumFile(){
             //1.로딩 시작
             this.isLoading = true;
+            this.cnddtFoods = [];
+            this.foods = [];
 
             //2.AWS 연결
             this.connectAWS();
@@ -320,6 +322,7 @@ export default {
                         })
                         .then((res) =>{
                             this.isError = false;
+
                             if(res.data.isSuccess === "true" && res.data.code === 1000){
                                 //중요) 요청에 성공하였습니다.
                                 this.cnddtFoods = res.data.result.foods;
