@@ -380,9 +380,11 @@ export default {
                 }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
                     //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
                     //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
-                    this.$store.dispatch('logout');
-                    this.$router.push({
-                        name : "sign-in",
+                    this.$store.dispatch('logout')
+                    .then(() => {
+                        this.$router.push({
+                            name : "sign-in",
+                        });
                     });
                 }else{
                     //중요) 수정할 Meal 정보가 없습니다.
