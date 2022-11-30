@@ -12,9 +12,6 @@
       </v-fade-transition>
       
     </v-main>
-    
-    <MyPageBottomNavigation/>
-
   </v-app>
 
 </template>
@@ -22,7 +19,6 @@
 <script>
 const DefaultBar = () => import("@/components/AppBar.vue");
 const DefaultNavigationDrawer = () => import("@/components/AppNavigationDrawer.vue");
-const MyPageBottomNavigation = () => import("@/components/MyPageBottomNavigation.vue");
 
 export default {
     name : "MyPageLayout",
@@ -37,7 +33,6 @@ export default {
     components : {
       "DefaultBar" : DefaultBar,
       "DefaultNavigationDrawer" : DefaultNavigationDrawer,
-      "MyPageBottomNavigation" : MyPageBottomNavigation,
     }
 }
 </script>

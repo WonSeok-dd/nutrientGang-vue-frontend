@@ -20,7 +20,7 @@
             <div class="mb-5">
                 <div>
                     <div>
-                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                        <strong class="red--text">사진 클릭(수정 및 삭제)</strong> 
                     </div>
                 </div>
                 <div>
@@ -55,7 +55,7 @@
             <div class="mb-5">
                 <div>
                     <div>
-                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                        <strong class="red--text">사진 클릭(수정 및 삭제)</strong> 
                     </div>
                 </div>
                 <div>
@@ -89,7 +89,7 @@
             <div class="mb-5">
                 <div>
                     <div>
-                        <strong class="red--text">사진 클릭(수정 및 사진)</strong> 
+                        <strong class="red--text">사진 클릭(수정 및 삭제)</strong> 
                     </div>
                 </div>
                 <div>

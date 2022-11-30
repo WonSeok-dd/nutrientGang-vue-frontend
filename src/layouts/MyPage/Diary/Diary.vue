@@ -38,15 +38,6 @@
             </v-col>
 
             <v-spacer></v-spacer>
-            
-            <!--날짜별 몸무게 입력 버튼-->
-            <v-col cols="auto">
-                <v-btn @click="goWeightRegister" 
-                class="white--text" color="blue" >
-                  kg<v-icon right>mdi-human-child</v-icon>
-                </v-btn>
-            </v-col>
-
           </v-row>
       </div>
 
@@ -186,18 +177,7 @@ export default {
 
           this.date = this.toStringByFormatting(temp_date);
       },
-      
-      goWeightRegister(){
-        this.$router.push(
-          {
-            name : "WeightRegister",
-            params : {
-              initDate : this.date,
-            }
-          }
-        );
-      },
-
+    
       goImageRegister(component){
         this.$router.push(
             {

@@ -88,7 +88,6 @@ export default {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",
 
       items: [
-        { title: 'Dashboard', icon: 'mdi-view-dashboard', to: "/" },
         { title: '로그인', icon: 'mdi-account-badge', to: "/authentication/sign-in" },
         { title: '회원가입', icon: 'mdi-apple-finder', to: "/authentication/info-first" },
         { title: '마이페이지', icon: 'mdi-account-multiple', items : [
@@ -102,7 +101,6 @@ export default {
         { title: '등록페이지', icon: 'mdi-account-multiple-plus', items : [
             { title: "카메라/갤러리(식사)", icon: 'mdi-image-filter-tilt-shift', to: "/setting/register/image/mobile" },
             { title: "텍스트(식사)", icon: 'mdi-comment-text-outline', to: "/setting/register/image/text" },
-            { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/register/weight" },
         ]},
         { title: '수정페이지', icon: 'mdi-account-switch', items : [
             { title: "식사", icon: 'mdi-food', to: "/setting/modify/meal" },
