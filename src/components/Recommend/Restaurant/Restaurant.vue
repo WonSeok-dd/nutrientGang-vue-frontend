@@ -24,7 +24,8 @@
               <div class="border-styles">
                 <h3>{{menu.menuName}}</h3>
                 <v-divider></v-divider>
-                <div class="mb-1">{{menu.menuInfo}}</div>
+                <div class="mb-1">{{menu.menuInfo}}kcal</div>
+                <div>칼로리: {{menu.menuKcal}}</div>
                 <div>탄수화물: {{menu.menuCarbo}}g</div>
                 <div>단백질: {{menu.menuProtein}}g</div>
                 <div>지방: {{menu.menuFat}}g</div>
