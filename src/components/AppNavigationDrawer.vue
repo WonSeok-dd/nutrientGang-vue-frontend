@@ -106,7 +106,7 @@ export default {
         ]},
         { title: '수정페이지', icon: 'mdi-account-switch', items : [
             { title: "식사", icon: 'mdi-food', to: "/setting/modify/meal" },
-            { title: "몸무게", icon: 'mdi-weight-kilogram', to: "/setting/modify/weight" },
+            { title: "건강정보", icon: 'mdi-dumbbell', to: "/setting/modify/healthInfo" },
         ]}, 
       ],
     }

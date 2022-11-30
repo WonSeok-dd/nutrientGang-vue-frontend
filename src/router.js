@@ -42,6 +42,8 @@ const WeightModify = () => import("@/layouts/Setting/Modify/Weight/WeightModify.
 const MealModify = () => import("@/layouts/Setting/Modify/Meal/MealModify.vue");
 const MealDetailModify = () => import("@/layouts/Setting/Modify/Meal/MealDetailModify.vue");
 
+const HealthInfoModify = () => import("@/layouts/Setting/Modify/HealthInfo/HealthInfoModify.vue");
+
 
 Vue.use(VueRouter)
 const routes = [
@@ -176,6 +178,12 @@ const routes = [
                 component : MealDetailModify,
                 props : true,
             },
+            {
+                name : "HealthInfoModify",
+                path : 'healthInfo',
+                component : HealthInfoModify,
+                props : true,
+            }
         ]
     }
 

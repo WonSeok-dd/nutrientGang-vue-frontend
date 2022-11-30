@@ -21,6 +21,12 @@ export const store = new Vuex.Store({
         LoginErrorMsg : '',
 
         userName : '',
+
+        modifyInfoTarget : 0,   //0:체중감량 1:근육증량 2:체중유지
+        modifyInfoActivity : 0, //0:가벼운활동 1:일상적업무 2:심한활동
+        modifyInfoGender : 0,   //0:남자 1:여자
+        modifyInfoHeight : 180, //키
+        modifyInfoWeight : 50,  //몸무게
     },
 
     getters : {
