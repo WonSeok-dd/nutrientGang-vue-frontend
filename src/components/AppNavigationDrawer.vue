@@ -48,7 +48,8 @@
             <!--보조 Navigtaion-->
             <template v-for="(itemchild, index) in item.items">
               <!--item-->
-              <v-list-item :key="index" :to="itemchild.to" link>
+              <v-list-item :key="index" :to="itemchild.to" link
+              :disabled="isLogin === true">
                 <v-list-item-icon>
                   <v-icon>{{ itemchild.icon }}</v-icon>
                 </v-list-item-icon>
@@ -63,7 +64,8 @@
 
           <!--item.items가 존재하면X-->
           <!--item-->
-          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link>
+          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link
+          :disabled="isLogin === true">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
@@ -106,7 +108,8 @@
 
           <!--item.items가 존재하면X-->
           <!--item-->
-          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link>
+          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link
+          :disabled="isLogin === false">
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>

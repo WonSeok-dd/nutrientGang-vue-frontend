@@ -112,9 +112,11 @@ export default {
                 };
                 
                 this.$store.dispatch('login', loginObj)
-                //.then(()=>{
-                //    this.$router.push('/')
-                //})
+                .then(()=>{
+                    this.$router.push({
+                        name : "Diary",
+                    });
+                })
             }
         }
     }

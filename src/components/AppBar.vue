@@ -15,7 +15,7 @@
         로그인
       </v-btn>
       
-      <v-btn :to="{name: 'info-first'}" class="mr-1" icon small>
+      <v-btn v-if="!isLogin" :to="{name: 'info-first'}" class="mr-1" icon small>
         회원가입
       </v-btn>
     </v-app-bar>

@@ -229,7 +229,11 @@ export default {
                         console.log(res.data.message);
                         if (res.data.isSuccess === true && res.data.code === 1000){
                             //중요) 요청에 성공하였습니다.
-                            this.$store.commit('clearInfoRegister');
+                            this.$store.commit('clearInfoRegister')
+                            this.$router.push({
+                                name : "sign-in",
+                            });
+
                             //this.$router.push('/authentication/sign-in')
 
                         }else if(res.data.isSuccess === false && res.data.code === 2005){
