@@ -249,9 +249,9 @@ export default {
                     if(res.data.isSuccess === true && res.data.code === 1000){
                     
                         //Diary
-                        //this.$router.push({
-                        //    name : "Diary",
-                        //});
+                        this.$router.push({
+                            name : "Diary",
+                        });
 
                         this.$store.commit('clearInfoModify');
 

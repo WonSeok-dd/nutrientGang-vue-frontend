@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-    timeout: 1000,
+    timeout: 2000,
     withCredentials : true,
     headers : {
         Authorization : `Bearer ${localStorage.getItem('access-token')}`

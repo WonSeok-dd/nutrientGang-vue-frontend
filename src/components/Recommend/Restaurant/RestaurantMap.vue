@@ -118,6 +118,9 @@ export default {
                 level : 3
             },
 
+            userLat : 0,
+            userLng : 0,
+
             markers : null, //marker 인스턴스
 
             activeRestaurant : null, //selected 음식점(class: acitve활성)
@@ -156,6 +159,9 @@ export default {
                     lng : coordinates.lng
                 }
 
+                this.userLat = coordinates.lat;
+                this.userLng = coordinates.lng;
+
                 this.refreshMap();
 
             })
@@ -164,6 +170,10 @@ export default {
                     lat : 37.55807745217469,
                     lng : 127.00095068962825
                 }
+
+                this.userLat = 37.55807745217469;
+                this.userLng = 127.00095068962825;
+
                 console.log(`${error}: not get location`);
                 
                 this.refreshMap();
@@ -203,7 +213,8 @@ export default {
 
         refreshMap(){
             //1. 추천 음식점 정보 얻기
-            Recommend.getRcnRtr(this.menu.name, this.mapOptions.center.lat, this.mapOptions.center.lng)
+
+            Recommend.getRcnRtr(this.menu.name, this.userLat, this.userLng)
             .then((res) =>{
                 this.isError = false;
                 this.isNotRtrError = false;

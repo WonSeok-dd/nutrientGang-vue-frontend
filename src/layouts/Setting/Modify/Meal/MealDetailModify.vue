@@ -643,9 +643,9 @@ export default {
                     if(res.data.isSuccess === true && res.data.code === 1000){
                     
                         //Diary
-                        //this.$router.push({
-                        //    name : "Diary",
-                        //});
+                        this.$router.push({
+                            name : "Diary",
+                        });
     
                     }else{
                         this.submitDialog = true;
@@ -678,9 +678,9 @@ export default {
                     if(res.data.isSuccess === true && res.data.code === 1000){
                     
                         //Diary
-                        //this.$router.push({
-                        //    name : "Diary",
-                        //});
+                        this.$router.push({
+                            name : "Diary",
+                        });
     
                     }else{
                         this.submitDialog = true;

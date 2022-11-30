@@ -6,7 +6,7 @@ export default {
     getMealInfo(mealId, meal){
         
         return interceptor({
-            url: 'http://54.180.116.95:3000/meal',
+            url: 'http://54.180.116.95:3000/register/info/meal',
             method: 'get',
             params : {
                 mealId : mealId,
@@ -18,7 +18,7 @@ export default {
     modifyFood(putObj, mealId, meal){
         
         return interceptor({
-            url: 'http://54.180.116.95:3000/modify/meal',
+            url: 'http://54.180.116.95:3000/register/update/meal',
             method: 'put',
             params : {
                 mealId : mealId,
@@ -32,7 +32,7 @@ export default {
 
     deleteFood(mealId,meal){
         return interceptor({
-            url: 'http://54.180.116.95:3000/delete/meal',
+            url: 'http://54.180.116.95:3000/register/delete/meal',
             method: 'delete',
             params : {
                 mealId : mealId,
@@ -45,7 +45,7 @@ export default {
     getHealthInfo(date){
         
         return interceptor({
-            url: 'http://54.180.116.95:3000/healthMember',
+            url: 'http://54.180.116.95:3000/memberHealth',
             method: 'get',
             params : {
                 date : date,
@@ -55,7 +55,7 @@ export default {
 
     modifyHealthInfo(putObj){
         return interceptor({
-            url: 'http://54.180.116.95:3000/healthMember/update',
+            url: 'http://54.180.116.95:3000/memberHealth/update',
             method: 'put',
             data : {
                 ...putObj
