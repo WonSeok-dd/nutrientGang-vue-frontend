@@ -207,7 +207,7 @@ export default {
                         activity = "NORMAL_ACTIVITY";
                         break;
                     case 2:
-                        activity = "HARD_ACTIVITIY";
+                        activity = "HARD_ACTIVITY";
                         break;
                 }
 
