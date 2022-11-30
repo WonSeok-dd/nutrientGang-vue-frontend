@@ -21,7 +21,7 @@
 <script>
 const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 const NotHealthInfoComponent = () => import("@/components/ErrorComponent/NotHealthInfoComponent.vue");
-import HealthInfo from '@/api/HealthInfo';
+import Modify from '@/api/Modify';
 export default {
     name : 'HealthInfoModifyDialog',
     component : {
@@ -39,7 +39,7 @@ export default {
                 
                 //날짜별 회원정보 가져오기
                 //중요) 필요한 데이터 요청
-                HealthInfo.getHealthInfo(date)
+                Modify.getHealthInfo(date)
                 .then((res) =>{
                     this.isError = false;
                     this.isNotHealthInfoError = false;

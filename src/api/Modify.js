@@ -2,6 +2,7 @@ import interceptor from '../axios/interceptor.js'
 
 export default {
     
+    //식사정보 수정 관련
     getMealInfo(mealId, meal){
         
         return interceptor({
@@ -36,6 +37,18 @@ export default {
             params : {
                 mealId : mealId,
                 meal : meal
+            }
+        });
+    },
+
+    //건강정보 수정 관련
+    getHealthInfo(date){
+        
+        return interceptor({
+            url: '/healthMember',
+            method: 'get',
+            params : {
+                date : date,
             }
         });
     }
