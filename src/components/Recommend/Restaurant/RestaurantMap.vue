@@ -210,7 +210,7 @@ export default {
                 console.log(res.data.message);
                 if(res.data.isSuccess === true && res.data.code === 1000){
                     //중요) 요청에 성공하였습니다.
-                    this.restaurants = res.data.result.rcnRtrs;
+                    this.restaurants = res.data.result.restaurantDtoList;
 
                 }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
                     //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션

@@ -65,7 +65,7 @@ export default {
                 }                 
             }
 
-            return carbo_sum + protein_sum + fat_sum;
+            return (carbo_sum + protein_sum + fat_sum).toFixed(2);
         },
         allCarbo(){
             let sum = 0;
@@ -78,7 +78,7 @@ export default {
                 } 
             }
             
-            return sum;
+            return (sum).toFixed(2);
         },
         allProtein(){
             let sum = 0;
@@ -91,7 +91,7 @@ export default {
                 } 
             }
 
-            return sum;
+            return (sum).toFixed(2);
         },
         allFat(){
             let sum = 0;
@@ -103,7 +103,7 @@ export default {
                     sum += this.foods[i].nutrient.fat;
                 } 
             }
-            return sum;
+            return (sum).toFixed(2);
         },
     }
 }

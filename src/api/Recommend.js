@@ -26,7 +26,7 @@ export default {
     getRcnRtr(menuName, lat, lng){
 
         return interceptor({
-            url: '/rcn/rtr',
+            url: '/rcn/res',
             method: 'get',
             params : {
                 menu : menuName,

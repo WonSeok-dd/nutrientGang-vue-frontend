@@ -32,10 +32,11 @@
       <!--drawer Navigation-->
       <v-list expand dense nav>
         
+        <!--로그인 x items-->
         <template v-for="(item,index) in items">
           
           <!--item.items가 존재하면O-->
-          <v-list-group v-if="item.items" :key="index" :prepend-icon="item.icon">
+          <v-list-group v-if="item.items" :key="`NotLogin-${index}`" :prepend-icon="item.icon">
             
             <!--주 Navigtaion-->
             <template #activator>
@@ -71,7 +72,49 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+        </template>
 
+        <!--로그인 o items-->
+        <template v-for="(item,index) in login_items">
+          
+          <!--item.items가 존재하면O-->
+          <v-list-group v-if="item.items" :key="`Login-${index}`" :prepend-icon="item.icon">
+  
+            <!--주 Navigtaion-->
+            <template #activator>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
+            </template>
+
+            <!--보조 Navigtaion-->
+            <template v-for="(itemchild, index) in item.items">
+              <!--item-->
+              <v-list-item :key="index" :to="itemchild.to" link
+              :disabled="isLogin === false">
+                <v-list-item-icon>
+                  <v-icon>{{ itemchild.icon }}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ itemchild.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+          </v-list-group>
+
+          <!--item.items가 존재하면X-->
+          <!--item-->
+          <v-list-item v-else :key="index" :to="item.to" active-class="primary" link>
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </template>
 
 
@@ -81,6 +124,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   name : "AppNavigationDrawer",
   data() {
@@ -90,6 +134,9 @@ export default {
       items: [
         { title: '로그인', icon: 'mdi-account-badge', to: "/authentication/sign-in" },
         { title: '회원가입', icon: 'mdi-apple-finder', to: "/authentication/info-first" },
+      ],
+
+      login_items : [
         { title: '마이페이지', icon: 'mdi-account-multiple', items : [
             { title: "다이어리", icon: 'mdi-heart-box-outline', to: "/mypage/diary" },
             { title: "리포트", icon: 'mdi-history', to: "/mypage/report" },
@@ -106,8 +153,12 @@ export default {
             { title: "식사", icon: 'mdi-food', to: "/setting/modify/meal" },
             { title: "건강정보", icon: 'mdi-dumbbell', to: "/setting/modify/healthInfo" },
         ]}, 
-      ],
+      ]
     }
+  },
+
+  computed : {
+    ...mapState(['isLogin'])
   }
 }
 </script>

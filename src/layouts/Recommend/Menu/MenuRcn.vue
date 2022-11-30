@@ -109,15 +109,15 @@ export default {
                     console.log(res.data.message);
                     if(res.data.isSuccess === true && res.data.code === 1000){
                         //중요) 요청에 성공하였습니다.
-                        const rcnItemsResult = res.data.result.rcnMenus;
+                        const rcnItemsResult = res.data.result.foodDtoList;
                         let rcnItems = [];
                         for (let i=0; i< rcnItemsResult.length; i++){
                             const rcnItem = {
                                 '이름': rcnItemsResult[i].name,
                                 '칼로리': rcnItemsResult[i].calorie,
-                                '탄수화물': rcnItemsResult[i].carbo,
-                                '단백질' : rcnItemsResult[i].protein,
-                                '지방' : rcnItemsResult[i].fat
+                                '탄수화물': rcnItemsResult[i].nutrient.carbohydrate,
+                                '단백질' : rcnItemsResult[i].nutrient.protein,
+                                '지방' : rcnItemsResult[i].nutrient.fat
                             };
                             rcnItems.push(rcnItem);
                         }
