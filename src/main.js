@@ -20,6 +20,7 @@ new Vue({
     // 완료시간
     const expiredTime = localStorage.getItem('access-token-expiresIn');
 
+
     // 현재 시간
     const curr = new Date();
     const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
@@ -59,9 +60,11 @@ new Vue({
                   //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
                   //돌리기 -> 로그인 페이지로 돌리기
                   console.log(res.data.isSuccess, res.data.message);
-                  this.$store.dispatch('logout');
-                  this.$router.push({
+                  this.$store.dispatch('logout')
+                  .then(() => {
+                    this.$router.push({
                       name : "sign-in",
+                    });
                   });
               }
           })
@@ -69,9 +72,11 @@ new Vue({
               //중요) 서버 오류 입니다.
               //돌리기 -> 로그인 페이지로 돌리기
               console.log(err.message);
-              this.$store.dispatch('logout');
-              this.$router.push({
+              this.$store.dispatch('logout')
+              .then(() => {
+                this.$router.push({
                   name : "sign-in",
+                });
               });
           })
         }

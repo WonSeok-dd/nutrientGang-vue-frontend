@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {mapState, mapGetters, mapActions} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 export default {
   name : 'AppBar',
   computed : {
@@ -33,7 +33,15 @@ export default {
   },
 
   methods : {
-    ...mapActions(['logout'])
+    logout(){
+      this.$store.dispatch('logout')
+      .then(() => {
+        this.$router.push({
+          name : "sign-in",
+        });
+      });
+    }
+
   }
 
 }

@@ -24,8 +24,8 @@
               <div class="border-styles">
                 <h3>{{menu.menuName}}</h3>
                 <v-divider></v-divider>
-                <div class="mb-1">{{menu.menuInfo}}kcal</div>
-                <div>칼로리: {{menu.menuKcal}}</div>
+                <div class="mb-1">{{menu.menuInfo}}</div>
+                <div>칼로리: {{menu.menuKcal}}kcal</div>
                 <div>탄수화물: {{menu.menuCarbo}}g</div>
                 <div>단백질: {{menu.menuProtein}}g</div>
                 <div>지방: {{menu.menuFat}}g</div>
@@ -61,7 +61,7 @@ export default {
             const href = 'https://dgucapstonepics.s3.ap-northeast-2.amazonaws.com/';
             const albumName = 'rtr_album';
 
-            const url = href + albumName + '/' + this.rtr.rtrimgURL;
+            const url = href + albumName + '/' + this.rtr.rtrImgURL;
             return this.default_img ? require('@/assets/default.png') : url;
         }
     },
