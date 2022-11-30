@@ -51,6 +51,16 @@ export default {
                 date : date,
             }
         });
+    },
+
+    modifyHealthInfo(putObj){
+        return interceptor({
+            url: '/healthMember/update',
+            method: 'put',
+            data : {
+                ...putObj
+            }
+        });
     }
 
 }

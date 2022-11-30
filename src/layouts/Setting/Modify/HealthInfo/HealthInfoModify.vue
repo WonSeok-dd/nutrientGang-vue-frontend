@@ -56,7 +56,7 @@
 const HealthInfoModifyDialog = () => import("@/components/Modify/HealthInfo/HealthInfoModifyDialog.vue");
 export default {
     name : 'HealthInfoModify',
-    component : {
+    components : {
         "HealthInfoModifyDialog" : HealthInfoModifyDialog
     },
 

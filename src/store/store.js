@@ -52,6 +52,15 @@ export const store = new Vuex.Store({
             state.infoEmail = null;
             state.infoPassword = null;     
         },
+
+        //건강정보 수정 성공시
+        clearInfoModify(state){
+            state.modifyInfoTarget = 0;
+            state.modifyInfoActivity = 0;
+            state.modifyInfoGender = 0;
+            state.modifyInfoHeight = 180;
+            state.modifyInfoWeight = 50;
+        },
         
         //localStorage에 저장
         setLocalStorage(state, tokenDto){

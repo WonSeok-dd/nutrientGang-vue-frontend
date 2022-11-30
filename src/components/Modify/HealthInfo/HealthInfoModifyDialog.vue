@@ -14,22 +14,109 @@
         </v-row>
   </div>
   <div v-else>
+    <v-row align="center" justify="center">
+        <v-col cols="auto">
 
+          <!--건강정보 수정 Dialog-->
+          <v-dialog v-model="modifyDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+              
+              <!--건강정보 수정 Dialog 유발-->
+              <template v-slot:activator="{ on, attrs }">
+                <v-chip v-bind="attrs" v-on="on" label outlined color="blue" dark>
+                  <v-icon left>mdi-chevron-double-right</v-icon>건강정보 수정<v-icon right>mdi-chevron-double-left</v-icon>
+                </v-chip>
+              </template>
+              
+              <!--건강정보 수정 Dialog 내용-->
+              <v-card class="text-center">
+                <v-toolbar dark color="blue">
+                    <v-btn icon dark @click="modifyDialog = false">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>({{computedDate}}) 건강정보 수정</v-toolbar-title>
+                </v-toolbar>
+                
+                <v-card-text class="justify-center">
+                    <!--1. 단계 Tab 선택-->
+                    <v-tabs v-model="modifyTabModel" background-color="transparent" color="blue" grow>
+                      <v-tab v-for="tabItem in modifyTabItems" :key="tabItem.tabIdx">
+                        {{ tabItem.tabName }}
+                      </v-tab>
+                    </v-tabs>
+
+                    <!--1. 단계 Tab 선택시 내용-->
+                    <v-tabs-items v-model="modifyTabModel" class="mt-5">
+                      <v-tab-item v-for="tabItem in modifyTabItems" :key="tabItem.tabIdx">
+                        <div v-if="tabItem.tabIdx === 0">
+                            <HealthInfoFirstDialog/>
+                        </div>
+                        <div v-else-if="tabItem.tabIdx === 1">
+                            <HealthInfoSecondDialog/>
+                        </div>
+                      </v-tab-item>
+                    </v-tabs-items>
+
+                    <!--2. 수정-->
+                    <v-row justify="center" align="center" class="mt-1">
+                        <v-col cols="auto">
+                            <v-btn color="blue darken-1" outlined x-large rounded
+                            @click="modify">수정</v-btn>
+                        </v-col>
+                    </v-row>
+                    
+                    <!--3. 수정 클릭시 Dialog-->
+                    <v-dialog transition="dialog-bottom-transition" max-width="600" v-model="submitDialog">
+                        <!--Dialog 내용-->
+                        <v-card>
+                            <v-card-title class="justify-center error white--text">
+                                <v-icon left>mdi-alert-decagram</v-icon>주의<v-icon right>mdi-alert-decagram</v-icon>
+                            </v-card-title>
+                            <v-card-text class="text-center">
+                                <h3 class="pa-12" v-html="printNewLine"></h3>
+                            </v-card-text>
+                            <v-card-actions class="justify-center">
+                                <v-btn text @click="closeSubmitDialog()">확인</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-card-text>
+              </v-card>
+          </v-dialog>
+        </v-col>
+      </v-row>
   </div>
 </template>
 
 <script>
 const ServerErrorComponent = () => import("@/components/ErrorComponent/ServerErrorComponent.vue");
 const NotHealthInfoComponent = () => import("@/components/ErrorComponent/NotHealthInfoComponent.vue");
+
+const HealthInfoFirstDialog = () => import("@/components/Modify/HealthInfo/HealthInfoFirstDialog");
+const HealthInfoSecondDialog = () => import("@/components/Modify/HealthInfo/HealthInfoSecondDialog");
+
 import Modify from '@/api/Modify';
 export default {
     name : 'HealthInfoModifyDialog',
-    component : {
+    components : {
         "ServerErrorComponent" : ServerErrorComponent,
         "NotHealthInfoComponent" : NotHealthInfoComponent,
+        "HealthInfoFirstDialog" : HealthInfoFirstDialog,
+        "HealthInfoSecondDialog" : HealthInfoSecondDialog
     },
     props : {
         "date" : String
+    },
+    
+    computed : {
+        //날짜
+        computedDate(){
+            return this.formatDate(this.date);
+        },
+
+        //submitDialog 개행
+        printNewLine(){
+            return this.submitErrMsg.replace("\n", "<br />")
+        }
     },
 
     watch : {
@@ -117,7 +204,74 @@ export default {
             //에러 판단
             isError : false,
             isNotHealthInfoError : false,
+
+            //건강정보 수정 Dialog, 건강정보 수정 1단계, 2단계 Tab 관련
+            modifyDialog : false,
+            modifyTabModel: 0,
+            modifyTabItems : [
+              {tabIdx: 0, tabName : '1단계'},
+              {tabIdx: 1, tabName : '2단계'},
+            ],
+
+            //수정 버튼 클릭시 Dialog 관련 
+            submitDialog : false,
+            submitErrMsg : "",
         }
+    },
+
+    methods : {
+        //computed 통해 날짜 할당시 format
+        formatDate(date){
+            if (!date) return null
+
+            const [year, month, day] = date.split('-')
+            return `${year.substring(2,4)}/${month}/${day}`
+        },
+
+        modify(){
+
+            const putObj = {
+                height : this.$store.state.modifyInfoHeight,
+                weight : this.$store.state.modifyInfoWeight,
+                gender : this.$store.state.modifyInfoGender,
+                activity : this.$store.state.modifyInfoActivity,
+                target : this.$store.state.modifyInfoTarget,
+                date : this.date
+            }
+
+            Modify.modifyHealthInfo(putObj)
+            .then((res) => {
+                    this.modifyDialog = false;
+
+                    console.log(res.data.message);
+                    if(res.data.isSuccess === true && res.data.code === 1000){
+                    
+                        //Diary
+                        //this.$router.push({
+                        //    name : "Diary",
+                        //});
+
+                        this.$store.commit('clearInfoModify');
+
+    
+                    }else{
+                        this.submitDialog = true;
+                        this.submitErrMsg = "서버 오류로 수정 불가"
+                    }
+                })
+                .catch((err) => {
+                    this.modifyDialog = false;
+
+                    console.log(err)
+                    this.submitDialog = true;
+                    this.submitErrMsg = "서버 오류로 수정 불가"
+                });
+        },
+
+        closeSubmitDialog(){
+            this.submitDialog = false;
+            this.submitErrMsg = "";
+        },
     }
 
 }
