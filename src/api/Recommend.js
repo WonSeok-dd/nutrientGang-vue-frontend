@@ -14,7 +14,7 @@ export default {
         }
 
         return interceptor({
-            url: '/rcn/menu',
+            url: 'http://54.180.116.95:3000/rcn/menu',
             method: 'get',
             params : {
                 date : date,
@@ -26,7 +26,7 @@ export default {
     getRcnRtr(menuName, lat, lng){
 
         return interceptor({
-            url: '/rcn/res',
+            url: 'http://54.180.116.95:3000/rcn/res',
             method: 'get',
             params : {
                 menu : menuName,

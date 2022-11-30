@@ -5,7 +5,7 @@ export default {
     getFoodName(name){
         
         return interceptor({
-            url: '/food',
+            url: 'http://54.180.116.95:3000/food',
             method: 'get',
             params : {
                 name : name
@@ -16,7 +16,7 @@ export default {
     registerFood(postObj){
         
         return interceptor({
-            url: '/register/meal',
+            url: 'http://54.180.116.95:3000/register/meal',
             method: 'post',
             data : {
                 ...postObj

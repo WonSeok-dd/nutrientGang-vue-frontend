@@ -114,7 +114,7 @@ export const store = new Vuex.Store({
         // 로그인 버튼 클릭시 dispatch
         login({commit}, loginObj){
             
-            axios.post('/auth/login', loginObj)
+            axios.post('http://54.180.116.95:3000/auth/login', loginObj)
             .then(res => {
                 console.log(res.data.message);
                 if (res.data.isSuccess === true && res.data.code === 1000){            

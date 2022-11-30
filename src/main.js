@@ -45,7 +45,7 @@ new Vue({
           }
         
           //2. 재발행 요청
-          axios.post('/auth/reissue', tokenObj)
+          axios.post('http://54.180.116.95:3000/auth/reissue', tokenObj)
           .then(res => {
               console.log(res.data.message);
               if (res.data.isSuccess === true && res.data.code === 1000){

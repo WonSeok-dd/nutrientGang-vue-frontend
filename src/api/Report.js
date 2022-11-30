@@ -7,7 +7,7 @@ export default {
     getChangeKcal(){
         
         return interceptor({
-            url: '/health/report/change/calorie',
+            url: 'http://54.180.116.95:3000/health/report/change/calorie',
             method: 'get',
         });
     },
@@ -16,7 +16,7 @@ export default {
     getChangeWeight(){
 
         return interceptor({
-            url: '/health/report/change/weight',
+            url: 'http://54.180.116.95:3000/health/report/change/weight',
             method: 'get',
         });
     },
@@ -26,7 +26,7 @@ export default {
     getBalancePortion(begin, end){
 
         return interceptor({
-            url: '/health/report/balance/portion',
+            url: 'http://54.180.116.95:3000/health/report/balance/portion',
             method: 'get',
             params : {
                 begin : begin,
@@ -39,7 +39,7 @@ export default {
     getBalanceDetail(begin, end){
 
         return interceptor({
-            url: '/health/report/balance/detail',
+            url: 'http://54.180.116.95:3000/health/report/balance/detail',
             method: 'get',
             params : {
                 begin : begin,
@@ -52,7 +52,7 @@ export default {
     getBalanceGraph(begin, end){
 
         return interceptor({
-            url: '/health/report/balance/graph',
+            url: 'http://54.180.116.95:3000/health/report/balance/graph',
             method: 'get',
             params : {
                 begin : begin,
@@ -65,7 +65,7 @@ export default {
     //일주일 간 총 식사 비율
     getMealGraph(begin,end){
         return interceptor({
-            url: '/health/report/meal/graph',
+            url: 'http://54.180.116.95:3000/health/report/meal/graph',
             method: 'get',
             params : {
                 begin : begin,
@@ -77,7 +77,7 @@ export default {
     //일주일 간 식사여부 조회
     getMealList(begin,end){
         return interceptor({
-            url: '/health/report/meal/list',
+            url: 'http://54.180.116.95:3000/health/report/meal/list',
             method: 'get',
             params : {
                 begin : begin,

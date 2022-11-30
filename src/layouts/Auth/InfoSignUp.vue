@@ -224,7 +224,7 @@ export default {
                 };
                 console.log(info)
 
-                await axios.post('/auth/signup', info)
+                await axios.post('http://54.180.116.95:3000/auth/signup', info)
                     .then(res => {
                         console.log(res.data.message);
                         if (res.data.isSuccess === true && res.data.code === 1000){

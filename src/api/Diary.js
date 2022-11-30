@@ -5,7 +5,7 @@ export default {
     getKcal(date){
         
         return interceptor({
-            url: '/health/diary/calorie',
+            url: 'http://54.180.116.95:3000/health/diary/calorie',
             method: 'get',
             params : {
                 date :  date
@@ -16,7 +16,7 @@ export default {
     getNutrient(date){
 
         return interceptor({
-            url: '/health/diary/nutrient',
+            url: 'http://54.180.116.95:3000/health/diary/nutrient',
             method: 'get',
             params : {
                 date :  date
