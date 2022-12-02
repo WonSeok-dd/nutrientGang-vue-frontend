@@ -105,9 +105,9 @@ export default {
             console.log(res.data.message);
             if(res.data.isSuccess === true && res.data.code === 1000){
                 //중요) 요청에 성공하였습니다.
-                const carboPortion = (res.data.result.carbohydratePortion * 100);
-                const proteinPortion = (res.data.result.proteinPortion * 100);
-                const fatPortion = (res.data.result.fatPortion * 100);
+                const carboPortion = (res.data.result.carbohydratePortion * 100).toFixed(2);
+                const proteinPortion = (res.data.result.proteinPortion * 100).toFixed(2);
+                const fatPortion = (res.data.result.fatPortion * 100).toFixed(2);
                 
                 this.fillPieChartData(carboPortion, proteinPortion, fatPortion);
             }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
@@ -156,13 +156,13 @@ export default {
                   portionLabels.push(finalDate);
 
                   let carbohydratePortion = weekPortion.carbohydratePortion;
-                  const finalCarbohydratePortion = carbohydratePortion * 100;
+                  const finalCarbohydratePortion = (carbohydratePortion * 100).toFixed(2);
 
                   let proteinPortion = weekPortion.proteinPortion;
-                  const finalProteinPortion = proteinPortion * 100;
+                  const finalProteinPortion = (proteinPortion * 100).toFixed(2);
 
                   let fatPortion = weekPortion.fatPortion;
-                  const finalFatPortion = fatPortion * 100;
+                  const finalFatPortion = (fatPortion * 100).toFixed(2);
 
                   portionCarboData.push(finalCarbohydratePortion);
                   portionProteinData.push(finalProteinPortion);

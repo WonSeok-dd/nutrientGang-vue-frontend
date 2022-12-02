@@ -213,7 +213,6 @@ export default {
 
         refreshMap(){
             //1. 추천 음식점 정보 얻기
-
             Recommend.getRcnRtr(this.menu.name, this.userLat, this.userLng)
             .then((res) =>{
                 this.isError = false;
