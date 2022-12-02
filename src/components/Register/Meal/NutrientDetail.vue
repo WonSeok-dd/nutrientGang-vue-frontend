@@ -74,19 +74,19 @@ export default {
             const carbo = this.foods[this.activeFood].nutrient.carbo;
             const protein = this.foods[this.activeFood].nutrient.protein;
             const fat = this.foods[this.activeFood].nutrient.fat;
-            return carbo + protein + fat
+            return (carbo + protein + fat).toFixed(2);
         },
 
         carbo(){
-            return this.foods[this.activeFood].nutrient.carbo;
+            return (this.foods[this.activeFood].nutrient.carbo).toFixed(2);
         },
 
         protein(){
-            return this.foods[this.activeFood].nutrient.protein;
+            return (this.foods[this.activeFood].nutrient.protein).toFixed(2);
         },
 
         fat(){
-            return this.foods[this.activeFood].nutrient.fat;
+            return (this.foods[this.activeFood].nutrient.fat).toFixed(2);
         }
     }
 

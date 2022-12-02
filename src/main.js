@@ -20,19 +20,25 @@ new Vue({
     // 완료시간
     const expiredTime = localStorage.getItem('access-token-expiresIn');
 
-
     // 현재 시간
     const curr = new Date();
     const utc = curr.getTime() + (curr.getTimezoneOffset() * 60 * 1000);
     const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
     const kr_curr = new Date(utc + (KR_TIME_DIFF));
     const nowTime = kr_curr.getTime();
-   
+
+    //만료 토큰이 없다면 로그인,회원가입 페이지니까 로그인 페이지로 돌리기
     if (!expiredTime){
       // x(로그인,회원가입 페이지)
-    }else{
-      
-        // 현재시간>만료시간 재발행
+      this.$router.push({
+        name : "sign-in",
+      });
+
+    }
+    //만료 토큰이 있다면 재발행 판단
+    else{
+
+        // 현재시간>만료시간 재발행O
         if (nowTime > expiredTime){
       
           //1. localStorage에서 가져오기
@@ -51,11 +57,12 @@ new Vue({
               if (res.data.isSuccess === true && res.data.code === 1000){
                   //중요) 요청에 성공하였습니다.
                   //1. localStoarge에 저장
-                  this.$store.commit('setLocalStorage', res.data.result.tokenDto);
+                  const loginResult = res.data.result;
+                  this.$store.commit('setLocalStorage', loginResult);
                   
                   //2. loginSuccess
                   this.$store.commit('loginSuccess', res.data.result.username);
-              
+                
               }else {
                   //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
                   //돌리기 -> 로그인 페이지로 돌리기
@@ -79,6 +86,12 @@ new Vue({
                 });
               });
           })
+        }
+        // 현재시간>만료시간 재발행X
+        else{
+            //1. loginSuccess
+            const userName = localStorage.getItem('user-name');
+            this.$store.commit('loginSuccess', userName);
         }
     }
 

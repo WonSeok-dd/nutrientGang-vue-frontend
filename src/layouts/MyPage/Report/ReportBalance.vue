@@ -142,13 +142,12 @@ export default {
             if(res.data.isSuccess === true && res.data.code === 1000){
                 //중요) 요청에 성공하였습니다.
                 const weekPortionList = res.data.result.weekPortionList;
-                const reverseList = [...weekPortionList].reverse();
-
+                
                 let portionLabels = [];
                 let portionCarboData = [];
                 let portionProteinData = [];
                 let portionFatData = [];
-                for (const weekPortion of reverseList){
+                for (const weekPortion of weekPortionList){
                   
                   let date = weekPortion.date;
                   let dateArray = date.split('-');

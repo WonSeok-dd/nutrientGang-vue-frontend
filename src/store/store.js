@@ -63,14 +63,15 @@ export const store = new Vuex.Store({
         },
         
         //localStorage에 저장
-        setLocalStorage(state, tokenDto){
+        setLocalStorage(state, loginResult){
             
-            const accessToken = tokenDto.accessToken;
-            const refreshToken = tokenDto.refreshToken;
-            const accessTokenExpiresIn = tokenDto.accessTokenExpiresIn;
+            const accessToken = loginResult.tokenDto.accessToken;
+            const refreshToken = loginResult.tokenDto.refreshToken;
+            const accessTokenExpiresIn = loginResult.tokenDto.accessTokenExpiresIn;
             localStorage.setItem('access-token', accessToken);
             localStorage.setItem('refresh-token', refreshToken);
             localStorage.setItem('access-token-expiresIn', accessTokenExpiresIn);
+            localStorage.setItem('user-name', loginResult.username);
         },
 
         //localStorage에 삭제
@@ -79,6 +80,7 @@ export const store = new Vuex.Store({
             localStorage.removeItem('access-token');
             localStorage.removeItem('refresh-token');
             localStorage.removeItem('access-token-expiresIn');
+            localStorage.removeItem('user-name');
         },
 
         //로그인 성공 시
@@ -120,7 +122,8 @@ export const store = new Vuex.Store({
                 if (res.data.isSuccess === true && res.data.code === 1000){            
                     //중요) 요청에 성공하였습니다.
                     //1. localStoarge에 저장
-                    commit('setLocalStorage', res.data.result.tokenDto);
+                    const loginResult = res.data.result;
+                    commit('setLocalStorage', loginResult);
                     
                     //2. loginSuccess
                     commit('loginSuccess', res.data.result.username);
