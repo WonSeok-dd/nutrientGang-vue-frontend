@@ -83,13 +83,13 @@ export default {
                 //중요) 요청에 성공하였습니다.
                 this.weekCarbo = res.data.result.haveNutrient.carbohydrate;
                 this.recommendCarbo = res.data.result.needNutrient.carbohydrate;
-                this.recommendCarboPercent = (res.data.result.nutrientPortion.carbohydratePortion * 100);
+                this.recommendCarboPercent = (res.data.result.nutrientPortion.carbohydratePortion * 100).toFixed(2);
                 this.weekProtein = res.data.result.haveNutrient.protein;
                 this.recommendProtein = res.data.result.needNutrient.protein;
-                this.recommendProteinPercent = (res.data.result.nutrientPortion.proteinPortion * 100);
+                this.recommendProteinPercent = (res.data.result.nutrientPortion.proteinPortion * 100).toFixed(2);
                 this.weekFat = res.data.result.haveNutrient.fat;
                 this.recommendFat = res.data.result.needNutrient.fat;
-                this.recommendFatPercent = (res.data.result.nutrientPortion.fatPortion * 100);
+                this.recommendFatPercent = (res.data.result.nutrientPortion.fatPortion * 100).toFixed(2);
             }else if (res.data.isSuccess === false && res.data.code === "NO_AUTHORIZATION"){
                 //중요) 인증 정보 없으니까 로그아웃 후 리다이렉션
                 //돌리기 -> 하지만 이미 레이아웃이 그려지기 전에 이미 재발행 받아서 로그인 페이지로 돌려지지 않음
