@@ -44,27 +44,10 @@
                                     </div>
                                 </div>
                                 
-                                <!--음식 사진 확인-->
-                                <div>
-                                    <div class="text-center">
-                                        <h2 class="text--primary font-weight-black">음식 사진 확인</h2>
-                                    </div>
-                                    
-                                    <v-row align="center" justify="center" v-if="isLoading">
-                                        <v-col cols="auto">
-                                            <LoadingComponent/>
-                                        </v-col>
-                                    </v-row>
-                                    <div class="border-image" v-else>
-                                        <v-img :src="cImg" @error="changeNotDefault"
-                                        height="200px" contain/>
-                                    </div>
-                                </div>
-
                                 <!--음식 라벨링 사진 확인-->
                                 <div>
                                     <div class="text-center">
-                                        <h2 class="text--primary font-weight-black">분석된 음식 사진 확인</h2>
+                                        <h2 class="text--primary font-weight-black">음식 사진 확인</h2>
                                     </div>
 
                                     <v-row align="center" justify="center" v-if="isLoading">
