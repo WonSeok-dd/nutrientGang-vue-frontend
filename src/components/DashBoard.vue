@@ -1,87 +1,155 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <v-card color="grey lighten-4">
-          <v-card-title>
-            <v-icon :color="checking ? 'red lighten-2' : 'indigo'" class="mr-12" size="64" @click="takePulse">mdi-heart-pulse</v-icon>
-            
-            <v-row align="start">
-              <div class="text-caption grey--text text-uppercase">
-                Heart rate
-              </div>
-              <div>
-                <span class="text-h3 font-weight-black" v-text="avg || '—'"></span>
-                <strong v-if="avg">BPM</strong>
-              </div>
-            </v-row>
+    <div v-if="isLogin">
+      <div class="mb-10 border pa-3">
+        <div class="text-center mb-10">
+            <h1 class="text--primary font-weight-black">건강정보</h1>
+        </div>
+        <v-row align="center" justify="center">
 
-            <v-spacer></v-spacer>
+            <!--다이어리-->
+            <v-col cols="6">
+                <v-btn @click="goDiary"
+                block x-large rounded color="primary" outlined>다이어리</v-btn>
+            </v-col>
 
-            <v-btn icon class="align-self-start" size="28">
-              <v-icon>mdi-arrow-right-thick</v-icon>
-            </v-btn>
-          </v-card-title>
+            <!--리포트-->
+            <v-col cols="6">
+                <v-btn @click="goReport"
+                block x-large rounded color="error" outlined>리포트</v-btn>
+            </v-col>
+        </v-row>
+      </div>
+      <div class="mb-10 border pa-3">
+        <div class="text-center mb-10">
+            <h1 class="text--primary font-weight-black">추천</h1>
+        </div>
+        <v-row align="center" justify="center">
 
-          <v-sheet color="transparent">
-            <v-sparkline
-              :key="String(avg)"
-              :smooth="16"
-              :gradient="['#f72047', '#ffd200', '#1feaea']"
-              :line-width="3"
-              :value="heartbeats"
-              auto-draw
-              stroke-linecap="round"
-            ></v-sparkline>
-          </v-sheet>
+            <!--메뉴 추천-->
+            <v-col cols="6">
+                <v-btn @click="goMenu"
+                block x-large rounded color="primary" outlined>메뉴</v-btn>
+            </v-col>
 
-        </v-card>
-      </v-col>
-    </v-row>
+            <!--음식점 추천-->
+            <v-col cols="6">
+                <v-btn @click="goRestaurant"
+                block x-large rounded color="error" outlined>음식점</v-btn>
+            </v-col>
+        </v-row>
+      </div>
+      <div class="mb-10 border pa-3">
+        <div class="text-center mb-10">
+            <h1 class="text--primary font-weight-black">수정</h1>
+        </div>
+        <v-row align="center" justify="center">
+
+            <!--식사정보 수정-->
+            <v-col cols="6">
+                <v-btn @click="goMealModify"
+                block x-large rounded color="primary" outlined>식사정보</v-btn>
+            </v-col>
+
+            <!--건강정보 수정-->
+            <v-col cols="6">
+                <v-btn @click="goHealthModify"
+                block x-large rounded color="error" outlined>건강정보</v-btn>
+            </v-col>
+        </v-row>
+      </div>
+
+    </div>
+    <div v-else>
+      <div class="text-center mb-10">
+          <h1 class="text--primary font-weight-black">회원가입 및 로그인</h1>
+      </div>
+      <v-row align="center" justify="center">
+         
+          <!--다이어리-->
+          <v-col cols="6">
+              <v-btn @click="goRegister"
+              block x-large rounded color="primary" outlined>회원가입</v-btn>
+          </v-col>
+          
+          <!--리포트-->
+          <v-col cols="6">
+              <v-btn @click="goLogin"
+              block x-large rounded color="error" outlined>로그인</v-btn>
+          </v-col>
+      </v-row>
+    </div>
   </v-container>
 </template>
 
 <script>
-const exhale = ms => new Promise(resolve => setTimeout(resolve, ms))
+import {mapState} from 'vuex'
+export default {
+  name : 'DashBoard',
+  computed : {
+    ...mapState(['isLogin']),
+  },
 
-  export default {
-    data: () => ({
-      checking: false,
-      heartbeats: [],
-    }),
+  methods : {
 
-    computed: {
-      avg () {
-        const sum = this.heartbeats.reduce((acc, cur) => acc + cur, 0)
-        const length = this.heartbeats.length
-
-        if (!sum && !length) return 0
-
-        return Math.ceil(sum / length)
-      },
+    goRegister(){
+      this.$router.push({
+        name : "info-first",
+      });
     },
 
-    created () {
-      this.takePulse(false)
+    goLogin(){
+      this.$router.push({
+        name : "sign-in",
+      });
     },
 
-    methods: {
-      heartbeat () {
-        return Math.ceil(Math.random() * (120 - 80) + 80)
-      },
-      async takePulse (inhale = true) {
-        this.checking = true
+    goDiary(){
+      this.$router.push({
+        name : "Diary",
+      });
+    },
 
-        inhale && await exhale(1000)
+    goReport(){
+      this.$router.push({
+        name : "Report",
+      });
+    },
 
-        this.heartbeats = Array.from({ length: 20 }, this.heartbeat)
+    goMenu(){
+      this.$router.push({
+        name : "MenuRcn",
+      });
+    },
 
-        this.checking = false
-      },
+    goRestaurant(){
+      this.$router.push({
+        name : "RestaurantRcn",
+      });
+    },
+
+    goMealModify(){
+      this.$router.push({
+        name : "MealModify",
+      });
+    },
+
+    goHealthModify(){
+      this.$router.push({
+        name : "HealthInfoModify",
+      });
     },
   }
+
+}
 </script>
 
-<style>
-
+<style scoped>
+.border {
+    border: 2px dashed;
+    border-color: #80CAFF;
+}
+.border-image{
+    border : 3px solid ;
+}
 </style>

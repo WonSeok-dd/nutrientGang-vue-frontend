@@ -1,10 +1,14 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 
+const DefaultLayout = () => import("@/layouts/Default/index.vue");
 const AuthenticationLayout = () => import("@/layouts/Auth/index.vue");
 const MyPageLayout = () => import("@/layouts/MyPage/index.vue");
 const RecommendLayout = () => import("@/layouts/Recommend/index.vue");
 const SettingLayout = () => import("@/layouts/Setting/index.vue");
+
+//DefaultLayout
+const DashBoard = () => import('@/components/DashBoard.vue');
 
 //AuthenticationLayout
 const SignIn = () => import('@/layouts/Auth/SignIn.vue')
@@ -42,6 +46,17 @@ const HealthInfoModify = () => import("@/layouts/Setting/Modify/HealthInfo/Healt
 
 Vue.use(VueRouter)
 const routes = [
+    {
+        path: "/main",
+        component : DefaultLayout,
+        children : [
+            {
+                name : 'main',
+                path : '/',
+                component : DashBoard
+            }
+        ]
+    },
 
     {
         path: "/",

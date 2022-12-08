@@ -116,14 +116,13 @@ export default {
               this.minKg = res.data.result.minWeight;
 
               const weightInfoList = res.data.result.weightInfoList;
-              const reverseList = [...weightInfoList].reverse();
-
+              
               this.dateKg = res.data.result.weightInfoList[0].weight;
               this.todayKg = res.data.result.todayWeight; //이거필요
 
               this.kgLabels = [];
               this.kgData = [];
-              for (const weightInfo of reverseList){
+              for (const weightInfo of weightInfoList){
                 this.kgLabels.push(weightInfo.date);
                 this.kgData.push(weightInfo.weight)
               }
