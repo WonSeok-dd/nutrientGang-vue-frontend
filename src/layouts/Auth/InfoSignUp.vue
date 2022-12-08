@@ -222,7 +222,6 @@ export default {
                     email : this.$store.state.infoEmail,
                     password : this.$store.state.infoPassword
                 };
-                console.log(info)
 
                 await axios.post('http://54.180.116.95:3000/auth/signup', info)
                     .then(res => {

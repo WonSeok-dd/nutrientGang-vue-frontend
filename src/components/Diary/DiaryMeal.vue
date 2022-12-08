@@ -257,7 +257,6 @@ export default {
 
     methods : {
         slideClick(food, meal){
-            console.log(food.mealId, meal)
             //MealDetailModify
             this.$router.push({
                 name : "MealDetailModify",

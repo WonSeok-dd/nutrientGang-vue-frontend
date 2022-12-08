@@ -519,7 +519,6 @@ export default {
                 foods : deepArr,
             };
 
-            console.log(postObj);
             Food.registerFood(postObj)
             .then((res) => {
               console.log(res.data.message);

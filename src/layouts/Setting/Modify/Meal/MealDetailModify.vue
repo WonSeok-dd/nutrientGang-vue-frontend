@@ -636,7 +636,6 @@ export default {
                     foods : deepArr,
                 };
 
-                console.log(putObj);
                 Modify.modifyFood(putObj, this.initMealId, this.initMeal)
                 .then((res) => {
                     console.log(res.data.message);

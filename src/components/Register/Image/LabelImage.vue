@@ -70,12 +70,10 @@ export default {
                         if(isXmainNull || isYmainNull){
                             //
                         }else{
-                            console.log(foods[i].xmain, foods[i].ymain);
-
                             let deepObject = JSON.parse(JSON.stringify(foods[i]));
                             deepObject.xmain = deepObject.xmain * 0.8;
                             deepObject.ymain = deepObject.ymain * 0.8;
-                            console.log(deepObject.xmain, deepObject.ymain)
+
                             this.activeFoods.push(deepObject);
                         }
                     }

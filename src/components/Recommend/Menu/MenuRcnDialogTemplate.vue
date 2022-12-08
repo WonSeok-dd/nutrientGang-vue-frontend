@@ -145,7 +145,7 @@ const NotMenuInfoComponent = () => import("@/components/ErrorComponent/NotMenuIn
           protein : item.단백질,
           fat : item.지방
         }
-        console.log(menu);
+
         this.$router.push({
           name : "RestaurantRcn",
           params : {

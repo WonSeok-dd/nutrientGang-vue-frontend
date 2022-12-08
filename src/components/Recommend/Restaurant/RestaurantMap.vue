@@ -174,7 +174,7 @@ export default {
                 this.userLat = 37.55807745217469;
                 this.userLng = 127.00095068962825;
 
-                console.log(`${error}: not get location`);
+                console.log(`${error}: 동국대학교로 위치를 설정합니다.`);
                 
                 this.refreshMap();
             });
