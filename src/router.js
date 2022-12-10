@@ -214,8 +214,7 @@ router.beforeEach( async (to,from,next)=>{
     //만료 토큰이 없다면 로그인,회원가입 페이지니까 로그인,회원가입 페이지로 돌리기
     if (!expiredTime){
         
-        // x(로그인,회원가입 페이지 return)
-        // x(이외의 페이지 : 로그인 페이지로 return)
+        // x(이외의 페이지: 로그인 페이지로 return)
         const isInfoFirst = to.path === '/authentication/info-first';
         const isInfoSecond = to.path === '/authentication/info-second';
         const isInfoSignUp = to.path === '/authentication/info-sign-up';
@@ -225,7 +224,6 @@ router.beforeEach( async (to,from,next)=>{
         if (!isAuthPage){
             return next({name : 'sign-in'});
         }
-        
     }
     //만료 토큰이 있다면 재발행 판단
     else{
@@ -256,10 +254,22 @@ router.beforeEach( async (to,from,next)=>{
 
                     //2. loginSuccess
                     store.commit('loginSuccess', res.data.result.username);
+                    
+                    //3. (만료 토큰이 필요없는 route면 Diary로 return)
+                    switch(to.path){
+                        case '/authentication/info-first':
+                            return next({name : 'Diary'});
+                        case '/authentication/info-second':
+                            return next({name : 'Diary'});
+                        case '/authentication/info-sign-up':
+                            return next({name : 'Diary'});
+                        case '/authentication/sign-in':
+                            return next({name : 'Diary'});
+                    }
 
                 }else {
                     //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
-                    //돌리기 -> 로그인 페이지로 돌리기 return
+                    // x(로그인 페이지로 return)
                     console.log('로그인 만료되어 재발행 요청했으나 오류 - 로그인 페이지');
 
                     store.dispatch('logout')
@@ -270,7 +280,7 @@ router.beforeEach( async (to,from,next)=>{
             })
             .catch(() => {
                 //중요) 서버 오류 입니다.
-                //돌리기 -> 로그인 페이지로 돌리기 return
+                // x(로그인 페이지로 return)
                 console.log('로그인 만료되어 재발행 요청했으나 오류 - 로그인 페이지');
 
                 store.dispatch('logout')
@@ -284,7 +294,7 @@ router.beforeEach( async (to,from,next)=>{
         else{
             console.log('로그인 만료되지 않았습니다 - 페이지이동');
             
-            //0. 만료 토큰이 필요없는 route면 Diary로 return
+            //0. (만료 토큰이 필요없는 route면 Diary로 return)
             switch(to.path){
                 case '/authentication/info-first':
                     return next({name : 'Diary'});
