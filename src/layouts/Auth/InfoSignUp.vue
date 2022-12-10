@@ -244,7 +244,7 @@ export default {
                             setTimeout(()=>{
                                 this.isRegisterError = false;
                                 this.RegisterErrorMsg = '';
-                            },5000);
+                            },3000);
 
                         }
                     })
@@ -258,7 +258,7 @@ export default {
                         setTimeout(()=>{
                             this.isRegisterError = false;
                             this.RegisterErrorMsg = '';
-                        },5000);
+                        },3000);
 
                     })
             }

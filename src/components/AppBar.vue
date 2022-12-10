@@ -38,6 +38,9 @@ export default {
       .then(() => {
         this.$router.push({
           name : "sign-in",
+        })
+        .catch(()=>{
+          console.log('같은 페이지 입니다.');
         });
       });
     }

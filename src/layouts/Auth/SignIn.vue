@@ -111,12 +111,16 @@ export default {
                     password : this.password
                 };
                 
+                // 로그인 
                 this.$store.dispatch('login', loginObj)
                 .then(()=>{
-                    this.$router.push({
-                        name : "Diary",
-                    });
-                })
+                    // 로그인 O면 페이지 이동
+                    if(this.$store.state.isLogin){
+                        this.$router.push({
+                            name : "Diary",
+                        });
+                    }
+                });
             }
         }
     }

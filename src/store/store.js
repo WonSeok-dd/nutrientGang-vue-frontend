@@ -114,9 +114,9 @@ export const store = new Vuex.Store({
     actions : {
         
         // 로그인 버튼 클릭시 dispatch
-        login({commit}, loginObj){
+        async login({commit}, loginObj){
             
-            axios.post('http://54.180.116.95:3000/auth/login', loginObj)
+            await axios.post('http://54.180.116.95:3000/auth/login', loginObj)
             .then(res => {
                 console.log(res.data.message);
                 if (res.data.isSuccess === true && res.data.code === 1000){            
@@ -144,7 +144,7 @@ export const store = new Vuex.Store({
                 //뜨기 -> alert메시지 뜨기
                 console.log(err);
                 commit('loginError', '서버와의 통신이 원할하지 않습니다.');
-            })
+            });
         },
 
 
