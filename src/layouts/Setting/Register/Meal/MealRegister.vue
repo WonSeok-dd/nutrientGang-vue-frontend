@@ -251,7 +251,7 @@
               <v-icon left>mdi-alert-decagram</v-icon>주의<v-icon right>mdi-alert-decagram</v-icon>
             </v-card-title>
             <v-card-text class="text-center">
-              <h2 class="pa-12">{{submitErrMsg}}</h2>
+              <h3 class="pa-12" v-html="printNewLine"></h3>
             </v-card-text>
             <v-card-actions class="justify-center">
               <v-btn text @click="closeSubmitDialog()">확인</v-btn>
@@ -444,6 +444,10 @@ export default {
         }
 
         return selectedFoodName;
+      },
+
+      printNewLine(){
+          return this.submitErrMsg.replace("\n", "<br />")
       }
   },
 
@@ -491,7 +495,7 @@ export default {
 
           if(Array.isArray(this.foods) && this.foods.length === 0){
               this.submitDialog = true;
-              this.submitErrMsg = "최소한 1개의 음식은 등록해주세요"
+              this.submitErrMsg = "최소한 1개의 음식은\n 등록해주세요."
           }
           else{
             

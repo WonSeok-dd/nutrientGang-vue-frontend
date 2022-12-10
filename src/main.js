@@ -66,7 +66,6 @@ new Vue({
               }else {
                   //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
                   //돌리기 -> 로그인 페이지로 돌리기
-                  console.log(res.data.isSuccess, res.data.message);
                   this.$store.dispatch('logout')
                   .then(() => {
                     this.$router.push({

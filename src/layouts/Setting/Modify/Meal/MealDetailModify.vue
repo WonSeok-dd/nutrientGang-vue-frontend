@@ -248,7 +248,7 @@
             </v-card>
         </div>
 
-        <!--6. 수정 삭제-->
+        <!--6. 수정, 삭제-->
         <div class="mt-10">
             <v-row align="center" justify="center">
 
