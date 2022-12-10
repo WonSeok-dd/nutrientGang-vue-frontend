@@ -233,8 +233,6 @@ export default {
                                 name : "sign-in",
                             });
 
-                            //this.$router.push('/authentication/sign-in')
-
                         }else if(res.data.isSuccess === false && res.data.code === 2005){
 
                             //중요) 이미 회원가입된 email 입니다.
