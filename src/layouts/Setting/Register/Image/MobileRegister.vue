@@ -286,12 +286,11 @@ export default {
                 //4. AWS 버킷에 업로드(2) 
                 var promise = upload.promise();
                 promise
-                .then((data) => {
-                        console.log("파일 업로드:", data);
-
+                .then(() => {
+                    
                         //이미지
                         this.imgURL = randomString + '.' + form;
-                        
+
                         this.imgPreURL = this.href + this.albumName + '/' + randomString + '.' + form;
                         this.isDefaultImage = false;
 
