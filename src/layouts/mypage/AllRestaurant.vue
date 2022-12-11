@@ -75,7 +75,7 @@ export default {
       
       console.log(rtr)
       this.$router.push({
-        name : 'update', 
+        name : 'UpdateRestaurant', 
         params : {
             rtr: rtr
         }
