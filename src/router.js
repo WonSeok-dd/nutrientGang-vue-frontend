@@ -105,16 +105,17 @@ router.beforeEach( async (to,from,next)=>{
     const kr_curr = new Date(utc + (KR_TIME_DIFF));
     const nowTime = kr_curr.getTime();
 
-    //만료 토큰이 없다면 로그인,회원가입 페이지니까 로그인,회원가입 페이지로 돌리기
+    //만료 토큰이 없다면 메인,로그인,회원가입 페이지니까 메인,로그인,회원가입 페이지로 돌리기
     if (!expiredTime){
         
-        // x(이외의 페이지: 로그인 페이지로 return)
+        // x(이외의 페이지: 메인 페이지로 return)
+        const isMain = to.path === '/';
         const isInfoSignUp = to.path === '/authentication/sign-up';
         const isSignIn = to.path === '/authentication/sign-in';
 
-        const isAuthPage = isInfoSignUp || isSignIn;
+        const isAuthPage = isMain || isInfoSignUp || isSignIn;
         if (!isAuthPage){
-            return next({name : 'sign-in'});
+            return next({name : 'main'});
         }
     }
     //만료 토큰이 있다면 재발행 판단
@@ -147,7 +148,7 @@ router.beforeEach( async (to,from,next)=>{
                     //2. loginSuccess
                     store.commit('loginSuccess', res.data.result.username);
                     
-                    //3. (만료 토큰이 필요없는 route면 Diary로 return)
+                    //3. (만료 토큰이 필요없는 route면 main으로 return)
                     switch(to.path){
                         case '/authentication/sign-up':
                             return next({name : 'main'});
@@ -158,22 +159,22 @@ router.beforeEach( async (to,from,next)=>{
                 }else {
                     //중요) Refresh Token이 유효하지 않습니다, 로그아웃된 사용자입니다.
                     // x(로그인 페이지로 return)
-                    console.log('로그인 만료되어 재발행 요청했으나 오류 - 로그인 페이지');
+                    console.log('로그인 만료되어 재발행 요청했으나 오류 - 메인 페이지');
 
                     store.dispatch('logout')
                     .then(() => {
-                        return next({name : 'sign-in'});
+                        return next({name : 'main'});
                     });
                 }
             })
             .catch(() => {
                 //중요) 서버 오류 입니다.
                 // x(로그인 페이지로 return)
-                console.log('로그인 만료되어 재발행 요청했으나 오류 - 로그인 페이지');
+                console.log('로그인 만료되어 재발행 요청했으나 오류 - 메인 페이지');
 
                 store.dispatch('logout')
                 .then(() => {
-                    return next({name : 'sign-in'});
+                    return next({name : 'main'});
                 });
             });
         }
@@ -182,7 +183,7 @@ router.beforeEach( async (to,from,next)=>{
         else{
             console.log('로그인 만료되지 않았습니다 - 페이지이동');
             
-            //0. (만료 토큰이 필요없는 route면 Diary로 return)
+            //0. (만료 토큰이 필요없는 route면 main으로 return)
             switch(to.path){
                 case '/authentication/sign-up':
                     return next({name : 'main'});
