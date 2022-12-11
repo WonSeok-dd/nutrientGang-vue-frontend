@@ -17,7 +17,7 @@ const SignUp = () => import("@/layouts/authentication/SignUp.vue")
 const RegisterRestaurant = () => import("@/layouts/register/RegisterRestaurant.vue")
 
 //MyPageLayout
-const AllRestaurant = () => import("@/layouts/mypage/MyPage.vue")
+const AllRestaurant = () => import("@/layouts/mypage/AllRestaurant.vue")
 const UpdateRestaurant = () => import("@/layouts/mypage/UpdateRestaurant.vue");
 
 
