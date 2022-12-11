@@ -17,7 +17,7 @@ const SignUp = () => import("@/layouts/authentication/SignUp.vue")
 const RegisterRestaurant = () => import("@/layouts/register/RegisterRestaurant.vue")
 
 //MyPageLayout
-const MyPage = () => import("@/layouts/mypage/MyPage.vue")
+const AllRestaurant = () => import("@/layouts/mypage/MyPage.vue")
 const UpdateRestaurant = () => import("@/layouts/mypage/UpdateRestaurant.vue");
 
 
@@ -25,19 +25,19 @@ Vue.use(VueRouter)
 const routes = [
 
     {
-        path: "/",
+        path : "/",
         component : DefaultLayout,
         children : [
 
             {
-                path :"",
+                name : 'main',
+                path : '/',
                 component : RestaurantList
             },
         ]
     },
 
     {   
-        name : 'authentication',
         path: "/authentication",
         component : AuthenticationLayout,
         children : [
@@ -59,8 +59,8 @@ const routes = [
         component : RegisterLayout,
         children : [
             {
-                name : 'register',
-                path : '',
+                name : 'RegisterRestaurant',
+                path : '/',
                 component : RegisterRestaurant
             },
 
@@ -68,16 +68,16 @@ const routes = [
     },
 
     {
-        name : 'mypage',
         path: "/mypage",
         component : MyPageLayout,
         children : [
             {
-                path : '',
-                component : MyPage
+                name : 'AllRestaurant',
+                path : '/',
+                component : AllRestaurant
             },
             {
-                name : 'update',
+                name : 'UpdateRestaurant',
                 path : 'update',
                 component : UpdateRestaurant,
                 props : true

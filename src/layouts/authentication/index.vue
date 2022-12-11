@@ -22,9 +22,7 @@ export default {
     name : 'AuthPage',
     data () {
       return {
-
         drawer : false,
-
       }
     },
 

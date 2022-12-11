@@ -10,33 +10,53 @@ export const store = new Vuex.Store({
     state : {
         isLogin : false,
         isLoginError : false,
-        LoginErrorMsg: '',
+        LoginErrorMsg : '',
 
-        userInfo : {
-            user_name : "정원석"
-        }
+        userName : '',
+
     },
 
     getters : {
-        getUserInfo_name(state){
+        getUserName(state){
             if(state.isLogin){
-                return state.userInfo.user_name;
+                return state.userName;
             }
 
             return '';
-        }
+        },
     },
 
     mutations : {
         
+        //localStorage에 저장
+        setLocalStorage(state, loginResult){
+            
+            const accessToken = loginResult.tokenDto.accessToken;
+            const refreshToken = loginResult.tokenDto.refreshToken;
+            const accessTokenExpiresIn = loginResult.tokenDto.accessTokenExpiresIn;
+            localStorage.setItem('access-token', accessToken);
+            localStorage.setItem('refresh-token', refreshToken);
+            localStorage.setItem('access-token-expiresIn', accessTokenExpiresIn);
+            localStorage.setItem('user-name', loginResult.username);
+        },
+
+        //localStorage에 삭제
+        removeLocalStorage(){
+            
+            localStorage.removeItem('access-token');
+            localStorage.removeItem('refresh-token');
+            localStorage.removeItem('access-token-expiresIn');
+            localStorage.removeItem('user-name');
+        },
+
         //로그인 성공 시
-        loginSuccess(state, payload){
+        loginSuccess(state, userName){
             state.isLogin = true;
             state.isLoginError = false;
 
-            state.userInfo = payload
+            state.userName = userName;
         },
-
+        
         //로그인 실패 시
         loginError(state, msg){
             state.isLogin = false;
@@ -53,78 +73,55 @@ export const store = new Vuex.Store({
             state.isLogin = false;
             state.isLoginError = false;
 
-            state.userInfo = null;
+            state.userName = '';
         },
 
     },
 
     actions : {
-        login({dispatch}, loginObj){
+        
+        // 로그인 버튼 클릭시 dispatch
+        async login({commit}, loginObj){
             
-            axios.post('/api/user/login', loginObj)
+            await axios.post('http://54.180.116.95:3000/auth/login', loginObj)
             .then(res => {
-                
-                
-                // 로그인 일치 정보 o (isSuccess: true, token: token)
-                // 로그인 일치 정보 x (isSuccess: false, message)
-                if (res.data.isSuccess === true){             // 로그인 일치 정보 o
+                console.log(res.data.message);
+                if (res.data.isSuccess === true && res.data.code === 1000){            
+                    //중요) 요청에 성공하였습니다.
+                    //1. localStoarge에 저장
+                    const loginResult = res.data.result;
+                    commit('setLocalStorage', loginResult);
                     
-                    //1. localStoarge에 token 저장(새로고침 방지)
-                    let token = res.data.token;
-                    localStorage.setItem('access-token', token);
+                    //2. loginSuccess
+                    commit('loginSuccess', res.data.result.username);
 
-                    //2. getMemberInfo
-                    dispatch('getMemberInfo');
-
-                }else{                                     // 로그인 일치 정보 x      
-                    console.log(res.data.isSuccess, res.data.message)
+                }else if(res.data.isSuccess === false && res.data.code === 2003){       
                     
-                    this.commit('loginError', res.data.message);
+                    //중요) 비밀번호가 틀렸습니다.
+                    commit('loginError', res.data.message);
+                }else if (res.data.isSuccess === false && res.data.code === 2010){
+
+                    //중요) 유저를 찾을 수 없습니다.
+                    commit('loginError', res.data.message);
                 }
 
             })
             .catch(err =>{
-                console.log(err.message)
-            })
-        },
-
-        getMemberInfo({commit}){
-            
-            //1. localStoarge에서 token 얻음(새로고침 방지)
-            let token = localStorage.getItem('access-token');
-            let config = {
-                headers : {
-                    'access-token' : token
-                }
-            };
-
-            //2. token을 헤더에 포함시켜서 유저 정보를 요청
-            axios.get('/api/user/auth', config)
-            .then(response => {
-                
-                //auth o (isSuccess: true, user_id, user_name)
-                //auth x (isSuccess: false, message)
-                if (response.data.isSuccess === true){    //auth o
-                    
-                    let userInfo = {
-                        user_id : response.data.user_id,
-                        user_name : response.data.user_name,
-                    };
-                    console.log(response.data.isSuccess, response.data.user_name)
-                    commit('loginSuccess', userInfo)
-                }else{                                  //auth x
-                    console.log(response.data.isSuccess, response.data.message);
-                }
-            })
-            .catch(err => {
-                console.log(err.message);
+                //중요) 서버 오류입니다.
+                //뜨기 -> alert메시지 뜨기
+                console.log(err);
+                commit('loginError', '서버와의 통신이 원할하지 않습니다.');
             });
         },
 
+
+        //로그아웃 버튼 클릭시 dispatch
         logout({commit}) {
 
-            localStorage.removeItem('access-token');
+            //1. localStorage에 삭제
+            commit('removeLocalStorage');
 
+            //2. logout
             commit('logout')
         },
     }

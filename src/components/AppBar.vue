@@ -15,30 +15,40 @@
         로그인
       </v-btn>
       
-      <v-btn :to="{name: 'sign-up'}" class="mr-1" icon small>
+      <v-btn v-if="!isLogin" :to="{name: 'sign-up'}" class="mr-1" icon small>
         회원가입
       </v-btn>
     </v-app-bar>
 </template>
 
 <script>
-import {mapState, mapGetters, mapActions} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 export default {
   name : 'AppBar',
   computed : {
     ...mapState(['isLogin']),
     ...mapGetters({
-      loginName : 'getUserInfo_name'
+      loginName : 'getUserName'
     }),
   },
 
   methods : {
-    ...mapActions(['logout'])
+    logout(){
+      this.$store.dispatch('logout')
+      .then(() => {
+        this.$router.push({
+          name : "sign-in",
+        })
+        .catch(()=>{
+          console.log('같은 페이지 입니다.');
+        });
+      });
+    }
+
   }
 
 }
 </script>
-
 <style>
 
 </style>

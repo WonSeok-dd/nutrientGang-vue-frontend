@@ -74,17 +74,13 @@ import {mapState} from 'vuex'
 
 
 export default {
-  name : 'NavigationDrawer',
+  name : 'AppNavigationDrawer',
   data() {
     return {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",
 
       items: [
-        { idx : 100, title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},
-
-        //{ title: 'Pages', icon: 'mdi-menu', items : [            
-        //    { title: "RestaurantList", icon: 'mdi-clipboard-list-outline', to: "/page/restaurantList" },
-        //]},        
+        { idx : 100, title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},  
       ],
       
       login_items :[
