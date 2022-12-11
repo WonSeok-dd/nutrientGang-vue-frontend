@@ -31,11 +31,23 @@
 
       <!--drawer Navigation-->
       <v-list expand dense nav>
-        
+        <!--item.items가 존재하면X-->
+        <!--item(items의 item)-->   
+        <template v-for="(item) in not_login_items">
+          <v-list-item :key="item.idx" :to="item.to" active-class="primary" link
+          :disabled="isLogin === true">
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <!--item.items가 존재하면X-->
+        <!--item(items의 item)-->        
         <template v-for="(item) in items">
-          
-          <!--item.items가 존재하면X-->
-          <!--item(items의 item)-->
           <v-list-item :key="item.idx" :to="item.to" active-class="primary" link>
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
@@ -45,12 +57,10 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          
         </template>
+        <!--item.items가 존재하면X-->
+        <!--item(login_items의 item)-->
         <template v-for="(item) in login_items">
-          
-          <!--item.items가 존재하면X-->
-          <!--item(login_items의 item)-->
           <v-list-item :key="item.idx" :to="item.to" active-class="primary" link 
           :disabled="isLogin === false">
             <v-list-item-icon>
@@ -61,7 +71,6 @@
               <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          
         </template>
 
       </v-list>
@@ -78,6 +87,11 @@ export default {
   data() {
     return {
       gradient: "rgba(0,0,0,0.7), rgba(0,0,0,0.7)",
+
+      not_login_items : [
+        { idx : 0, title: '로그인', icon: 'mdi-food-fork-drink', to: '/authentication/sign-in'}, 
+        { idx : 1, title: '회원가입', icon: 'mdi-food-fork-drink', to: '/authentication/sign-up'},   
+      ],
 
       items: [
         { idx : 100, title: '음식점 현황', icon: 'mdi-food-fork-drink', to: '/'},  
