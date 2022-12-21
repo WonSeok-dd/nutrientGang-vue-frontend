@@ -2,7 +2,7 @@
 
    <!-- v-bind="$attrs"를 통해 상위 props를 내려받음 -->
    <!-- <v-navigation-drawer v-model="drawer" :src="require('@/assets/sidebar.jpg')" dark app> -->
-  <v-navigation-drawer v-bind="$attrs" :src="require('@/assets/sidebar.jpg')" dark app>
+  <v-navigation-drawer v-bind="$attrs" :src="require('@/assets/star.jpg')" dark app>
 
       <!--(1)v-navigation-drawer :src="require('@/assets/sidebar.jpg')"[배경입히기]-->
       <!--(2)v-navigation-drawer 배경이미지[그라디언트 취하기]-->
